@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Engineering Projects Showcase</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#F2F2F2", // Using an off-white/light grey for high contrast accents
+                        "background-light": "#F0F2F5",
+                        "background-dark": "#0A0A0A", // Deep matte black as requested
+                        "card-dark": "#121212",
+                        "card-light": "#FFFFFF",
+                        "text-secondary-dark": "#888888",
+                        "text-secondary-light": "#666666",
+                    },
+                    fontFamily: {
+                        display: ["Space Grotesk", "sans-serif"], // Technical, robotic feel
+                        sans: ["Inter", "sans-serif"], // Clean, legible
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
+                    }
+                },
+            },
+        };
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }.project-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .project-item:nth-child(1) { animation-delay: 0.1s; }
+        .project-item:nth-child(2) { animation-delay: 0.3s; }
+        .project-item:nth-child(3) { animation-delay: 0.5s; }
+        .project-item:nth-child(4) { animation-delay: 0.7s; }.hover-line {
+            width: 0;
+            transition: width 0.4s ease;
+        }
+        .group:hover .hover-line {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
+<nav class="fixed w-full z-50 mix-blend-difference text-white px-6 py-6 flex justify-between items-center bg-transparent">
+<div class="text-xl font-display font-bold tracking-widest uppercase">LUS-ION / ENG</div>
+<div class="hidden md:flex space-x-8 text-sm font-light tracking-wide">
+<a class="hover:opacity-50 transition-opacity" href="#">Index</a>
+<a class="opacity-50" href="#">Projects</a>
+<a class="hover:opacity-50 transition-opacity" href="#">About</a>
+<a class="hover:opacity-50 transition-opacity" href="#">Contact</a>
+</div>
+<button class="md:hidden">
+<span class="material-icons">menu</span>
+</button>
+</nav>
+<main class="min-h-screen pt-32 pb-20 px-4 md:px-12 max-w-7xl mx-auto">
+<header class="mb-24 fade-in">
+<h1 class="text-6xl md:text-8xl font-display font-medium tracking-tight leading-none mb-6">
+                SELECTED <br/>
+<span class="text-text-secondary-light dark:text-text-secondary-dark">WORKS</span>
+</h1>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end border-t border-gray-300 dark:border-gray-800 pt-6">
+<p class="max-w-md text-sm md:text-base text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
+                    A collection of engineering challenges solved through robotics, AI integration, and precision mechanics. Exploring the intersection of digital intelligence and physical form.
+                </p>
+<div class="mt-4 md:mt-0 text-xs font-mono tracking-widest text-text-secondary-light dark:text-text-secondary-dark uppercase">
+                    2021 — 2024
+                </div>
+</div>
+</header>
+<section class="space-y-0">
+<article class="project-item group relative border-t border-gray-300 dark:border-gray-800 py-12 md:py-20 flex flex-col md:flex-row gap-8 md:gap-20 transition-all duration-500 hover:bg-gray-200 dark:hover:bg-white/5 px-2 -mx-2 rounded-lg">
+<div class="w-full md:w-1/4 flex flex-col justify-between h-auto">
+<span class="font-mono text-xs text-text-secondary-light dark:text-text-secondary-dark mb-2">01</span>
+<div>
+<h2 class="text-3xl md:text-4xl font-display font-medium mb-4 group-hover:pl-2 transition-all">Autonomous Navigation</h2>
+<div class="h-[1px] bg-primary hover-line"></div>
+</div>
+<div class="hidden md:block mt-auto pt-8">
+<ul class="text-xs text-text-secondary-light dark:text-text-secondary-dark space-y-1 font-mono uppercase">
+<li>LIDAR Integration</li>
+<li>SLAM Algorithm</li>
+<li>Path Planning</li>
+</ul>
+</div>
+</div>
+<div class="w-full md:w-3/4 overflow-hidden rounded-lg bg-gray-200 dark:bg-card-dark relative aspect-[16/9] md:aspect-[21/9]">
+<img alt="Abstract white robotic arm detail against dark background" class="object-cover w-full h-full opacity-90 group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1cnhTDKLJlVfidS766krsd11d1blNOXoeREPfbkcM6eEFj64ibwf3AyWxxEU7yBl2DHmfZCX1gDQY6GKWkzbqeXJpMHxtybX0ub69iFaA_5dz09_KOTIaUc-Y_pOwrIuFM3ZxxuazFMYCiaH3v2XHvxeDry2QNTfMWuHkV5-hpfOmtB_l9nRVof1IbBIKynb9JFP82xOFKYOYpXTOI3ai5YSL9xvWDMBX0eHjO2PBDqF4Z_GiVWCq0PkuaNmgLT-DeGLKt0jZ2FQ"/>
+<div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
+<span class="text-xs font-mono text-white">View Case Study</span>
+<span class="material-icons text-sm text-white rotate-45">arrow_upward</span>
+</div>
+</div>
+<div class="md:hidden">
+<ul class="flex flex-wrap gap-3 text-xs text-text-secondary-light dark:text-text-secondary-dark font-mono uppercase">
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">LIDAR</li>
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">SLAM</li>
+</ul>
+</div>
+</article>
+<article class="project-item group relative border-t border-gray-300 dark:border-gray-800 py-12 md:py-20 flex flex-col md:flex-row gap-8 md:gap-20 transition-all duration-500 hover:bg-gray-200 dark:hover:bg-white/5 px-2 -mx-2 rounded-lg">
+<div class="w-full md:w-1/4 flex flex-col justify-between h-auto">
+<span class="font-mono text-xs text-text-secondary-light dark:text-text-secondary-dark mb-2">02</span>
+<div>
+<h2 class="text-3xl md:text-4xl font-display font-medium mb-4 group-hover:pl-2 transition-all">Dexterous Manipulation</h2>
+<div class="h-[1px] bg-primary hover-line"></div>
+</div>
+<div class="hidden md:block mt-auto pt-8">
+<ul class="text-xs text-text-secondary-light dark:text-text-secondary-dark space-y-1 font-mono uppercase">
+<li>Haptic Feedback</li>
+<li>Kinematics</li>
+<li>Force Control</li>
+</ul>
+</div>
+</div>
+<div class="w-full md:w-3/4 overflow-hidden rounded-lg bg-gray-200 dark:bg-card-dark relative aspect-[16/9] md:aspect-[21/9]">
+<img alt="Close up of mechanical joints and precision engineering parts" class="object-cover w-full h-full opacity-80 group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdgo5elJAKo6c3MyTQfSsl4evnSnCszP9inw7kska22BEHKm_bcge4jxip9wTvR4g22wVJhgmNZo-i0s65L5IFqqMwRVG3CrVTaSHNmi6ecNJsps1uW4Qz5SPBWnJ-zdqVkkjgMK0vAU2z9Yh2FkaVrXUIRJDnlMr4Jd4nQG8yFzbYIO5emGfTKO9BPeFRhrnKJWJ8RvD_kKBI-5_TK9dkXzLPb1Smev_rz0yOa8cUkYMMQA0Oz5qYhcVTthLAaQrbLztQbZcxW0E"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-black text-[10px] font-bold px-2 py-1 uppercase tracking-wider rounded-sm">Featured</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
+<span class="text-xs font-mono text-white">View Case Study</span>
+<span class="material-icons text-sm text-white rotate-45">arrow_upward</span>
+</div>
+</div>
+<div class="md:hidden">
+<ul class="flex flex-wrap gap-3 text-xs text-text-secondary-light dark:text-text-secondary-dark font-mono uppercase">
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">Haptics</li>
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">Kinematics</li>
+</ul>
+</div>
+</article>
+<article class="project-item group relative border-t border-gray-300 dark:border-gray-800 py-12 md:py-20 flex flex-col md:flex-row gap-8 md:gap-20 transition-all duration-500 hover:bg-gray-200 dark:hover:bg-white/5 px-2 -mx-2 rounded-lg">
+<div class="w-full md:w-1/4 flex flex-col justify-between h-auto">
+<span class="font-mono text-xs text-text-secondary-light dark:text-text-secondary-dark mb-2">03</span>
+<div>
+<h2 class="text-3xl md:text-4xl font-display font-medium mb-4 group-hover:pl-2 transition-all">Vision Systems</h2>
+<div class="h-[1px] bg-primary hover-line"></div>
+</div>
+<div class="hidden md:block mt-auto pt-8">
+<ul class="text-xs text-text-secondary-light dark:text-text-secondary-dark space-y-1 font-mono uppercase">
+<li>Computer Vision</li>
+<li>Object Recognition</li>
+<li>Real-time Processing</li>
+</ul>
+</div>
+</div>
+<div class="w-full md:w-3/4 overflow-hidden rounded-lg bg-gray-200 dark:bg-card-dark relative aspect-[16/9] md:aspect-[21/9]">
+<img alt="Data visualization overlay on a futuristic interface" class="object-cover w-full h-full opacity-80 group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1XUokhsorze_kE6sMRLamjNUAvFZlW2Ot4Wdgmt9F6fKZ_hbH_YWhuIvGicOF3nJTxQaLdDmw9iAJTRgDr8Zxh85WFHIvnDLSTUZlOaUI_b3AUbgdfFC_Ul7xSYehnyWJVHgjzlP794SMuRspDkPbMfouQ4rX2xYWUcdZyB8F8M4mvGP4XvVnbJI7H5KRA7529OCJIFvvb9cNT4mIMj3tGDZqNVd_X89kpMA2GAneYcs7e5oIADH2rwTA0P7jcqWDgoveEFTVEWs"/>
+<div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
+<span class="text-xs font-mono text-white">View Case Study</span>
+<span class="material-icons text-sm text-white rotate-45">arrow_upward</span>
+</div>
+</div>
+<div class="md:hidden">
+<ul class="flex flex-wrap gap-3 text-xs text-text-secondary-light dark:text-text-secondary-dark font-mono uppercase">
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">CV</li>
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">AI</li>
+</ul>
+</div>
+</article>
+<article class="project-item group relative border-t border-b border-gray-300 dark:border-gray-800 py-12 md:py-20 flex flex-col md:flex-row gap-8 md:gap-20 transition-all duration-500 hover:bg-gray-200 dark:hover:bg-white/5 px-2 -mx-2 rounded-lg">
+<div class="w-full md:w-1/4 flex flex-col justify-between h-auto">
+<span class="font-mono text-xs text-text-secondary-light dark:text-text-secondary-dark mb-2">04</span>
+<div>
+<h2 class="text-3xl md:text-4xl font-display font-medium mb-4 group-hover:pl-2 transition-all">Bipedal Locomotion</h2>
+<div class="h-[1px] bg-primary hover-line"></div>
+</div>
+<div class="hidden md:block mt-auto pt-8">
+<ul class="text-xs text-text-secondary-light dark:text-text-secondary-dark space-y-1 font-mono uppercase">
+<li>Dynamic Balancing</li>
+<li>Gait Analysis</li>
+<li>Servo Control</li>
+</ul>
+</div>
+</div>
+<div class="w-full md:w-3/4 overflow-hidden rounded-lg bg-gray-200 dark:bg-card-dark relative aspect-[16/9] md:aspect-[21/9]">
+<img alt="Abstract 3D rendering of bipedal robot legs" class="object-cover w-full h-full opacity-80 group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW9nce2yih874_WJyOgWiZyFeAF985jAZdZYGqNbLKae1CTlM6ib-ywQ29O84dguvmTQy3wpyIriepfPor9HwshiVMjl4Dcc09XxcvOlHMDHPgkyJVlWE0eXe8U3uHLhL__MqTFuYIH9_BCF6inHOeNR0T33t-S7Vj-mGOd1BeuiDOes5s4_hCiiZF0KrMH2069kmrOkliO2XmgnIvY0fMAthuYMIvFWckmgZ4MXkE_2oGNPGo1PWMSICX1gI92kZOuuHMU9lKkFo"/>
+<div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
+<span class="text-xs font-mono text-white">View Case Study</span>
+<span class="material-icons text-sm text-white rotate-45">arrow_upward</span>
+</div>
+</div>
+<div class="md:hidden">
+<ul class="flex flex-wrap gap-3 text-xs text-text-secondary-light dark:text-text-secondary-dark font-mono uppercase">
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">Balance</li>
+<li class="border border-gray-300 dark:border-gray-800 px-2 py-1 rounded">Control</li>
+</ul>
+</div>
+</article>
+</section>
+<section class="mt-32 mb-20">
+<div class="bg-gray-200 dark:bg-card-dark rounded-xl p-8 md:p-16 flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden group">
+<div class="relative z-10">
+<h3 class="text-2xl md:text-4xl font-display font-medium mb-4">Interested in collaboration?</h3>
+<p class="text-text-secondary-light dark:text-text-secondary-dark mb-8 max-w-lg">Open to discussing new opportunities in robotics engineering and research.</p>
+<a class="inline-flex items-center gap-3 px-6 py-3 bg-gray-900 dark:bg-primary text-white dark:text-black rounded-full text-sm font-medium hover:scale-105 transition-transform" href="#">
+                        Get in Touch
+                        <span class="material-icons text-sm">east</span>
+</a>
+</div>
+<div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-gray-300 dark:from-gray-800 to-transparent opacity-20 transform skew-x-12"></div>
+<div class="absolute right-20 top-0 h-full w-1/4 bg-gradient-to-l from-gray-300 dark:from-gray-800 to-transparent opacity-10 transform -skew-x-12"></div>
+</div>
+</section>
+</main>
+<footer class="bg-background-light dark:bg-background-dark border-t border-gray-300 dark:border-gray-800 py-12 px-4 md:px-12">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
+<div>
+<div class="text-4xl md:text-6xl font-display font-bold tracking-widest uppercase mb-4">LUS-ION</div>
+<div class="text-xs text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-widest">© 2024 Engineering Portfolio</div>
+</div>
+<div class="grid grid-cols-2 gap-12 md:gap-24 text-sm">
+<div class="flex flex-col gap-3">
+<span class="text-text-secondary-light dark:text-text-secondary-dark uppercase font-mono text-xs mb-2">Socials</span>
+<a class="hover:text-primary transition-colors" href="#">LinkedIn</a>
+<a class="hover:text-primary transition-colors" href="#">GitHub</a>
+<a class="hover:text-primary transition-colors" href="#">Twitter</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-text-secondary-light dark:text-text-secondary-dark uppercase font-mono text-xs mb-2">Legal</span>
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple script to toggle dark mode for demonstration purposes
+        // In a real app, this would detect system preference or save to localStorage
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+</body></html>

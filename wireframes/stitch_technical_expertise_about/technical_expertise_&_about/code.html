@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Technical Expertise &amp; About - Robotics Engineer Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FFFFFF", // White as primary accent in dark mode, black in light mode usually, but strict rule says consistent primary. Let's stick to white text as primary focus on dark bg.
+              "background-light": "#F3F3F3",
+              "background-dark": "#050505",
+              "surface-dark": "#121212",
+              "surface-light": "#E5E5E5",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              display: ["Space Grotesk", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "4px",
+            },
+            backgroundImage: {
+                'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+            }
+          },
+        },
+      };
+    </script>
+<style>
+        body {
+            font-feature-settings: "ss01", "ss02";
+        }
+        .reveal-text {
+            animation: reveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-sans antialiased selection:bg-gray-300 dark:selection:bg-gray-700">
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-6 mix-blend-difference text-white">
+<a class="font-display font-bold text-2xl tracking-widest uppercase" href="#">Nexus<span class="font-light opacity-70">Lab</span></a>
+<div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
+<a class="hover:text-gray-300 transition-colors" href="#">Projects</a>
+<a class="hover:text-gray-300 transition-colors" href="#">Research</a>
+<a class="hover:text-gray-300 transition-colors" href="#">About</a>
+</div>
+<button class="md:hidden">
+<span class="material-icons">menu</span>
+</button>
+</nav>
+<section class="relative min-h-screen flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20 overflow-hidden">
+<div class="absolute right-0 top-0 h-full w-full md:w-2/3 lg:w-1/2 opacity-20 pointer-events-none z-0">
+<img alt="Abstract metallic mechanical joint close up" class="h-full w-full object-cover mix-blend-luminosity mask-gradient-to-l opacity-50 dark:opacity-30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7IPfmaO6yozH75M_3Y41S5gTl2T2fw7CBXhtBBdot2zNsR_gws0zzvZ7fMLXa6-n5k0jf8HXCcLtOj8do_obMSsegTPk_wGi4aiS3j3r-E166QnPj6H2gn2EDQuxp40d7flxY8jSbGkc8Bxgj8aoZ8FP2rtJi3XNom0rtBUXSMqdcm2vfg1LjQ--GrYNOR4qGQ8hq5GIa0gb9MI1lyhpW91Mkd5cv-ZCLn359rbHzy6Xh9vW5XIAjz4WjSiDn48S4CixzV4WZjAs" style="-webkit-mask-image: linear-gradient(to right, transparent, black);"/>
+</div>
+<div class="relative z-10 max-w-4xl">
+<span class="block text-xs md:text-sm font-display uppercase tracking-[0.2em] mb-4 text-gray-500 dark:text-gray-400 reveal-text">Technical Expertise</span>
+<h1 class="text-4xl md:text-6xl lg:text-8xl font-display font-light leading-[0.9] mb-8 reveal-text delay-100">
+                ENGINEERING <br/>
+<span class="font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-500">AUTONOMY.</span>
+</h1>
+<p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed reveal-text delay-200">
+                Bridging the gap between cognitive AI and kinetic reality. My work focuses on the integration of advanced control systems with bio-inspired hardware architecture.
+            </p>
+</div>
+<div class="absolute bottom-12 left-6 md:left-24 animate-pulse">
+<span class="material-icons text-3xl opacity-50">keyboard_arrow_down</span>
+</div>
+</section>
+<main class="relative z-10 bg-background-light dark:bg-background-dark">
+<section class="py-24 px-6 md:px-12 lg:px-24 border-t border-gray-300 dark:border-gray-800">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<div class="order-2 md:order-1">
+<h2 class="text-2xl md:text-4xl font-display mb-6 uppercase">01. Computer Vision</h2>
+<p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                        The world is unstructured. My research in SLAM (Simultaneous Localization and Mapping) allows robots to navigate unpredictable environments with sub-centimeter accuracy. Utilizing sensor fusion from LiDAR and stereo cameras to create real-time dense semantic maps.
+                    </p>
+<a class="inline-flex items-center px-6 py-3 border border-gray-400 dark:border-gray-600 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-all text-sm uppercase tracking-wide group" href="#">
+                        Read Whitepaper
+                        <span class="material-icons ml-2 text-sm group-hover:translate-x-1 transition-transform">north_east</span>
+</a>
+</div>
+<div class="order-1 md:order-2 relative aspect-square md:aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden group">
+<img alt="Abstract robot eye lens technology" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYeivgu-FiyJBU3d5NkFLKe4PRlRt8KTqZ8VBjy91147Lxq11UI6hBuECCTyE-fuQknXBMca04Uk2C50HgaZ7779fS4PIFVeDNnSkTGE40I_Y6M4VvwU3Tsjr5Q5q1Lf_W8g4XECkTnYR50dlsTaF_vDp6KHFrcyo06ax79IsUiAYDbgwwF0pPJXVhAJ98W-q1oB-cA5rY2ZLusFAfI0Eta6eTUba3snXm5R0qTcDtUB2q4uU1gFT-4IlCR9z6hebh8vBa5XC_lwI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-4 right-4 text-xs font-mono text-white/70">FIG 01.01 — OPTICAL SENSING</span>
+</div>
+</div>
+</section>
+<section class="py-24 px-6 md:px-12 lg:px-24 border-t border-gray-300 dark:border-gray-800">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<div class="relative aspect-square md:aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden group">
+<img alt="Robotic arm coding interface" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8vgVZRb84WJ1rv8XUZHMDTgZdt5Yb2ZBRw3oq2TuDCupSwe6IxEvimkSZYDzFgk_qdfcTWz-JSxrl5ByY1F-TolC9ayylNyMIcnCF6CqnM_w65CnIrKsBMyAlrXycDtu1G9Ay0ij6r94JKM4lrmwlpt116jZBYdaBrf_HNcAr-zsYtvH5olJtOyw79t_ZAnHHhO19Uunv4HXvRzmZqhf9tf8SGcRBmDG9mY9Ph6ZXe6GrJ_qsv95XpgFz2kpYIUZ7IcZZXJY72Y4"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="border border-white/20 p-4 rounded-full backdrop-blur-sm bg-white/5">
+<span class="material-icons text-white text-3xl">play_arrow</span>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-2xl md:text-4xl font-display mb-6 uppercase">02. Control Systems</h2>
+<p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                        Beyond rigid movement. Developing impedance control algorithms that allow for compliant interaction with human operators. My systems prioritize safety and fluidity, utilizing model-predictive control (MPC) for dynamic trajectory optimization.
+                    </p>
+<a class="inline-flex items-center px-6 py-3 border border-gray-400 dark:border-gray-600 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-all text-sm uppercase tracking-wide group" href="#">
+                        Explore Codebase
+                        <span class="material-icons ml-2 text-sm group-hover:translate-x-1 transition-transform">north_east</span>
+</a>
+</div>
+</div>
+</section>
+<section class="py-24 px-6 md:px-12 lg:px-24 border-t border-gray-300 dark:border-gray-800 relative overflow-hidden">
+<div class="absolute left-0 top-0 w-full h-full opacity-5 pointer-events-none">
+<svg height="100%" width="100%">
+<defs>
+<pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10">
+<div class="order-2 md:order-1">
+<h2 class="text-2xl md:text-4xl font-display mb-6 uppercase">03. Hardware Design</h2>
+<p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                        Form follows function. Designing high-torque-density actuators and lightweight carbon fiber skeletal structures. The goal is to maximize the payload-to-weight ratio while maintaining structural integrity under high dynamic loads.
+                    </p>
+<ul class="space-y-4 font-mono text-sm text-gray-500 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-800 pl-6 mb-8">
+<li>&gt; BLDC Motor Driver Integration</li>
+<li>&gt; Harmonic Drive Gearing</li>
+<li>&gt; Carbon Fiber Composite Layups</li>
+</ul>
+<a class="inline-flex items-center px-6 py-3 border border-gray-400 dark:border-gray-600 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-all text-sm uppercase tracking-wide group" href="#">
+                        View CAD Models
+                        <span class="material-icons ml-2 text-sm group-hover:translate-x-1 transition-transform">north_east</span>
+</a>
+</div>
+<div class="order-1 md:order-2 relative aspect-square md:aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-lg overflow-hidden group">
+<img alt="Detailed mechanical joint close up" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-luminosity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB80TJOtO7hnllNY-aHeYs7TDbEbD6P58dj1rUvjrZPu49ydwTV8hCRhJGXKU-XVWX-1iIhCIBUsBPzljM3tSe3PuInx6vxu07JeLwprpFFnBUMmYoQsBs1zbAAC7WZCdagNjCWUrW85f5W6sDJwg9kwlvDkarWbspB6GxTV64yXc4jN-ZO1xEXTQsm_tM9j0TwHMbfVYUBkAMzOZc5opqiStRtRUeLll9W6nQVFrynl42yKNRbm6delt4jBxDiGj0OOjWhnNMI9Q"/>
+<span class="absolute top-4 left-4 text-xs font-mono text-white/70 bg-black/50 px-2 py-1 rounded">JOINT_V4.2</span>
+</div>
+</div>
+</section>
+<section class="h-[60vh] md:h-[80vh] w-full relative group overflow-hidden">
+<img alt="Futuristic humanoid robot torso" class="w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5Vk0xnRiyEgdT1yzTW6WoYpEEAompfdNOPglfe9WGLih530ZaJzBHo2i3uF92XJqhos_Ux_C0_awObV4GUsgBANf8_J8kDbMaFSAs6NWCIxqY17dXFuKaDH9IZ322SInTqTAHnwmZQbXC5Jx1sRMgxyDy4YGrWLLKr5Fg8J5Oog2GMxpMtXz6YDsjFhJTVc_OBcX2ANu7Lae4dezNDf0i6nFdZ8A0CKHoVm-1XwAlmX4Jr3AND-GmIKBAboYuUjkr3DJe7sMFIaM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent opacity-90"></div>
+<div class="absolute bottom-12 md:bottom-24 left-6 md:left-24 max-w-2xl">
+<h3 class="text-3xl md:text-5xl font-display uppercase mb-4 text-gray-900 dark:text-white">The Intelligence<br/>Behind the Machine</h3>
+<p class="text-gray-700 dark:text-gray-300 mb-8">
+                    Currently developing neural networks for object manipulation and grasp synthesis.
+                </p>
+<a class="inline-flex items-center px-8 py-4 border border-gray-900 dark:border-white rounded-full hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all text-sm uppercase tracking-wide" href="#">
+                    Project Helix
+                    <span class="material-icons ml-2 text-sm">north_east</span>
+</a>
+</div>
+</section>
+</main>
+<footer class="bg-gray-200 dark:bg-[#111] text-gray-900 dark:text-gray-100 pt-20 pb-12 px-6 md:px-12 lg:px-24 border-t border-gray-300 dark:border-gray-800">
+<div class="flex flex-col lg:flex-row justify-between gap-16 lg:gap-32">
+<div class="w-full lg:w-1/3 flex flex-col justify-between h-full">
+<div>
+<h2 class="text-6xl md:text-8xl font-display font-bold tracking-[0.2em] mb-12 uppercase">NEXUS</h2>
+<div class="mb-12">
+<p class="mb-4 text-sm font-medium">Keep up with the lab</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Get technical breakdowns, paper reviews, and project updates.</p>
+<form class="flex w-full max-w-sm relative">
+<input class="w-full bg-white dark:bg-[#1a1a1a] border-none rounded-full py-4 pl-6 pr-24 text-sm focus:ring-1 focus:ring-gray-400 placeholder-gray-400 dark:placeholder-gray-600 text-gray-900 dark:text-white" placeholder="Email Address*" type="email"/>
+<button class="absolute right-2 top-2 bottom-2 bg-black dark:bg-white text-white dark:text-black px-6 rounded-full text-xs font-bold uppercase tracking-wider hover:opacity-80 transition-opacity" type="submit">
+                                Sign Up
+                            </button>
+</form>
+</div>
+<div class="flex space-x-6 text-xl mt-8">
+<a class="opacity-60 hover:opacity-100 transition-opacity" href="#"><span class="font-display font-bold">X</span></a>
+<a class="opacity-60 hover:opacity-100 transition-opacity" href="#"><i class="material-icons" style="font-size: 1.25rem;">camera_alt</i></a>
+<a class="opacity-60 hover:opacity-100 transition-opacity font-bold" href="#">in</a>
+<a class="opacity-60 hover:opacity-100 transition-opacity" href="#"><i class="material-icons" style="font-size: 1.25rem;">play_arrow</i></a>
+</div>
+</div>
+<div class="mt-16 lg:mt-auto">
+<a class="flex items-center text-xs font-bold uppercase tracking-widest hover:text-gray-500 transition-colors group" href="#">
+                        Contact Me 
+                        <span class="material-icons ml-1 text-xs text-red-500 group-hover:translate-x-1 transition-transform">north_east</span>
+</a>
+</div>
+</div>
+<div class="w-full lg:w-1/2">
+<nav class="flex flex-col">
+<a class="group py-6 border-b border-gray-400 dark:border-gray-700 flex items-baseline hover:pl-4 transition-all duration-300" href="#">
+<span class="font-mono text-xs text-gray-500 dark:text-gray-500 w-12 mr-4">01</span>
+<span class="font-display text-3xl md:text-5xl uppercase font-light text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white">Projects</span>
+</a>
+<a class="group py-6 border-b border-gray-400 dark:border-gray-700 flex items-baseline hover:pl-4 transition-all duration-300" href="#">
+<span class="font-mono text-xs text-gray-500 dark:text-gray-500 w-12 mr-4">02</span>
+<span class="font-display text-3xl md:text-5xl uppercase font-light text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white">Research</span>
+</a>
+<a class="group py-6 border-b border-gray-400 dark:border-gray-700 flex items-baseline hover:pl-4 transition-all duration-300" href="#">
+<span class="font-mono text-xs text-gray-500 dark:text-gray-500 w-12 mr-4">03</span>
+<span class="font-display text-3xl md:text-5xl uppercase font-light text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white">Publications</span>
+</a>
+<a class="group py-6 border-b border-gray-400 dark:border-gray-700 flex items-baseline hover:pl-4 transition-all duration-300" href="#">
+<span class="font-mono text-xs text-gray-500 dark:text-gray-500 w-12 mr-4">04</span>
+<span class="font-display text-3xl md:text-5xl uppercase font-light text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white">Hardware</span>
+</a>
+<a class="group py-6 border-b border-gray-400 dark:border-gray-700 flex items-baseline hover:pl-4 transition-all duration-300" href="#">
+<span class="font-mono text-xs text-gray-500 dark:text-gray-500 w-12 mr-4">05</span>
+<span class="font-display text-3xl md:text-5xl uppercase font-light text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white">Simulation</span>
+</a>
+<a class="group py-6 border-b border-gray-400 dark:border-gray-700 flex items-baseline hover:pl-4 transition-all duration-300" href="#">
+<span class="font-mono text-xs text-gray-500 dark:text-gray-500 w-12 mr-4">06</span>
+<span class="font-display text-3xl md:text-5xl uppercase font-light text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white">About Me</span>
+</a>
+<a class="group py-6 border-b border-gray-400 dark:border-gray-700 flex items-baseline hover:pl-4 transition-all duration-300" href="#">
+<span class="font-mono text-xs text-gray-500 dark:text-gray-500 w-12 mr-4">07</span>
+<span class="font-display text-3xl md:text-5xl uppercase font-light text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white">Resume</span>
+</a>
+</nav>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-end mt-24 pt-8 text-[10px] md:text-xs uppercase tracking-wide text-gray-500 dark:text-gray-500 border-t border-gray-300 dark:border-gray-800/50">
+<p>© Nexus Lab 2024.</p>
+<div class="flex space-x-6 mt-4 md:mt-0">
+<a class="hover:text-gray-800 dark:hover:text-gray-300 transition-colors" href="#">Terms &amp; Conditions</a>
+<a class="hover:text-gray-800 dark:hover:text-gray-300 transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-gray-800 dark:hover:text-gray-300 transition-colors" href="#">Accessibility Statement</a>
+</div>
+</div>
+</footer>
+
+</body></html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Robotics Portfolio Hero Home</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFFFFF", // Pure white for high contrast accents
+                        "background-light": "#F3F4F6", // Light grey for light mode
+                        "background-dark": "#050505", // Deep, almost absolute black
+                        "surface-dark": "#0f0f0f", // Slightly lighter for cards/sections
+                        "accent-gray": "#333333",
+                        "text-muted": "#888888",
+                    },
+                    fontFamily: {
+                        display: ["Space Grotesk", "sans-serif"],
+                        body: ["Manrope", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "4px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        'full': "9999px",
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        };
+    </script>
+<style>html { scroll-behavior: smooth; }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }.fade-in-up {
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-500 { animation-delay: 0.5s; }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }.glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: white;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-body antialiased transition-colors duration-300">
+<nav class="fixed top-0 w-full z-50 mix-blend-difference text-white px-6 py-6 md:px-12 flex justify-between items-center bg-transparent backdrop-blur-sm dark:backdrop-blur-none">
+<div class="text-2xl font-display font-bold tracking-widest uppercase cursor-pointer glitch-hover">
+            S.K. Eng
+        </div>
+<div class="hidden md:flex space-x-12 text-sm tracking-widest font-medium uppercase">
+<a class="hover:text-gray-400 transition-colors" href="#">Work</a>
+<a class="hover:text-gray-400 transition-colors" href="#">About</a>
+<a class="hover:text-gray-400 transition-colors" href="#">Lab</a>
+</div>
+<button class="md:hidden text-white focus:outline-none">
+<span class="material-icons-outlined text-3xl">menu</span>
+</button>
+<a class="hidden md:block border border-white/30 px-6 py-2 rounded-full text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300" href="#contact">
+            Contact
+        </a>
+</nav>
+<main class="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden">
+<div class="absolute inset-0 z-0 bg-background-light dark:bg-background-dark">
+<div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-900/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-500/10 dark:bg-gray-700/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
+</div>
+<div class="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-40 dark:opacity-80">
+<img alt="Abstract silhouette of a futuristic humanoid robot back lit in a dark environment" class="h-[80vh] md:h-[90vh] object-contain object-center filter grayscale contrast-125 brightness-75 dark:brightness-90 drop-shadow-2xl fade-in-up duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR_mz87Ku8CPbqldlqJbhlStbgkp6KNpDwcf1qR7kzoKlp7fwkFWlX6dmsLZQtSVODf4BmyNAjoP84No_hOQeBq2gURvT5wzHHaTatRQcvanvOgqJlT3jy_gUsqGwy7oNsLBZu0bsHJlJn76ENy_FrQAmUf1ZV_IZVr20AzFn2iPwvV6l2pYZPigIGYy5DyVKJMoTMi5wUwwSe22lTrSUCq0CSPijAN_Dx1SGNFtjvGA8WGEpAlcB9sxkuqQyv8Uhmd9wyAmtYXhQ"/>
+</div>
+<div class="relative z-10 w-full max-w-7xl px-6 md:px-12 flex flex-col justify-between h-screen py-32 md:py-12">
+<div class="flex-grow hidden md:block"></div>
+<div class="flex flex-col md:flex-row md:items-end justify-between w-full mt-auto mb-12 md:mb-24 gap-8">
+<div class="max-w-2xl fade-in-up delay-200">
+<h2 class="text-xs md:text-sm font-mono text-gray-500 dark:text-gray-400 mb-4 tracking-[0.2em] uppercase">
+                        System Status: Online
+                    </h2>
+<h1 class="text-4xl md:text-6xl lg:text-8xl font-display font-medium tracking-tight leading-[1.1] text-gray-900 dark:text-white mix-blend-difference">
+                        ENGINEERING THE<br/>
+<span class="text-gray-400 dark:text-gray-500">FUTURE OF AUTONOMY</span>
+</h1>
+</div>
+<div class="flex flex-col items-start md:items-end gap-6 fade-in-up delay-300">
+<p class="max-w-xs text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed md:text-right">
+                        Crafting intelligent systems and humanoid interfaces that bridge the gap between biological movement and synthetic precision.
+                    </p>
+<a class="group relative inline-flex items-center gap-3 px-8 py-4 border border-gray-300 dark:border-white/20 rounded-full overflow-hidden transition-all duration-300 hover:border-white hover:w-auto" href="#projects">
+<span class="absolute inset-0 w-0 bg-white transition-all duration-[250ms] ease-out group-hover:w-full"></span>
+<span class="relative text-xs font-bold uppercase tracking-widest text-gray-900 dark:text-white group-hover:text-black">Explore Projects</span>
+<span class="relative material-icons-outlined text-sm text-gray-900 dark:text-white group-hover:text-black transition-transform group-hover:translate-x-1">arrow_outward</span>
+</a>
+</div>
+</div>
+<div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 fade-in-up delay-500 hidden md:flex flex-col items-center gap-2">
+<span class="text-[10px] uppercase tracking-widest text-gray-400">Scroll</span>
+<div class="w-[1px] h-12 bg-gradient-to-b from-transparent via-gray-400 to-transparent opacity-50"></div>
+</div>
+</div>
+</main>
+<section class="bg-background-light dark:bg-background-dark py-24 px-6 md:px-12 border-t border-gray-200 dark:border-white/5" id="projects">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16">
+<div>
+<span class="text-xs font-mono text-gray-500 dark:text-accent-gray mb-2 block tracking-widest">01 / SELECTED WORK</span>
+<h3 class="text-3xl md:text-5xl font-display text-gray-900 dark:text-white">INTELLIGENCE <br/> IN MOTION</h3>
+</div>
+<button class="mt-6 md:mt-0 text-sm uppercase tracking-widest border-b border-gray-300 dark:border-gray-700 pb-1 hover:border-white transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    View All Case Studies
+                </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+<div class="group relative aspect-[4/3] bg-gray-200 dark:bg-surface-dark rounded-lg overflow-hidden cursor-pointer">
+<img alt="Close up of robotic arm joint" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCACJWRwa8lIv-nkb6ekLJq_hHKpTXZQLwVo6icwpdHVvLHX8_UNoDCdNd-OOrrYnm4y2uMhx-tk3ucAEywjzzQx1_AXQZgLNA5PfYeKBmURDX9R7bsZT2U0PrOKMrM_S5mep8MaQOZkdcO5npv-r0dFuarJyVh6BO7A-_EGActEhdiqK7ZzSWBhRuRH3nVh4Omhy02EsE8GY8fxp7pwhwM-W9vOWY5XNtAeG0If0p-9DicOzQnkf2FUVCLrX-ELMaLoK6GQ1SCTs8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-6 md:p-10 w-full">
+<div class="flex justify-between items-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<div>
+<h4 class="text-xl md:text-2xl text-white font-display mb-1">Figure 03 Prototype</h4>
+<p class="text-sm text-gray-300 font-mono">Kinematics &amp; Control Systems</p>
+</div>
+<span class="material-icons-outlined text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="group relative aspect-[4/3] bg-gray-200 dark:bg-surface-dark rounded-lg overflow-hidden cursor-pointer md:mt-12">
+<img alt="AI Neural network visualization" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeYYbykfDZ_jKwwrSpxB5dfqTwQE46XEp5NCfMDIE_4zfjCdecIpUTzqU42wKtIQfkG81fd3PFIe3JAmFp0tek8EPhlN5outhamRYLFMEg15YXX7jSat4dpb6y2XGD_8rGFYmpbqSfUcnE9butwwVU8Z2URL-MsU4UFr48KWZXQH2kotnlXHs0dnUm6CUaGOivtO9OnpnvDUE14yTgn22s512GueWC1A1BkxtZBEWXfHt0zX7vxxlbZRb0zV6sGoaZd5Pid7rlSk8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-6 md:p-10 w-full">
+<div class="flex justify-between items-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<div>
+<h4 class="text-xl md:text-2xl text-white font-display mb-1">Helix AI Core</h4>
+<p class="text-sm text-gray-300 font-mono">Neural Navigation Logic</p>
+</div>
+<span class="material-icons-outlined text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-gray-100 dark:bg-[#0a0a0a] py-24 px-6 md:px-12">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
+<div class="md:col-span-4">
+<span class="text-xs font-mono text-gray-500 dark:text-accent-gray mb-4 block tracking-widest">02 / EXPERTISE</span>
+<h3 class="text-3xl font-display text-gray-900 dark:text-white leading-tight">
+                    BRIDGING THE GAP<br/>
+                    BETWEEN HARDWARE<br/>
+                    AND SOFTWARE.
+                </h3>
+</div>
+<div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
+<div class="space-y-4">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center mb-2">
+<span class="material-icons-outlined text-gray-900 dark:text-white text-lg">precision_manufacturing</span>
+</div>
+<h4 class="text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wide">Mechatronics</h4>
+<p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        End-to-end design of actuators and sensors integration. Proficient in SolidWorks, rapid prototyping, and material selection for humanoid forms.
+                    </p>
+</div>
+<div class="space-y-4">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center mb-2">
+<span class="material-icons-outlined text-gray-900 dark:text-white text-lg">psychology</span>
+</div>
+<h4 class="text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wide">Computer Vision</h4>
+<p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Implementing SLAM and object recognition for real-time environmental interaction. Familiar with OpenCV, PyTorch, and CUDA optimization.
+                    </p>
+</div>
+<div class="space-y-4">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center mb-2">
+<span class="material-icons-outlined text-gray-900 dark:text-white text-lg">settings_suggest</span>
+</div>
+<h4 class="text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wide">Control Theory</h4>
+<p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Advanced PID tuning and Model Predictive Control (MPC) for stable bipedal locomotion and dexterous manipulation.
+                    </p>
+</div>
+<div class="space-y-4">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center mb-2">
+<span class="material-icons-outlined text-gray-900 dark:text-white text-lg">terminal</span>
+</div>
+<h4 class="text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wide">Embedded Systems</h4>
+<p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Low-level programming for microcontrollers. Experience with RTOS, CAN bus communication, and power management systems.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-background-light dark:bg-background-dark pt-24 pb-12 px-6 md:px-12 border-t border-gray-200 dark:border-white/5" id="contact">
+<div class="max-w-7xl mx-auto flex flex-col justify-between min-h-[50vh]">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+<div>
+<h2 class="text-5xl md:text-7xl font-display font-medium text-gray-900 dark:text-white tracking-tight mb-8">
+                        LET'S BUILD<br/>THE FUTURE.
+                    </h2>
+<a class="inline-block text-xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors border-b border-gray-300 dark:border-gray-700 pb-1 hover:border-black dark:hover:border-white" href="mailto:hello@sk-eng.com">
+                        hello@sk-eng.com
+                    </a>
+</div>
+<div class="lg:pl-24">
+<form class="space-y-8">
+<div class="border-b border-gray-300 dark:border-gray-800 focus-within:border-black dark:focus-within:border-white transition-colors pb-2">
+<input class="w-full bg-transparent border-none p-0 text-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0" placeholder="Your Name" type="text"/>
+</div>
+<div class="border-b border-gray-300 dark:border-gray-800 focus-within:border-black dark:focus-within:border-white transition-colors pb-2">
+<input class="w-full bg-transparent border-none p-0 text-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-0" placeholder="Email Address" type="email"/>
+</div>
+<div class="flex justify-end pt-4">
+<button class="bg-gray-900 dark:bg-white text-white dark:text-black px-8 py-3 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors" type="submit">
+                                Send Message
+                            </button>
+</div>
+</form>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-end mt-24 pt-8 border-t border-gray-200 dark:border-white/5">
+<div class="flex flex-col md:flex-row gap-6 md:gap-12 mb-6 md:mb-0">
+<div class="flex flex-col">
+<span class="text-xs text-gray-400 uppercase tracking-wider mb-2">Socials</span>
+<div class="flex gap-4">
+<a class="text-gray-900 dark:text-white hover:opacity-70" href="#">LinkedIn</a>
+<a class="text-gray-900 dark:text-white hover:opacity-70" href="#">Twitter</a>
+<a class="text-gray-900 dark:text-white hover:opacity-70" href="#">GitHub</a>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-gray-400 uppercase tracking-wider mb-2">Location</span>
+<span class="text-gray-900 dark:text-white">San Francisco, CA</span>
+</div>
+</div>
+<div class="text-xs text-gray-400 uppercase tracking-widest">
+                    © 2024 S.K. Engineering. All Rights Reserved.
+                </div>
+</div>
+</div>
+</footer>
+
+</body></html>
