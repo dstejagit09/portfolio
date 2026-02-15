@@ -13,14 +13,12 @@ export function ExpertiseSection() {
           {/* Section Header */}
           <div className="md:col-span-4">
             <SectionHeader
-              eyebrow="02 / EXPERTISE"
+              eyebrow="EXPERTISE"
               title={
                 <>
-                  BRIDGING THE GAP
+                  AREAS I
                   <br />
-                  BETWEEN HARDWARE
-                  <br />
-                  AND SOFTWARE.
+                  SPECIALIZE IN
                 </>
               }
               theme="dark"

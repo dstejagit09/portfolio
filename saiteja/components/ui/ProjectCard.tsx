@@ -81,10 +81,6 @@ export function ProjectCard({ project, variant = "featured", className }: Projec
             </span>
           </div>
         )}
-        <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
-          <span className="text-xs font-mono text-white">View Case Study</span>
-          <span className="text-sm text-white rotate-45">↑</span>
-        </div>
       </div>
       <div className="md:hidden">
         <ul className="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400 font-mono uppercase">

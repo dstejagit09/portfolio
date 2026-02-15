@@ -14,14 +14,9 @@ export function WorksSection() {
             SELECTED <br />
             <span className="text-gray-500">WORKS</span>
           </h1>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-t border-gray-300 pt-6">
-            <p className="max-w-md text-sm md:text-base text-gray-600 leading-relaxed">
-              A collection of engineering challenges solved through robotics, AI integration, and
-              precision mechanics. Exploring the intersection of digital intelligence and physical
-              form.
-            </p>
-            <div className="mt-4 md:mt-0 text-xs font-mono tracking-widest text-gray-500 uppercase">
-              2021 — 2024
+          <div className="flex justify-end border-t border-gray-300 pt-6">
+            <div className="text-xs font-mono tracking-widest text-gray-500 uppercase">
+              2024 — 2026
             </div>
           </div>
         </header>
