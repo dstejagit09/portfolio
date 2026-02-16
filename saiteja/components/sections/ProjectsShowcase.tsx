@@ -32,10 +32,6 @@ export function ProjectsShowcase() {
             <div
               key={project.id}
               className={index === 1 ? "md:mt-12" : ""}
-              style={{
-                animation: `fadeInUp 0.8s ease-out ${index * 0.2}s forwards`,
-                opacity: 0,
-              }}
             >
               <ProjectCard project={project} variant="featured" />
             </div>

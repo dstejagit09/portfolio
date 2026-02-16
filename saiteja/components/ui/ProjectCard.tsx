@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Project } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -19,11 +18,10 @@ export function ProjectCard({ project, variant = "featured", className }: Projec
           className
         )}
       >
-        <Image
+        <img
           src={project.image}
           alt={project.title}
-          fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
         <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
@@ -68,11 +66,10 @@ export function ProjectCard({ project, variant = "featured", className }: Projec
         </div>
       </div>
       <div className="w-full md:w-3/4 overflow-hidden rounded-lg bg-gray-200 dark:bg-[#121212] relative aspect-[16/9] md:aspect-[21/9]">
-        <Image
+        <img
           src={project.image}
           alt={project.title}
-          fill
-          className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0"
+          className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0"
         />
         {project.featured && (
           <div className="absolute top-4 left-4">

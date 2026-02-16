@@ -27,14 +27,8 @@ export function ExpertiseSection() {
 
           {/* Expertise Cards Grid */}
           <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
-            {EXPERTISE_AREAS.map((expertise, index) => (
-              <div
-                key={expertise.id}
-                style={{
-                  animation: `fadeInUp 0.8s ease-out ${(index + 1) * 0.1}s forwards`,
-                  opacity: 0,
-                }}
-              >
+            {EXPERTISE_AREAS.map((expertise) => (
+              <div key={expertise.id}>
                 <ExpertiseCard expertise={expertise} />
               </div>
             ))}

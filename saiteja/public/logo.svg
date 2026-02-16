@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Outer hexagon ring -->
+  <polygon points="60,8 104,30 104,74 60,96 16,74 16,30" stroke="white" stroke-width="3" fill="none"/>
+  <!-- Inner hexagon -->
+  <polygon points="60,28 82,40 82,64 60,76 38,64 38,40" stroke="white" stroke-width="2" fill="none"/>
+  <!-- Center node -->
+  <circle cx="60" cy="52" r="6" fill="white"/>
+  <!-- Circuit connection lines from center to inner hex vertices -->
+  <line x1="60" y1="46" x2="60" y2="28" stroke="white" stroke-width="2"/>
+  <line x1="65" y1="55" x2="82" y2="64" stroke="white" stroke-width="2"/>
+  <line x1="55" y1="55" x2="38" y2="64" stroke="white" stroke-width="2"/>
+  <!-- Outer connection nodes -->
+  <circle cx="60" cy="8" r="4" fill="white"/>
+  <circle cx="104" cy="30" r="4" fill="white"/>
+  <circle cx="104" cy="74" r="4" fill="white"/>
+  <circle cx="60" cy="96" r="4" fill="white"/>
+  <circle cx="16" cy="74" r="4" fill="white"/>
+  <circle cx="16" cy="30" r="4" fill="white"/>
+  <!-- Short outer connection stubs -->
+  <line x1="60" y1="12" x2="60" y2="24" stroke="white" stroke-width="1.5" stroke-dasharray="2,3"/>
+  <line x1="100" y1="32" x2="86" y2="39" stroke="white" stroke-width="1.5" stroke-dasharray="2,3"/>
+  <line x1="100" y1="72" x2="86" y2="65" stroke="white" stroke-width="1.5" stroke-dasharray="2,3"/>
+  <line x1="60" y1="92" x2="60" y2="80" stroke="white" stroke-width="1.5" stroke-dasharray="2,3"/>
+  <line x1="20" y1="72" x2="34" y2="65" stroke="white" stroke-width="1.5" stroke-dasharray="2,3"/>
+  <line x1="20" y1="32" x2="34" y2="39" stroke="white" stroke-width="1.5" stroke-dasharray="2,3"/>
+</svg>

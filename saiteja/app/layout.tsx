@@ -1,36 +1,29 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Manrope, Inter } from "next/font/google";
+import { Roboto, Quantico } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "700", "900"],
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const quantico = Quantico({
+  variable: "--font-quantico",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Sai Teja - Robotics Engineer | Systems Engineering Portfolio",
-  description: "Robotics engineer specializing in autonomous systems, computer vision, control theory, and mechatronics. Bridging the gap between hardware and software.",
-  keywords: ["robotics", "engineering", "autonomous systems", "computer vision", "mechatronics", "control systems"],
-  authors: [{ name: "Sai Teja" }],
+  title: "Saiteja Dasari | Robotics Engineer",
+  description: "Robotics engineer building autonomous robots with ROS2, drone control systems, and computer vision. MS Robotics at Arizona State University.",
+  keywords: ["robotics", "ROS2", "autonomous systems", "computer vision", "drone control", "UAV"],
+  authors: [{ name: "Saiteja Dasari" }],
   openGraph: {
-    title: "Sai Teja - Robotics Engineer Portfolio",
-    description: "Engineering the future of autonomy through intelligent systems and humanoid interfaces",
+    title: "Saiteja Dasari | Robotics Engineer",
+    description: "Building autonomous robots with ROS2, drone control systems, and computer vision.",
     type: "website",
   },
 };
@@ -49,7 +42,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${spaceGrotesk.variable} ${manrope.variable} ${inter.variable} antialiased`}
+        className={`${roboto.variable} ${quantico.variable} antialiased`}
       >
         {children}
       </body>

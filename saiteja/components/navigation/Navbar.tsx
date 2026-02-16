@@ -34,9 +34,26 @@ export function Navbar() {
         {/* Logo */}
         <Link
           href="#home"
-          className="text-2xl font-display font-bold tracking-widest uppercase cursor-pointer glitch-hover mix-blend-difference text-white"
+          className="flex items-center gap-3 cursor-pointer mix-blend-difference text-white"
         >
-          {SITE_CONFIG.name}
+          {/* Inline SVG logo */}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" className="w-8 h-8">
+            <polygon points="60,8 104,30 104,74 60,96 16,74 16,30" stroke="currentColor" strokeWidth="3" fill="none"/>
+            <polygon points="60,28 82,40 82,64 60,76 38,64 38,40" stroke="currentColor" strokeWidth="2" fill="none"/>
+            <circle cx="60" cy="52" r="6" fill="currentColor"/>
+            <line x1="60" y1="46" x2="60" y2="28" stroke="currentColor" strokeWidth="2"/>
+            <line x1="65" y1="55" x2="82" y2="64" stroke="currentColor" strokeWidth="2"/>
+            <line x1="55" y1="55" x2="38" y2="64" stroke="currentColor" strokeWidth="2"/>
+            <circle cx="60" cy="8" r="4" fill="currentColor"/>
+            <circle cx="104" cy="30" r="4" fill="currentColor"/>
+            <circle cx="104" cy="74" r="4" fill="currentColor"/>
+            <circle cx="60" cy="96" r="4" fill="currentColor"/>
+            <circle cx="16" cy="74" r="4" fill="currentColor"/>
+            <circle cx="16" cy="30" r="4" fill="currentColor"/>
+          </svg>
+          <span className="text-xl font-display font-bold tracking-widest uppercase">
+            {SITE_CONFIG.name}
+          </span>
         </Link>
 
         {/* Desktop Navigation */}

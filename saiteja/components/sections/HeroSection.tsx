@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { SITE_CONFIG } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
@@ -27,12 +26,10 @@ export function HeroSection() {
       {/* Robot Silhouette Image */}
       <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-80">
         <div className="relative h-[80vh] md:h-[90vh] w-full max-w-[800px]">
-          <Image
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR_mz87Ku8CPbqldlqJbhlStbgkp6KNpDwcf1qR7kzoKlp7fwkFWlX6dmsLZQtSVODf4BmyNAjoP84No_hOQeBq2gURvT5wzHHaTatRQcvanvOgqJlT3jy_gUsqGwy7oNsLBZu0bsHJlJn76ENy_FrQAmUf1ZV_IZVr20AzFn2iPwvV6l2pYZPigIGYy5DyVKJMoTMi5wUwwSe22lTrSUCq0CSPijAN_Dx1SGNFtjvGA8WGpAlcB9sxkuqQyv8Uhmd9wyAmtYXhQ"
+          <img
+            src="https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=800&q=80"
             alt="Abstract silhouette of a futuristic humanoid robot"
-            fill
-            priority
-            className={`object-contain object-center filter grayscale contrast-125 brightness-90 drop-shadow-2xl transition-all duration-1000 ${
+            className={`absolute inset-0 w-full h-full object-contain object-center filter grayscale contrast-125 brightness-90 drop-shadow-2xl transition-all duration-1000 ${
               isLoaded ? "opacity-80" : "opacity-0"
             }`}
           />
@@ -96,7 +93,7 @@ export function HeroSection() {
             Scroll
           </span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-gray-400 to-transparent opacity-50" />
-          <ChevronDown className="w-4 h-4 text-gray-400 animate-bounce" />
+          <ChevronDown className="w-4 h-4 text-gray-400" />
         </div>
       </div>
     </main>

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { TECHNICAL_SECTIONS } from "@/lib/constants";
 import { Container } from "@/components/layout/Container";
 import { ArrowUpRight } from "lucide-react";
@@ -11,11 +10,10 @@ export function TechnicalSection() {
       {/* Hero Header */}
       <div className="relative min-h-[60vh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20 overflow-hidden">
         <div className="absolute right-0 top-0 h-full w-full md:w-2/3 lg:w-1/2 opacity-20 pointer-events-none z-0">
-          <Image
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7IPfmaO6yozH75M_3Y41S5gTl2T2fw7CBXhtBBdot2zNsR_gws0zzvZ7fMLXa6-n5k0jf8HXCcLtOj8do_obMSsegTPk_wGi4aiS3j3r-E166QnPj6H2gn2EDQuxp40d7flxY8jSbGkc8Bxgj8aoZ8FP2rtJi3XNom0rtBUXSMqdcm2vfg1LjQ--GrYNOR4qGQ8hq5GIa0gb9MI1lyhpW91Mkd5cv-ZCLn359rbHzy6Xh9vW5XIAjz4WjSiDn48S4CixzV4WZjAs"
+          <img
+            src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&q=80"
             alt="Technical background"
-            fill
-            className="object-cover mix-blend-luminosity opacity-30"
+            className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-30"
           />
         </div>
 
@@ -72,11 +70,10 @@ export function TechnicalSection() {
 
               {/* Image */}
               <div className={`relative aspect-square md:aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden group ${index % 2 === 1 ? "md:order-1" : ""}`}>
-                <Image
+                <img
                   src={section.image}
                   alt={section.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-overlay"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 mix-blend-overlay"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <span className="absolute bottom-4 right-4 text-xs font-mono text-white/70">

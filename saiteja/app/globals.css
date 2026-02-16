@@ -38,21 +38,21 @@
   --color-text-muted: #888888;
   --color-accent-gray: #333333;
 
-  --font-display: var(--font-space-grotesk);
-  --font-body: var(--font-manrope);
-  --font-sans: var(--font-inter);
+  --font-display: var(--font-roboto);
+  --font-body: var(--font-quantico);
+  --font-sans: var(--font-quantico);
 }
 
 /* Typography styles */
 @layer base {
   h1, h2, h3 {
-    font-family: var(--font-space-grotesk), sans-serif;
+    font-family: var(--font-roboto), sans-serif;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: 0.02em;
   }
 
   body {
-    font-family: var(--font-manrope), sans-serif;
+    font-family: var(--font-quantico), sans-serif;
   }
 
   html {
@@ -101,47 +101,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-}
-
-/* Animation keyframes */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes glare {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-}
-
-@keyframes glitch {
-  0% { transform: translate(0) }
-  20% { transform: translate(-2px, 2px) }
-  40% { transform: translate(-2px, -2px) }
-  60% { transform: translate(2px, 2px) }
-  80% { transform: translate(2px, -2px) }
-  100% { transform: translate(0) }
-}
-
-.fade-in-up {
-  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.delay-100 { animation-delay: 0.1s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-500 { animation-delay: 0.5s; }
-
-.glitch-hover:hover {
-  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
 }
 
 /* Reduced motion support */

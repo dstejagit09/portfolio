@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Outer hexagon -->
+  <polygon points="16,3 27,9 27,21 16,27 5,21 5,9" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
+  <!-- Inner hexagon -->
+  <polygon points="16,9 22,12 22,18 16,21 10,18 10,12" stroke="#1a1a1a" stroke-width="1" fill="none"/>
+  <!-- Center node -->
+  <circle cx="16" cy="15" r="2" fill="#1a1a1a"/>
+  <!-- Connection lines -->
+  <line x1="16" y1="13" x2="16" y2="9" stroke="#1a1a1a" stroke-width="1"/>
+  <line x1="17.5" y1="16.5" x2="22" y2="18" stroke="#1a1a1a" stroke-width="1"/>
+  <line x1="14.5" y1="16.5" x2="10" y2="18" stroke="#1a1a1a" stroke-width="1"/>
+  <!-- Corner nodes -->
+  <circle cx="16" cy="3" r="1.5" fill="#1a1a1a"/>
+  <circle cx="27" cy="9" r="1.5" fill="#1a1a1a"/>
+  <circle cx="27" cy="21" r="1.5" fill="#1a1a1a"/>
+  <circle cx="16" cy="27" r="1.5" fill="#1a1a1a"/>
+  <circle cx="5" cy="21" r="1.5" fill="#1a1a1a"/>
+  <circle cx="5" cy="9" r="1.5" fill="#1a1a1a"/>
+</svg>

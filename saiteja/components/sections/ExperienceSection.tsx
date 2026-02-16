@@ -16,14 +16,10 @@ export function ExperienceSection() {
         />
 
         <div className="space-y-12">
-          {EXPERIENCE.map((exp, index) => (
+          {EXPERIENCE.map((exp) => (
             <div
               key={exp.id}
               className="border-l-2 border-white/20 pl-8 pb-12 last:pb-0"
-              style={{
-                animation: `fadeInUp 0.8s ease-out ${index * 0.2}s forwards`,
-                opacity: 0,
-              }}
             >
               <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                 <div>

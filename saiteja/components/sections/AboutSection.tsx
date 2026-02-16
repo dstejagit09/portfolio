@@ -1,17 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import { ABOUT_CONTENT, SITE_CONFIG } from "@/lib/constants";
 import { ArrowUpRight } from "lucide-react";
 
 export function AboutSection() {
   return (
     <section id="about" className="h-[60vh] md:h-[80vh] w-full relative group overflow-hidden bg-[#F3F3F3]">
-      <Image
+      <img
         src={ABOUT_CONTENT.image}
         alt="Autonomous Systems Engineering"
-        fill
-        className="object-cover object-center grayscale hover:grayscale-0 transition-all duration-1000"
+        className="absolute inset-0 w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-1000"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[#F3F3F3] to-transparent opacity-90" />
       <div className="absolute bottom-12 md:bottom-24 left-6 md:left-24 max-w-2xl z-10">
