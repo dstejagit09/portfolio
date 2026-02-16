@@ -78,8 +78,11 @@ export function EducationSection() {
                 <MapPin className="w-4 h-4" />
                 <span>Hyderabad, India</span>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center justify-between">
                 <span className="text-sm font-mono text-gray-500">{ABOUT_CONTENT.education.bachelors.period}</span>
+                <span className="px-3 py-1 bg-gray-900 text-white text-sm rounded-full">
+                  CGPA: {ABOUT_CONTENT.education.bachelors.gpa}
+                </span>
               </div>
             </div>
 

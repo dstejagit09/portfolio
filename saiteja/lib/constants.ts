@@ -264,6 +264,7 @@ export const ABOUT_CONTENT = {
     bachelors: {
       degree: "B.E. Electrical and Electronics Engineering",
       school: "Chaitanya Bharathi Institute of Technology",
+      gpa: "6.9",
       period: "Aug. 2020 – 2024",
       coursework: ["Embedded Systems", "Digital Electronics", "Power Systems", "Power Electronics"],
     },

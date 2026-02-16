@@ -23,18 +23,21 @@ export function HeroSection() {
         <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
       </div>
 
-      {/* Robot Silhouette Image */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-80">
+      {/* Robot Silhouette Image - pushed behind text with low opacity */}
+      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
         <div className="relative h-[80vh] md:h-[90vh] w-full max-w-[800px]">
           <img
             src="https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=800&q=80"
             alt="Abstract silhouette of a futuristic humanoid robot"
-            className={`absolute inset-0 w-full h-full object-contain object-center filter grayscale contrast-125 brightness-90 drop-shadow-2xl transition-all duration-1000 ${
-              isLoaded ? "opacity-80" : "opacity-0"
+            className={`absolute inset-0 w-full h-full object-contain object-center filter grayscale brightness-[0.3] contrast-125 transition-all duration-1000 ${
+              isLoaded ? "opacity-50" : "opacity-0"
             }`}
           />
         </div>
       </div>
+
+      {/* Dark overlay to ensure text readability */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/80 pointer-events-none" />
 
       {/* Content Container */}
       <div className="relative z-10 w-full max-w-7xl px-6 md:px-12 flex flex-col justify-between h-screen py-32 md:py-12">
@@ -50,7 +53,7 @@ export function HeroSection() {
             <h2 className="text-xs md:text-sm font-mono text-gray-400 mb-4 tracking-[0.2em] uppercase">
               {SITE_CONFIG.title}
             </h2>
-            <h1 className="text-4xl md:text-6xl lg:text-8xl font-display font-medium tracking-tight leading-[1.1] text-white mix-blend-difference">
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-display font-medium tracking-tight leading-[1.1] text-white">
               {SITE_CONFIG.tagline.split(" ").slice(0, 2).join(" ")}
               <br />
               <span className="text-gray-500">
@@ -65,7 +68,7 @@ export function HeroSection() {
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
             }`}
           >
-            <p className="max-w-xs text-sm md:text-base text-gray-400 leading-relaxed md:text-right">
+            <p className="max-w-xs text-sm md:text-base text-gray-300 leading-relaxed md:text-right">
               {SITE_CONFIG.description}
             </p>
             <a href="#projects">
