@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maze Solver Visual</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0e0e0e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+}
+.canvas {
+  width: 1080px;
+  height: 760px;
+  position: relative;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+/* Subtle grid background */
+.canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Glow behind the grid */
+.grid-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(200,80,40,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 8x8 Grid */
+.maze-grid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: repeat(8, 56px);
+  grid-template-rows: repeat(8, 56px);
+  gap: 3px;
+}
+
+.cell {
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.cell.obstacle {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+}
+.cell.obstacle::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,0.04) 3px,
+    rgba(255,255,255,0.04) 4px
+  );
+}
+
+.cell.path {
+  background: rgba(200,80,40,0.12);
+  border-color: rgba(200,80,40,0.25);
+}
+.cell.path::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #c85028;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(200,80,40,0.6);
+}
+
+.cell.visited {
+  background: rgba(200,80,40,0.04);
+  border-color: rgba(200,80,40,0.1);
+}
+
+.cell.start {
+  background: rgba(200,80,40,0.2);
+  border: 1.5px solid rgba(200,80,40,0.5);
+}
+.cell.end {
+  background: rgba(80,200,120,0.15);
+  border: 1.5px solid rgba(80,200,120,0.4);
+}
+
+/* ArUco markers */
+.aruco {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255,255,255,0.5);
+}
+.aruco-inner {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  width: 100%;
+  height: 100%;
+}
+.aruco-bit {
+  background: rgba(255,255,255,0.08);
+}
+.aruco-bit.on {
+  background: rgba(255,255,255,0.7);
+}
+.aruco-label {
+  position: absolute;
+  font-size: 8px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* ArUco positions */
+.aruco-tl { top: 95px; left: 258px; }
+.aruco-tl .aruco-label { top: -14px; left: 0; }
+.aruco-br { bottom: 95px; right: 258px; }
+.aruco-br .aruco-label { bottom: -14px; right: 0; }
+
+/* Path line SVG overlay */
+.path-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 472px;
+  height: 472px;
+  pointer-events: none;
+}
+
+/* Robotic arm silhouette */
+.arm-overlay {
+  position: absolute;
+  top: 40px;
+  right: 60px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* Labels */
+.label-start {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 9px;
+  color: #c85028;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transform: translate(-310px, -260px);
+}
+.label-end {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 9px;
+  color: rgba(80,200,120,0.7);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transform: translate(230px, 240px);
+}
+
+/* Coordinate labels */
+.coord-x, .coord-y {
+  position: absolute;
+  font-size: 8px;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 1px;
+}
+
+/* Technical overlay text */
+.tech-overlay {
+  position: absolute;
+  bottom: 40px;
+  left: 50px;
+  font-size: 9px;
+  color: rgba(255,255,255,0.12);
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+}
+
+.tech-right {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  font-size: 9px;
+  color: rgba(255,255,255,0.12);
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+  text-align: right;
+}
+
+/* Scan line */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(200,80,40,0.15) 50%, transparent 100%);
+  animation: scan 4s linear infinite;
+  pointer-events: none;
+}
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Corner brackets */
+.corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+.corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-tr { top: 20px; right: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+
+/* Animated path glow */
+@keyframes pathPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.path-dot {
+  animation: pathPulse 2s ease-in-out infinite;
+}
+.path-dot:nth-child(2) { animation-delay: 0.15s; }
+.path-dot:nth-child(3) { animation-delay: 0.3s; }
+.path-dot:nth-child(4) { animation-delay: 0.45s; }
+.path-dot:nth-child(5) { animation-delay: 0.6s; }
+.path-dot:nth-child(6) { animation-delay: 0.75s; }
+.path-dot:nth-child(7) { animation-delay: 0.9s; }
+.path-dot:nth-child(8) { animation-delay: 1.05s; }
+.path-dot:nth-child(9) { animation-delay: 1.2s; }
+.path-dot:nth-child(10) { animation-delay: 1.35s; }
+
+/* End point pulse */
+.cell.end::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: rgba(80,200,120,0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(80,200,120,0.5);
+  animation: endPulse 2s ease-in-out infinite;
+}
+@keyframes endPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(80,200,120,0.3); }
+  50% { box-shadow: 0 0 20px rgba(80,200,120,0.6); }
+}
+
+.cell.start::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: rgba(200,80,40,0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(200,80,40,0.5);
+}
+
+/* Cost overlay numbers */
+.cell-cost {
+  position: absolute;
+  bottom: 3px;
+  right: 4px;
+  font-size: 7px;
+  color: rgba(200,80,40,0.25);
+  font-family: 'Courier New', monospace;
+}
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid-glow"></div>
+  <div class="scan-line"></div>
+
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- ArUco Marker Top-Left -->
+  <div class="aruco aruco-tl">
+    <div class="aruco-label">ARUCO_ID:07</div>
+    <div class="aruco-inner">
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+    </div>
+  </div>
+
+  <!-- ArUco Marker Bottom-Right -->
+  <div class="aruco aruco-br">
+    <div class="aruco-label">ARUCO_ID:13</div>
+    <div class="aruco-inner">
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+    </div>
+  </div>
+
+  <!-- Labels -->
+  <div class="label-start">ORIGIN [0,0]</div>
+  <div class="label-end">GOAL [7,7]</div>
+
+  <!-- 8x8 Maze Grid -->
+  <!-- Row 0 -->
+  <div class="maze-grid">
+    <div class="cell start path-dot"><span class="cell-cost">0</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">1</span></div>
+    <div class="cell visited"></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <!-- Row 1 -->
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">2</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">3</span></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell"></div>
+    <!-- Row 2 -->
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">4</span></div>
+    <div class="cell visited"></div>
+    <div class="cell visited"></div>
+    <div class="cell visited"></div>
+    <div class="cell"></div>
+    <!-- Row 3 -->
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell path path-dot"><span class="cell-cost">5</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">6</span></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <!-- Row 4 -->
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">7</span></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <!-- Row 5 -->
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">8</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">9</span></div>
+    <div class="cell visited"></div>
+    <!-- Row 6 -->
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">10</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">11</span></div>
+    <!-- Row 7 -->
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell end"><span class="cell-cost">12</span></div>
+  </div>
+
+  <!-- Path SVG overlay -->
+  <svg class="path-overlay" viewBox="0 0 472 472" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 29 29 L 88 29 L 88 88 L 147 88 L 206 88 L 206 147 L 206 206 L 265 206 L 265 265 L 324 265 L 383 265 L 383 324 L 383 383 L 442 383 L 442 442"
+      fill="none"
+      stroke="rgba(200,80,40,0.2)"
+      stroke-width="2"
+      stroke-dasharray="6 4"
+    />
+  </svg>
+
+  <!-- Robotic arm silhouette -->
+  <svg class="arm-overlay" width="160" height="280" viewBox="0 0 160 280" xmlns="http://www.w3.org/2000/svg">
+    <!-- Base -->
+    <ellipse cx="80" cy="268" rx="50" ry="10" fill="none" stroke="white" stroke-width="0.8"/>
+    <rect x="65" y="240" width="30" height="28" rx="3" fill="none" stroke="white" stroke-width="0.8"/>
+    <!-- Joint 1 -->
+    <circle cx="80" cy="240" r="6" fill="none" stroke="white" stroke-width="0.8"/>
+    <!-- Link 1 -->
+    <line x1="80" y1="234" x2="60" y2="180" stroke="white" stroke-width="0.8"/>
+    <line x1="80" y1="234" x2="68" y2="180" stroke="white" stroke-width="0.8"/>
+    <!-- Joint 2 -->
+    <circle cx="64" cy="180" r="5" fill="none" stroke="white" stroke-width="0.8"/>
+    <!-- Link 2 -->
+    <line x1="64" y1="175" x2="85" y2="120" stroke="white" stroke-width="0.8"/>
+    <line x1="64" y1="175" x2="77" y2="120" stroke="white" stroke-width="0.8"/>
+    <!-- Joint 3 -->
+    <circle cx="81" cy="120" r="5" fill="none" stroke="white" stroke-width="0.8"/>
+    <!-- Link 3 -->
+    <line x1="81" y1="115" x2="65" y2="70" stroke="white" stroke-width="0.8"/>
+    <line x1="81" y1="115" x2="73" y2="70" stroke="white" stroke-width="0.8"/>
+    <!-- Wrist -->
+    <circle cx="69" cy="70" r="4" fill="none" stroke="white" stroke-width="0.8"/>
+    <!-- Gripper -->
+    <line x1="69" y1="66" x2="60" y2="42" stroke="white" stroke-width="0.8"/>
+    <line x1="69" y1="66" x2="78" y2="42" stroke="white" stroke-width="0.8"/>
+    <line x1="56" y1="42" x2="60" y2="30" stroke="white" stroke-width="0.7"/>
+    <line x1="64" y1="42" x2="60" y2="30" stroke="white" stroke-width="0.7"/>
+    <line x1="74" y1="42" x2="78" y2="30" stroke="white" stroke-width="0.7"/>
+    <line x1="82" y1="42" x2="78" y2="30" stroke="white" stroke-width="0.7"/>
+    <!-- DOF labels -->
+    <text x="94" y="242" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J1</text>
+    <text x="48" y="178" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J2</text>
+    <text x="92" y="120" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J3</text>
+    <text x="52" y="68" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J4</text>
+  </svg>
+
+  <!-- Technical metadata -->
+  <div class="tech-overlay">
+    ASTAR_HEURISTIC: MANHATTAN<br>
+    GRID_RESOLUTION: 8x8<br>
+    MARKER_DICT: ARUCO_4X4_50<br>
+    DETECTION_FPS: 30<br>
+    ARM_MODEL: MYCOBOT_600<br>
+    DOF: 6
+  </div>
+
+  <div class="tech-right">
+    OCCUPANCY_MAP: LOADED<br>
+    PATH_STATUS: OPTIMAL<br>
+    COST: 12 STEPS<br>
+    COLLISION: CLEAR<br>
+    WAYPOINTS: COMPUTED<br>
+    ARM_STATE: EXECUTING
+  </div>
+</div>
+</body>
+</html>

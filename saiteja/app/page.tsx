@@ -1,25 +1,41 @@
 import { Navbar } from "@/components/navigation/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { EducationSection } from "@/components/sections/EducationSection";
-import { PublicationsSection } from "@/components/sections/PublicationsSection";
-import { ExpertiseSection } from "@/components/sections/ExpertiseSection";
 import { TechnicalSection } from "@/components/sections/TechnicalSection";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
-import { WorksSection } from "@/components/sections/WorksSection";
+import { ProjectsShowcase } from "@/components/sections/ProjectsShowcase";
+import { CredentialsSection } from "@/components/sections/CredentialsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
+import { ColorPalette } from "@/components/ui/ColorPalette";
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <HeroSection />
-      <EducationSection />
-      <PublicationsSection />
-      <ExpertiseSection />
-      <TechnicalSection />
-      <ExperienceSection />
-      <WorksSection />
-      <ContactSection />
+
+      <main className="bg-surface">
+        <HeroSection />
+        <TechnicalSection />
+        <ExperienceSection />
+        <ProjectsShowcase />
+        <CredentialsSection />
+        <ContactSection />
+      </main>
+
+      {/* Fixed Footer */}
+      <footer className="fixed bottom-0 w-full flex justify-between items-center px-10 py-3 z-50 bg-surface-container-lowest border-t border-outline-variant/20">
+        <div className="text-primary-fixed font-label text-[10px] uppercase tracking-widest">
+          VERSION 4.0.2-STABLE | [ SYSTEM: READY ]
+        </div>
+        <a
+          href="mailto:totobotplus@gmail.com"
+          className="text-secondary hover:text-primary-fixed font-label text-[10px] uppercase tracking-widest transition-colors duration-150"
+        >
+          Currently: Open for Opportunities
+        </a>
+      </footer>
+
+      {/* Color Palette Widget */}
+      <ColorPalette />
     </>
   );
 }

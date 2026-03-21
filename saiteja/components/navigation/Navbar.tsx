@@ -1,113 +1,152 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+
+const NAV_LINKS = [
+  { label: "ARCHIVE",     href: "#archive" },
+  { label: "SPECS",       href: "#telemetry" },
+  { label: "BUILD LOG",   href: "#experience" },
+  { label: "DEPLOYMENTS", href: "#bio" },
+  { label: "MANIFEST",    href: "#manifest" },
+  { label: "CONTACT",     href: "#contact" },
+];
+
+function HexWebLogo() {
+  return (
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 30 30"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      style={{ color: "var(--color-primary-fixed)" }}
+    >
+      {/* Radial spokes from center to outer hex vertices */}
+      <line x1="15" y1="15" x2="27" y2="15"    stroke="currentColor" strokeWidth="0.8" opacity="0.9" />
+      <line x1="15" y1="15" x2="21" y2="25.39" stroke="currentColor" strokeWidth="0.8" opacity="0.9" />
+      <line x1="15" y1="15" x2="9"  y2="25.39" stroke="currentColor" strokeWidth="0.8" opacity="0.9" />
+      <line x1="15" y1="15" x2="3"  y2="15"    stroke="currentColor" strokeWidth="0.8" opacity="0.9" />
+      <line x1="15" y1="15" x2="9"  y2="4.61"  stroke="currentColor" strokeWidth="0.8" opacity="0.9" />
+      <line x1="15" y1="15" x2="21" y2="4.61"  stroke="currentColor" strokeWidth="0.8" opacity="0.9" />
+      {/* Small inner hexagon (r=4) */}
+      <polygon points="19,15 17,18.46 13,18.46 11,15 13,11.54 17,11.54" stroke="currentColor" strokeWidth="0.8" fill="none" opacity="0.55" />
+      {/* Medium hexagon (r=8) */}
+      <polygon points="23,15 19,21.93 11,21.93 7,15 11,8.07 19,8.07" stroke="currentColor" strokeWidth="0.8" fill="none" opacity="0.75" />
+      {/* Outer hexagon (r=12) */}
+      <polygon points="27,15 21,25.39 9,25.39 3,15 9,4.61 21,4.61" stroke="currentColor" strokeWidth="0.9" fill="none" opacity="1" />
+      {/* Center dot */}
+      <circle cx="15" cy="15" r="1.5" fill="currentColor" />
+    </svg>
+  );
+}
 
 export function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("archive");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+    const sections = ["bio", "deployments", "experience", "telemetry", "archive", "contact"];
+    const sectionIds = ["bio", "contact", "experience", "telemetry", "archive"];
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      // Iterate bottom-to-top: first section whose top <= 120px wins
+      const orderedIds = ["contact", "manifest", "bio", "experience", "telemetry", "archive"];
+      let current = "archive";
+      for (const id of orderedIds) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) {
+          current = id;
+          break;
+        }
+      }
+      setActiveSection(current);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false);
-  };
-
   return (
     <>
-      <nav
-        className={cn(
-          "fixed top-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center transition-all duration-300",
-          isScrolled ? "backdrop-blur-sm bg-black/10" : "bg-transparent"
-        )}
-      >
-        {/* Logo */}
-        <Link
-          href="#home"
-          className="flex items-center gap-3 cursor-pointer mix-blend-difference text-white"
-        >
-          {/* Inline SVG logo */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" className="w-8 h-8">
-            <polygon points="60,8 104,30 104,74 60,96 16,74 16,30" stroke="currentColor" strokeWidth="3" fill="none"/>
-            <polygon points="60,28 82,40 82,64 60,76 38,64 38,40" stroke="currentColor" strokeWidth="2" fill="none"/>
-            <circle cx="60" cy="52" r="6" fill="currentColor"/>
-            <line x1="60" y1="46" x2="60" y2="28" stroke="currentColor" strokeWidth="2"/>
-            <line x1="65" y1="55" x2="82" y2="64" stroke="currentColor" strokeWidth="2"/>
-            <line x1="55" y1="55" x2="38" y2="64" stroke="currentColor" strokeWidth="2"/>
-            <circle cx="60" cy="8" r="4" fill="currentColor"/>
-            <circle cx="104" cy="30" r="4" fill="currentColor"/>
-            <circle cx="104" cy="74" r="4" fill="currentColor"/>
-            <circle cx="60" cy="96" r="4" fill="currentColor"/>
-            <circle cx="16" cy="74" r="4" fill="currentColor"/>
-            <circle cx="16" cy="30" r="4" fill="currentColor"/>
-          </svg>
-          <span className="text-xl font-display font-bold tracking-widest uppercase">
-            {SITE_CONFIG.name}
-          </span>
-        </Link>
+      <nav className="bg-surface fixed top-0 w-full flex justify-between items-center px-10 py-6 z-[100]">
+        {/* Logo — clicks back to top / archive */}
+        <a href="#archive" aria-label="Home" className="flex items-center group">
+          <HexWebLogo />
+        </a>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-12 text-sm tracking-widest font-medium uppercase mix-blend-difference text-white">
+        {/* Desktop Nav */}
+        <div className="hidden md:flex gap-10 items-center">
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.href.slice(1);
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`font-label text-xs tracking-widest transition-colors duration-150 pb-1 ${
+                  isActive
+                    ? "text-primary-fixed border-b-2 border-primary-fixed"
+                    : "text-secondary hover:text-primary-fixed"
+                }`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Right side */}
+        <div className="flex gap-6 items-center">
+          <a
+            href="https://github.com/dstejagit09"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-label text-xs tracking-widest text-secondary hover:text-primary-fixed transition-colors uppercase"
+          >
+            GITHUB
+          </a>
+          <a
+            href="https://www.linkedin.com/in/sdasar38/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-label text-xs tracking-widest text-secondary hover:text-primary-fixed transition-colors uppercase"
+          >
+            LINKEDIN
+          </a>
+          <button
+            className="md:hidden text-secondary hover:text-primary-fixed"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className="material-symbols-outlined">
+              {menuOpen ? "close" : "menu"}
+            </span>
+          </button>
+        </div>
+      </nav>
+
+      {/* Separator */}
+      <div className="bg-surface-container-lowest h-[1px] w-full fixed top-[84px] z-[99]" />
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden fixed top-[85px] left-0 w-full bg-surface border-b border-outline-variant/20 z-[98] px-10 py-6 flex flex-col gap-6">
           {NAV_LINKS.map((link) => (
             <a
-              key={link.id}
+              key={link.href}
               href={link.href}
-              className="hover:opacity-70 transition-opacity"
+              onClick={() => setMenuOpen(false)}
+              className={`font-label text-sm tracking-widest ${
+                activeSection === link.href.slice(1) ? "text-primary-fixed" : "text-secondary"
+              }`}
             >
               {link.label}
             </a>
           ))}
-        </div>
-
-        {/* Contact Button */}
-        <a
-          href="#contact"
-          className="hidden md:block border border-white/30 px-6 py-2 rounded-full text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 mix-blend-difference text-white"
-        >
-          Contact
-        </a>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden mix-blend-difference text-white focus:outline-none"
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
-        </button>
-      </nav>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-md md:hidden">
-          <div className="flex flex-col items-center justify-center h-full space-y-8">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.id}
-                href={link.href}
-                onClick={handleLinkClick}
-                className="text-3xl font-display font-bold text-white uppercase tracking-widest hover:opacity-70 transition-opacity"
-              >
-                {link.label}
-              </a>
-            ))}
-            <a
-              href="#contact"
-              onClick={handleLinkClick}
-              className="border border-white px-8 py-3 rounded-full text-sm uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all duration-300"
-            >
-              Contact
-            </a>
+          <div className="flex gap-6 pt-2 border-t border-outline-variant/10">
+            <a href="https://github.com/dstejagit09" target="_blank" rel="noopener noreferrer" className="font-label text-xs text-secondary tracking-widest uppercase">GITHUB</a>
+            <a href="https://www.linkedin.com/in/sdasar38/" target="_blank" rel="noopener noreferrer" className="font-label text-xs text-secondary tracking-widest uppercase">LINKEDIN</a>
           </div>
         </div>
       )}

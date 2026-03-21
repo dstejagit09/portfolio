@@ -1,104 +1,127 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { SITE_CONFIG } from "@/lib/constants";
-import { Button } from "@/components/ui/Button";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
-
 export function HeroSection() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
   return (
-    <main
-      id="home"
-      className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden bg-[#050505]"
+    <section
+      id="archive"
+      className="min-h-screen pt-32 pb-24 px-6 md:px-10 relative overflow-hidden"
     >
-      {/* Gradient Background Effects */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
-      </div>
+      {/* Dot-grid overlay */}
+      <div className="absolute inset-0 mosaic-bg pointer-events-none" />
 
-      {/* Robot Silhouette Image - pushed behind text with low opacity */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-        <div className="relative h-[80vh] md:h-[90vh] w-full max-w-[800px]">
-          <img
-            src="https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=800&q=80"
-            alt="Abstract silhouette of a futuristic humanoid robot"
-            className={`absolute inset-0 w-full h-full object-contain object-center filter grayscale brightness-[0.3] contrast-125 transition-all duration-1000 ${
-              isLoaded ? "opacity-50" : "opacity-0"
-            }`}
-          />
-        </div>
-      </div>
-
-      {/* Dark overlay to ensure text readability */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/80 pointer-events-none" />
-
-      {/* Content Container */}
-      <div className="relative z-10 w-full max-w-7xl px-6 md:px-12 flex flex-col justify-between h-screen py-32 md:py-12">
-        <div className="flex-grow hidden md:block" />
-
-        <div className="flex flex-col md:flex-row md:items-end justify-between w-full mt-auto mb-12 md:mb-24 gap-8">
-          {/* Left Side: Headline */}
-          <div
-            className={`max-w-2xl transition-all duration-1000 delay-200 ${
-              isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-            }`}
-          >
-            <h2 className="text-xs md:text-sm font-mono text-gray-400 mb-4 tracking-[0.2em] uppercase">
-              {SITE_CONFIG.title}
-            </h2>
-            <h1 className="text-4xl md:text-6xl lg:text-8xl font-display font-medium tracking-tight leading-[1.1] text-white">
-              {SITE_CONFIG.tagline.split(" ").slice(0, 2).join(" ")}
-              <br />
-              <span className="text-gray-500">
-                {SITE_CONFIG.tagline.split(" ").slice(2).join(" ")}
-              </span>
-            </h1>
-          </div>
-
-          {/* Right Side: Description & CTA */}
-          <div
-            className={`flex flex-col items-start md:items-end gap-6 transition-all duration-1000 delay-300 ${
-              isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-            }`}
-          >
-            <p className="max-w-xs text-sm md:text-base text-gray-300 leading-relaxed md:text-right">
-              {SITE_CONFIG.description}
-            </p>
-            <a href="#projects">
-              <Button
-                variant="outline"
-                className="group relative overflow-hidden"
-              >
-                <span className="absolute inset-0 w-0 bg-white transition-all duration-[250ms] ease-out group-hover:w-full" />
-                <span className="relative z-10 text-white group-hover:text-black transition-colors">
-                  Explore Projects
-                </span>
-                <ArrowUpRight className="relative z-10 w-4 h-4 text-white group-hover:text-black group-hover:translate-x-1 transition-all" />
-              </Button>
-            </a>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div
-          className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden md:flex flex-col items-center gap-2 transition-all duration-1000 delay-500 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <span className="text-[10px] uppercase tracking-widest text-gray-400">
-            Scroll
+      {/* Status Bar */}
+      <div className="mb-16 flex flex-wrap items-center gap-3">
+        <div className="px-3 py-1 bg-surface-container-high border border-outline-variant/20 flex items-center gap-3">
+          <span className="w-2 h-2 rounded-full bg-primary-fixed shadow-[0_0_8px_var(--color-primary-fixed)]" />
+          <span className="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant">
+            [ SYSTEM: READY ]
           </span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-gray-400 to-transparent opacity-50" />
-          <ChevronDown className="w-4 h-4 text-gray-400" />
+        </div>
+        <div className="px-3 py-1 border border-outline-variant/20 font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant">
+          [ CORE: V4.0.2-STABLE ]
+        </div>
+        <div className="px-3 py-1 border border-outline-variant/20 font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant">
+          [ LATENCY: 12ms ]
         </div>
       </div>
-    </main>
+
+      {/* Hero Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        {/* Headline Column */}
+        <div className="lg:col-span-7">
+          <h2 className="font-label text-primary-fixed text-sm tracking-[0.4em] mb-6 uppercase">
+            MS Robotics &amp; Autonomous Systems · ASU
+          </h2>
+          <h1 className="text-6xl md:text-8xl font-headline italic leading-[0.9] text-on-surface mb-8">
+            Saiteja
+            <br />
+            Venkateshwa
+            <br />
+            Rao Dasari
+          </h1>
+          <p className="max-w-xl text-secondary text-lg leading-relaxed border-l border-primary-fixed/30 pl-8 py-2">
+            Building intelligent robotic systems at the intersection of control
+            theory, computer vision, and multi-robot coordination. ROS2,
+            MATLAB/Simulink, Python, and C from simulation to hardware.
+          </p>
+          <div className="mt-12 border border-outline-variant/30 bg-surface-container-low p-5">
+            <p className="font-label text-[10px] text-outline uppercase tracking-widest mb-4">
+              Target Roles
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Robotics Engineer",
+                "Controls Engineer",
+                "Autonomy Engineer",
+                "UAV Systems",
+                "Robotics SWE",
+              ].map((role) => (
+                <span
+                  key={role}
+                  className="font-label text-xs uppercase tracking-widest px-3 py-1.5 border border-primary-fixed/30 text-primary-fixed bg-primary-fixed/5"
+                >
+                  {role}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Terminal Column */}
+        <div className="lg:col-span-5 w-full">
+          <div className="bg-surface-container-lowest border border-outline-variant/30 shadow-2xl relative">
+            {/* Terminal Header */}
+            <div className="bg-surface-container-high px-4 py-2 flex items-center justify-between border-b border-outline-variant/30">
+              <div className="flex gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-error/40" />
+                <div className="w-2.5 h-2.5 rounded-full bg-primary-fixed/40" />
+                <div className="w-2.5 h-2.5 rounded-full bg-secondary/40" />
+              </div>
+              <div className="font-label text-[10px] tracking-widest text-on-surface-variant/60 uppercase">
+                bash — 80x24
+              </div>
+            </div>
+
+            {/* Terminal Body */}
+            <div className="p-6 font-label text-sm leading-relaxed overflow-hidden">
+              {[
+                { n: "01", prompt: true, cmd: "ros2 launch autonomy bringup.launch.py" },
+                { n: "02", out: "[INFO] [launch]: Starting /fdi_controller" },
+                { n: "03", out: "[INFO] [launch]: Starting /path_planner_node" },
+                { n: "04", prompt: true, cmd: "ros2 topic echo /system_status" },
+                { n: "05", json: "{" },
+                { n: "06", json: '  "identity": "Saiteja Dasari",' },
+                { n: "07", json: '  "gpa": "3.89 / 4.0",' },
+                { n: "08", json: '  "focus": ["Controls", "Vision", "Autonomy"],' },
+                { n: "09", json: '  "status": "NOMINAL"' },
+                { n: "10", json: "}" },
+              ].map(({ n, prompt, cmd, out, json }) => (
+                <div key={n} className="flex gap-4 mb-2">
+                  <span className="text-primary-fixed/50 shrink-0">{n}</span>
+                  {prompt && (
+                    <>
+                      <span className="text-primary-fixed shrink-0">
+                        saiteja@asu:~$
+                      </span>
+                      <span className="text-on-surface">{cmd}</span>
+                    </>
+                  )}
+                  {out && (
+                    <span className="text-secondary-fixed-dim">{out}</span>
+                  )}
+                  {json && (
+                    <span className="text-on-surface-variant">{json}</span>
+                  )}
+                </div>
+              ))}
+              {/* Cursor line */}
+              <div className="flex gap-4">
+                <span className="text-primary-fixed/50">11</span>
+                <span className="text-primary-fixed">saiteja@asu:~$</span>
+                <span className="w-2 h-5 bg-primary-fixed animate-pulse" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

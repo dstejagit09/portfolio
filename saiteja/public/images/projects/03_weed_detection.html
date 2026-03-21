@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Courier New', monospace; overflow: hidden; }
+.canvas { width: 1080px; height: 760px; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; }
+.corner { position: absolute; width: 20px; height: 20px; }
+.corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-tr { top: 20px; right: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.scan-line { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(transparent, rgba(200,80,40,0.15), transparent); animation: scanH 3s linear infinite; z-index: 10; }
+@keyframes scanH { 0% { left: 0; } 100% { left: 100%; } }
+.tech-left { position: absolute; bottom: 40px; left: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; letter-spacing: 0.5px; }
+.tech-right { position: absolute; top: 40px; right: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; text-align: right; letter-spacing: 0.5px; }
+.view-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+/* Detection log */
+.det-log {
+  position: absolute;
+  top: 60px;
+  left: 50px;
+  font-size: 7px;
+  color: rgba(255,255,255,0.15);
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+}
+.det-log .crop { color: rgba(80,200,120,0.5); }
+.det-log .weed { color: rgba(255,80,80,0.5); }
+
+/* Confidence histogram */
+.conf-hist {
+  position: absolute;
+  bottom: 80px;
+  left: 50px;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+}
+.conf-bar {
+  width: 6px;
+  background: rgba(200,80,40,0.3);
+  border-radius: 1px 1px 0 0;
+}
+.conf-label { position: absolute; bottom: -14px; left: 0; right: 0; text-align: center; font-size: 6px; color: rgba(255,255,255,0.1); }
+
+/* Model info */
+.model-info {
+  position: absolute;
+  bottom: 60px;
+  right: 60px;
+  border: 1px solid rgba(200,80,40,0.15);
+  background: rgba(200,80,40,0.02);
+  padding: 10px 14px;
+  font-size: 7px;
+  color: rgba(200,80,40,0.4);
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+}
+
+@keyframes fadeBox { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="scan-line"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Detection log -->
+  <div class="det-log">
+    [FRAME_0847]<br>
+    <span class="crop">CROP&nbsp;&nbsp;conf:0.96 box:[124,89,210,198]</span><br>
+    <span class="weed">WEED&nbsp;&nbsp;conf:0.91 box:[302,156,388,260]</span><br>
+    <span class="crop">CROP&nbsp;&nbsp;conf:0.94 box:[445,72,538,180]</span><br>
+    <span class="weed">WEED&nbsp;&nbsp;conf:0.87 box:[180,340,268,445]</span><br>
+    <span class="crop">CROP&nbsp;&nbsp;conf:0.98 box:[390,310,490,420]</span><br>
+    <span class="crop">CROP&nbsp;&nbsp;conf:0.92 box:[88,420,175,530]</span><br>
+    <span class="weed">WEED&nbsp;&nbsp;conf:0.83 box:[510,390,580,480]</span><br>
+    <br>
+    DETECTIONS: 7<br>
+    CROP: 4 &nbsp;WEED: 3<br>
+    AVG_CONF: 0.916<br>
+    INFERENCE: 83ms
+  </div>
+
+  <!-- Confidence histogram -->
+  <div class="conf-hist">
+    <div class="conf-bar" style="height: 8px;"></div>
+    <div class="conf-bar" style="height: 12px;"></div>
+    <div class="conf-bar" style="height: 6px;"></div>
+    <div class="conf-bar" style="height: 18px;"></div>
+    <div class="conf-bar" style="height: 28px;"></div>
+    <div class="conf-bar" style="height: 42px;"></div>
+    <div class="conf-bar" style="height: 55px; background: rgba(200,80,40,0.5);"></div>
+    <div class="conf-bar" style="height: 48px; background: rgba(200,80,40,0.5);"></div>
+    <div class="conf-bar" style="height: 35px;"></div>
+    <div class="conf-bar" style="height: 20px;"></div>
+    <span class="conf-label">CONFIDENCE DIST.</span>
+  </div>
+
+  <!-- Model info -->
+  <div class="model-info">
+    MODEL: YOLOv8n<br>
+    INPUT: 640x640<br>
+    DATASET: 3000_SAMPLES<br>
+    CLASSES: [CROP, WEED]<br>
+    mAP@50: 0.97<br>
+    DEPLOY: ROSMASTER_X3<br>
+    NODE: /weed_detector
+  </div>
+
+  <!-- Main detection view -->
+  <div class="view-container">
+    <svg width="620" height="560" viewBox="0 0 620 560">
+      <!-- Background field representation -->
+      <rect x="0" y="0" width="620" height="560" rx="2" fill="rgba(255,255,255,0.01)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+
+      <!-- Field texture (rows of dots suggesting crops from above) -->
+      <g opacity="0.06">
+        <!-- Row patterns suggesting aerial crop view -->
+        <g>
+          <circle cx="60" cy="50" r="8" fill="rgba(100,180,80,0.8)"/>
+          <circle cx="110" cy="55" r="10" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="160" cy="48" r="9" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="210" cy="52" r="7" fill="rgba(80,160,60,0.7)"/>
+          <circle cx="260" cy="47" r="11" fill="rgba(100,180,80,0.5)"/>
+          <circle cx="310" cy="55" r="8" fill="rgba(120,200,80,0.6)"/>
+          <circle cx="360" cy="50" r="10" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="410" cy="48" r="9" fill="rgba(80,160,60,0.6)"/>
+          <circle cx="460" cy="53" r="7" fill="rgba(100,180,80,0.8)"/>
+          <circle cx="510" cy="50" r="10" fill="rgba(100,180,80,0.5)"/>
+          <circle cx="560" cy="47" r="8" fill="rgba(120,200,80,0.7)"/>
+        </g>
+        <!-- More rows offset -->
+        <g transform="translate(25, 60)">
+          <circle cx="60" cy="50" r="9" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="110" cy="55" r="7" fill="rgba(80,160,60,0.7)"/>
+          <circle cx="160" cy="48" r="11" fill="rgba(100,180,80,0.5)"/>
+          <circle cx="210" cy="52" r="8" fill="rgba(120,200,80,0.8)"/>
+          <circle cx="260" cy="47" r="10" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="310" cy="55" r="9" fill="rgba(80,160,60,0.7)"/>
+          <circle cx="360" cy="50" r="7" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="410" cy="48" r="11" fill="rgba(120,200,80,0.5)"/>
+          <circle cx="460" cy="53" r="8" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="510" cy="50" r="9" fill="rgba(80,160,60,0.8)"/>
+        </g>
+        <g transform="translate(-10, 120)">
+          <circle cx="60" cy="50" r="10" fill="rgba(100,180,80,0.5)"/>
+          <circle cx="110" cy="55" r="8" fill="rgba(120,200,80,0.7)"/>
+          <circle cx="160" cy="48" r="7" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="210" cy="52" r="11" fill="rgba(80,160,60,0.5)"/>
+          <circle cx="260" cy="47" r="9" fill="rgba(100,180,80,0.8)"/>
+          <circle cx="310" cy="55" r="10" fill="rgba(120,200,80,0.6)"/>
+          <circle cx="360" cy="50" r="8" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="410" cy="48" r="7" fill="rgba(80,160,60,0.6)"/>
+          <circle cx="460" cy="53" r="11" fill="rgba(100,180,80,0.5)"/>
+          <circle cx="510" cy="50" r="8" fill="rgba(120,200,80,0.7)"/>
+          <circle cx="560" cy="47" r="9" fill="rgba(100,180,80,0.6)"/>
+        </g>
+        <g transform="translate(15, 180)">
+          <circle cx="60" cy="50" r="8" fill="rgba(80,160,60,0.7)"/>
+          <circle cx="110" cy="55" r="11" fill="rgba(100,180,80,0.5)"/>
+          <circle cx="160" cy="48" r="9" fill="rgba(120,200,80,0.6)"/>
+          <circle cx="210" cy="52" r="10" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="260" cy="47" r="7" fill="rgba(80,160,60,0.8)"/>
+          <circle cx="310" cy="55" r="8" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="360" cy="50" r="11" fill="rgba(120,200,80,0.5)"/>
+          <circle cx="410" cy="48" r="9" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="460" cy="53" r="10" fill="rgba(80,160,60,0.6)"/>
+          <circle cx="510" cy="50" r="7" fill="rgba(100,180,80,0.8)"/>
+        </g>
+        <g transform="translate(-5, 240)">
+          <circle cx="60" cy="50" r="9" fill="rgba(120,200,80,0.6)"/>
+          <circle cx="110" cy="55" r="10" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="160" cy="48" r="8" fill="rgba(80,160,60,0.5)"/>
+          <circle cx="210" cy="52" r="7" fill="rgba(100,180,80,0.8)"/>
+          <circle cx="310" cy="55" r="11" fill="rgba(120,200,80,0.5)"/>
+          <circle cx="360" cy="50" r="9" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="460" cy="53" r="8" fill="rgba(80,160,60,0.7)"/>
+          <circle cx="510" cy="50" r="11" fill="rgba(100,180,80,0.5)"/>
+          <circle cx="560" cy="47" r="10" fill="rgba(120,200,80,0.6)"/>
+        </g>
+        <g transform="translate(20, 300)">
+          <circle cx="60" cy="50" r="10" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="110" cy="55" r="8" fill="rgba(80,160,60,0.6)"/>
+          <circle cx="160" cy="48" r="11" fill="rgba(120,200,80,0.5)"/>
+          <circle cx="260" cy="47" r="9" fill="rgba(100,180,80,0.6)"/>
+          <circle cx="310" cy="55" r="7" fill="rgba(80,160,60,0.8)"/>
+          <circle cx="410" cy="48" r="10" fill="rgba(100,180,80,0.7)"/>
+          <circle cx="460" cy="53" r="9" fill="rgba(120,200,80,0.5)"/>
+          <circle cx="510" cy="50" r="8" fill="rgba(100,180,80,0.6)"/>
+        </g>
+      </g>
+
+      <!-- CROP detections (green boxes) -->
+      <rect x="80" y="60" width="100" height="120" rx="2" fill="none" stroke="rgba(80,200,120,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite;"/>
+      <rect x="80" y="52" width="75" height="12" rx="1" fill="rgba(80,200,120,0.12)"/>
+      <text x="84" y="61" fill="rgba(80,200,120,0.7)" font-size="8" font-family="Courier New">CROP 0.96</text>
+
+      <rect x="400" y="45" width="110" height="125" rx="2" fill="none" stroke="rgba(80,200,120,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite 0.4s;"/>
+      <rect x="400" y="37" width="75" height="12" rx="1" fill="rgba(80,200,120,0.12)"/>
+      <text x="404" y="46" fill="rgba(80,200,120,0.7)" font-size="8" font-family="Courier New">CROP 0.94</text>
+
+      <rect x="350" y="280" width="115" height="130" rx="2" fill="none" stroke="rgba(80,200,120,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite 0.8s;"/>
+      <rect x="350" y="272" width="75" height="12" rx="1" fill="rgba(80,200,120,0.12)"/>
+      <text x="354" y="281" fill="rgba(80,200,120,0.7)" font-size="8" font-family="Courier New">CROP 0.98</text>
+
+      <rect x="50" y="390" width="100" height="120" rx="2" fill="none" stroke="rgba(80,200,120,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite 1.2s;"/>
+      <rect x="50" y="382" width="75" height="12" rx="1" fill="rgba(80,200,120,0.12)"/>
+      <text x="54" y="391" fill="rgba(80,200,120,0.7)" font-size="8" font-family="Courier New">CROP 0.92</text>
+
+      <!-- WEED detections (red boxes) -->
+      <rect x="260" y="130" width="100" height="118" rx="2" fill="none" stroke="rgba(255,80,80,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite 0.2s;"/>
+      <rect x="260" y="122" width="75" height="12" rx="1" fill="rgba(255,80,80,0.12)"/>
+      <text x="264" y="131" fill="rgba(255,80,80,0.7)" font-size="8" font-family="Courier New">WEED 0.91</text>
+      <!-- Spray target crosshair -->
+      <line x1="310" y1="175" x2="310" y2="205" stroke="rgba(255,80,80,0.2)" stroke-width="0.5"/>
+      <line x1="295" y1="189" x2="325" y2="189" stroke="rgba(255,80,80,0.2)" stroke-width="0.5"/>
+      <circle cx="310" cy="189" r="8" fill="none" stroke="rgba(255,80,80,0.15)" stroke-width="0.5"/>
+
+      <rect x="140" y="310" width="100" height="118" rx="2" fill="none" stroke="rgba(255,80,80,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite 0.6s;"/>
+      <rect x="140" y="302" width="75" height="12" rx="1" fill="rgba(255,80,80,0.12)"/>
+      <text x="144" y="311" fill="rgba(255,80,80,0.7)" font-size="8" font-family="Courier New">WEED 0.87</text>
+      <line x1="190" y1="355" x2="190" y2="385" stroke="rgba(255,80,80,0.2)" stroke-width="0.5"/>
+      <line x1="175" y1="369" x2="205" y2="369" stroke="rgba(255,80,80,0.2)" stroke-width="0.5"/>
+      <circle cx="190" cy="369" r="8" fill="none" stroke="rgba(255,80,80,0.15)" stroke-width="0.5"/>
+
+      <rect x="475" y="360" width="90" height="105" rx="2" fill="none" stroke="rgba(255,80,80,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite 1s;"/>
+      <rect x="475" y="352" width="75" height="12" rx="1" fill="rgba(255,80,80,0.12)"/>
+      <text x="479" y="361" fill="rgba(255,80,80,0.7)" font-size="8" font-family="Courier New">WEED 0.83</text>
+      <line x1="520" y1="398" x2="520" y2="428" stroke="rgba(255,80,80,0.2)" stroke-width="0.5"/>
+      <line x1="505" y1="413" x2="535" y2="413" stroke="rgba(255,80,80,0.2)" stroke-width="0.5"/>
+      <circle cx="520" cy="413" r="8" fill="none" stroke="rgba(255,80,80,0.15)" stroke-width="0.5"/>
+
+      <!-- Frame info overlay -->
+      <text x="10" y="552" fill="rgba(255,255,255,0.08)" font-size="7" font-family="Courier New">FRAME: 0847 | RES: 640x640 | FPS: 12 | NODE: /weed_detector/inference</text>
+
+      <!-- Inference scan line (vertical) -->
+      <line x1="0" y1="0" x2="0" y2="560" stroke="rgba(200,80,40,0.15)" stroke-width="0.8">
+        <animate attributeName="x1" values="0;620;0" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="x2" values="0;620;0" dur="3s" repeatCount="indefinite"/>
+      </line>
+
+      <!-- Legend -->
+      <rect x="490" y="15" width="120" height="42" rx="2" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+      <rect x="500" y="24" width="8" height="8" rx="1" fill="none" stroke="rgba(80,200,120,0.6)" stroke-width="1"/>
+      <text x="514" y="32" fill="rgba(80,200,120,0.5)" font-size="7" font-family="Courier New">CROP</text>
+      <rect x="500" y="38" width="8" height="8" rx="1" fill="none" stroke="rgba(255,80,80,0.6)" stroke-width="1"/>
+      <text x="514" y="46" fill="rgba(255,80,80,0.5)" font-size="7" font-family="Courier New">WEED (SPRAY TARGET)</text>
+    </svg>
+  </div>
+
+  <div class="tech-left">
+    PIPELINE: ROS_YOLO_V8<br>
+    CAMERA: USB_CAM_720P<br>
+    INFERENCE: ONNXRUNTIME<br>
+    TOPIC: /detections<br>
+    HARDWARE: ROSMASTER_X3
+  </div>
+  <div class="tech-right">
+    ACCURACY: 97%<br>
+    THROUGHPUT: 12_FPS<br>
+    SAMPLES: 3000<br>
+    CLASSES: 2<br>
+    CONF_THRESH: 0.5
+  </div>
+</div>
+</body>
+</html>

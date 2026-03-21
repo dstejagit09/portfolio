@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Courier New', monospace; overflow: hidden; }
+.canvas { width: 1080px; height: 760px; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; }
+.corner { position: absolute; width: 20px; height: 20px; }
+.corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-tr { top: 20px; right: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.scan-line { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,80,40,0.12), transparent); animation: scan 5s linear infinite; z-index: 10; }
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+.tech-left { position: absolute; bottom: 40px; left: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; letter-spacing: 0.5px; }
+.tech-right { position: absolute; top: 40px; right: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; text-align: right; letter-spacing: 0.5px; }
+.scene-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+/* PID Error plot */
+.pid-plot {
+  position: absolute;
+  top: 55px;
+  left: 50px;
+  border: 1px solid rgba(200,80,40,0.12);
+  background: rgba(0,0,0,0.2);
+  padding: 8px;
+}
+.pid-label { font-size: 7px; color: rgba(200,80,40,0.4); letter-spacing: 1px; margin-bottom: 4px; }
+
+/* State display */
+.state-display {
+  position: absolute;
+  bottom: 70px;
+  left: 50%; transform: translateX(-50%);
+  display: flex;
+  gap: 40px;
+}
+.state-item { text-align: center; }
+.state-lbl { font-size: 7px; color: rgba(255,255,255,0.2); letter-spacing: 2px; margin-bottom: 3px; }
+.state-val { font-size: 12px; letter-spacing: 1px; }
+.state-val.g { color: rgba(80,200,120,0.6); }
+.state-val.o { color: rgba(200,80,40,0.7); }
+
+/* Landing zone callout */
+.lz-callout {
+  position: absolute;
+  bottom: 140px;
+  right: 60px;
+  border: 1px solid rgba(80,200,120,0.15);
+  background: rgba(80,200,120,0.02);
+  padding: 8px 14px;
+  font-size: 7px;
+  color: rgba(80,200,120,0.5);
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+}
+
+@keyframes descend { 0% { transform: translate(0, 0); } 50% { transform: translate(20px, 40px); } 100% { transform: translate(0, 0); } }
+@keyframes platformMove { 0% { transform: translateX(0); } 50% { transform: translateX(60px); } 100% { transform: translateX(0); } }
+@keyframes markerPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="scan-line"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- PID error plot -->
+  <div class="pid-plot">
+    <div class="pid-label">PID_ERROR (X-AXIS)</div>
+    <svg width="180" height="70" viewBox="0 0 180 70">
+      <!-- Zero line -->
+      <line x1="0" y1="35" x2="180" y2="35" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+      <!-- Error signal converging to zero -->
+      <path d="M 0 10 Q 15 55, 30 38 Q 45 20, 60 33 Q 75 42, 90 36 Q 105 32, 120 34 Q 135 37, 150 35 L 180 35" fill="none" stroke="rgba(200,80,40,0.5)" stroke-width="1"/>
+      <!-- Labels -->
+      <text x="0" y="8" fill="rgba(255,255,255,0.12)" font-size="5" font-family="Courier New">+8cm</text>
+      <text x="0" y="68" fill="rgba(255,255,255,0.12)" font-size="5" font-family="Courier New">-8cm</text>
+      <text x="165" y="32" fill="rgba(80,200,120,0.4)" font-size="5" font-family="Courier New">0</text>
+    </svg>
+    <div class="pid-label" style="margin-top: 6px;">PID_ERROR (Y-AXIS)</div>
+    <svg width="180" height="70" viewBox="0 0 180 70">
+      <line x1="0" y1="35" x2="180" y2="35" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+      <path d="M 0 55 Q 20 15, 40 32 Q 55 45, 70 37 Q 85 30, 100 34 Q 115 38, 130 35.5 Q 145 34, 160 35 L 180 35" fill="none" stroke="rgba(100,150,255,0.5)" stroke-width="1"/>
+      <text x="0" y="8" fill="rgba(255,255,255,0.12)" font-size="5" font-family="Courier New">+8cm</text>
+      <text x="0" y="68" fill="rgba(255,255,255,0.12)" font-size="5" font-family="Courier New">-8cm</text>
+      <text x="165" y="32" fill="rgba(80,200,120,0.4)" font-size="5" font-family="Courier New">0</text>
+    </svg>
+  </div>
+
+  <!-- Landing zone callout -->
+  <div class="lz-callout">
+    MARKER_DETECTED: TRUE<br>
+    TRACKING_LOCK: STABLE<br>
+    PLATFORM_VEL: 0.3 m/s<br>
+    PRED_HORIZON: 2.0s<br>
+    LANDING_CLEAR: TRUE
+  </div>
+
+  <!-- Main scene -->
+  <div class="scene-container">
+    <svg width="650" height="520" viewBox="0 0 650 520">
+      <!-- Altitude reference lines -->
+      <g opacity="0.06">
+        <line x1="40" y1="100" x2="610" y2="100" stroke="white" stroke-width="0.3" stroke-dasharray="4 8"/>
+        <line x1="40" y1="200" x2="610" y2="200" stroke="white" stroke-width="0.3" stroke-dasharray="4 8"/>
+        <line x1="40" y1="300" x2="610" y2="300" stroke="white" stroke-width="0.3" stroke-dasharray="4 8"/>
+        <line x1="40" y1="400" x2="610" y2="400" stroke="white" stroke-width="0.3" stroke-dasharray="4 8"/>
+      </g>
+      <text x="20" y="104" fill="rgba(255,255,255,0.08)" font-size="6" font-family="Courier New">3m</text>
+      <text x="20" y="204" fill="rgba(255,255,255,0.08)" font-size="6" font-family="Courier New">2m</text>
+      <text x="20" y="304" fill="rgba(255,255,255,0.08)" font-size="6" font-family="Courier New">1m</text>
+      <text x="16" y="404" fill="rgba(255,255,255,0.08)" font-size="6" font-family="Courier New">0m</text>
+
+      <!-- Ground -->
+      <line x1="40" y1="440" x2="610" y2="440" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+
+      <!-- Moving platform -->
+      <g style="animation: platformMove 6s ease-in-out infinite;">
+        <!-- Platform body -->
+        <rect x="270" y="430" width="120" height="14" rx="3" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+        <!-- Wheels -->
+        <circle cx="290" cy="450" r="6" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <circle cx="370" cy="450" r="6" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <!-- ArUco marker on platform -->
+        <rect x="305" y="432" width="10" height="10" fill="none" stroke="rgba(200,80,40,0.6)" stroke-width="0.8" style="animation: markerPulse 2s infinite;"/>
+        <rect x="307" y="434" width="2" height="2" fill="rgba(200,80,40,0.4)"/>
+        <rect x="311" y="434" width="2" height="2" fill="rgba(200,80,40,0.4)"/>
+        <rect x="307" y="438" width="2" height="2" fill="rgba(200,80,40,0.4)"/>
+        <rect x="311" y="438" width="2" height="2" fill="rgba(200,80,40,0.4)"/>
+        <!-- Landing zone circle -->
+        <circle cx="330" cy="437" r="30" fill="none" stroke="rgba(80,200,120,0.1)" stroke-width="0.5" stroke-dasharray="3 3">
+          <animate attributeName="r" values="28;34;28" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="330" y="470" text-anchor="middle" fill="rgba(255,255,255,0.1)" font-size="6" font-family="Courier New">PLATFORM v=0.3m/s →</text>
+        <!-- Platform direction arrow -->
+        <line x1="390" y1="437" x2="410" y2="437" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" marker-end="url(#arr)"/>
+      </g>
+
+      <defs>
+        <marker id="arr" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto">
+          <path d="M1 1L5 3L1 5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+        </marker>
+      </defs>
+
+      <!-- Drone (animated descent) -->
+      <g style="animation: descend 6s ease-in-out infinite;">
+        <!-- Drone body -->
+        <rect x="310" y="170" width="40" height="14" rx="4" fill="rgba(200,80,40,0.06)" stroke="rgba(200,80,40,0.3)" stroke-width="0.8"/>
+        <!-- Arms -->
+        <line x1="315" y1="177" x2="285" y2="165" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+        <line x1="345" y1="177" x2="375" y2="165" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+        <!-- Rotors -->
+        <ellipse cx="285" cy="162" rx="18" ry="3" fill="none" stroke="rgba(200,80,40,0.2)" stroke-width="0.5">
+          <animate attributeName="rx" values="18;16;18" dur="0.3s" repeatCount="indefinite"/>
+        </ellipse>
+        <ellipse cx="375" cy="162" rx="18" ry="3" fill="none" stroke="rgba(200,80,40,0.2)" stroke-width="0.5">
+          <animate attributeName="rx" values="16;18;16" dur="0.3s" repeatCount="indefinite"/>
+        </ellipse>
+        <!-- Camera FOV cone -->
+        <path d="M 330 184 L 290 430 L 370 430 Z" fill="rgba(200,80,40,0.02)" stroke="rgba(200,80,40,0.06)" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <!-- Center detection beam -->
+        <line x1="330" y1="184" x2="330" y2="430" stroke="rgba(200,80,40,0.08)" stroke-width="0.3" stroke-dasharray="2 6"/>
+
+        <!-- Drone label -->
+        <text x="330" y="155" text-anchor="middle" fill="rgba(200,80,40,0.4)" font-size="7" font-family="Courier New">PARROT_MAMBO</text>
+        <text x="330" y="200" text-anchor="middle" fill="rgba(255,255,255,0.08)" font-size="6" font-family="Courier New">ALT: 2.4m ↓</text>
+      </g>
+
+      <!-- Predicted trajectory (dashed curve from drone to predicted platform position) -->
+      <g style="animation: descend 6s ease-in-out infinite;">
+        <path d="M 330 184 Q 340 300, 355 430" fill="none" stroke="rgba(200,80,40,0.2)" stroke-width="1" stroke-dasharray="6 4">
+          <animate attributeName="stroke-dashoffset" values="0;-20" dur="1.5s" repeatCount="indefinite"/>
+        </path>
+        <!-- Predicted landing point -->
+        <circle cx="355" cy="430" r="4" fill="rgba(200,80,40,0.3)" stroke="rgba(200,80,40,0.5)" stroke-width="0.5">
+          <animate attributeName="r" values="3;6;3" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="375" y="425" fill="rgba(200,80,40,0.3)" font-size="6" font-family="Courier New">PRED_IMPACT</text>
+      </g>
+
+      <!-- Historical trajectory trail -->
+      <circle cx="310" cy="100" r="2" fill="rgba(200,80,40,0.1)"/>
+      <circle cx="315" cy="120" r="2" fill="rgba(200,80,40,0.12)"/>
+      <circle cx="318" cy="140" r="2" fill="rgba(200,80,40,0.15)"/>
+      <circle cx="322" cy="155" r="2.5" fill="rgba(200,80,40,0.18)"/>
+      <text x="295" y="98" fill="rgba(255,255,255,0.06)" font-size="5" font-family="Courier New">TRAJECTORY_HIST</text>
+
+      <!-- Error tolerance zone -->
+      <rect x="295" y="425" width="70" height="20" rx="2" fill="none" stroke="rgba(80,200,120,0.08)" stroke-width="0.5" stroke-dasharray="3 3" style="animation: platformMove 6s ease-in-out infinite;"/>
+      <text x="330" y="490" text-anchor="middle" fill="rgba(80,200,120,0.15)" font-size="6" font-family="Courier New" style="animation: platformMove 6s ease-in-out infinite;">±8cm TOLERANCE</text>
+
+      <!-- Simulink block reference -->
+      <g transform="translate(480, 80)">
+        <rect x="0" y="0" width="130" height="70" rx="2" fill="rgba(200,80,40,0.02)" stroke="rgba(200,80,40,0.1)" stroke-width="0.5"/>
+        <text x="8" y="14" fill="rgba(200,80,40,0.35)" font-size="6" font-family="Courier New">CTRL_LOOP</text>
+        <rect x="10" y="22" width="36" height="14" rx="1" fill="rgba(200,80,40,0.04)" stroke="rgba(200,80,40,0.12)" stroke-width="0.3"/>
+        <text x="14" y="32" fill="rgba(200,80,40,0.3)" font-size="5" font-family="Courier New">PID_X</text>
+        <rect x="52" y="22" width="36" height="14" rx="1" fill="rgba(200,80,40,0.04)" stroke="rgba(200,80,40,0.12)" stroke-width="0.3"/>
+        <text x="56" y="32" fill="rgba(200,80,40,0.3)" font-size="5" font-family="Courier New">PID_Y</text>
+        <rect x="94" y="22" width="28" height="14" rx="1" fill="rgba(200,80,40,0.04)" stroke="rgba(200,80,40,0.12)" stroke-width="0.3"/>
+        <text x="98" y="32" fill="rgba(200,80,40,0.3)" font-size="5" font-family="Courier New">ALT</text>
+        <line x1="28" y1="36" x2="28" y2="48" stroke="rgba(200,80,40,0.08)" stroke-width="0.3"/>
+        <line x1="70" y1="36" x2="70" y2="48" stroke="rgba(200,80,40,0.08)" stroke-width="0.3"/>
+        <line x1="108" y1="36" x2="108" y2="48" stroke="rgba(200,80,40,0.08)" stroke-width="0.3"/>
+        <rect x="10" y="48" width="110" height="14" rx="1" fill="rgba(200,80,40,0.03)" stroke="rgba(200,80,40,0.1)" stroke-width="0.3"/>
+        <text x="14" y="58" fill="rgba(200,80,40,0.3)" font-size="5" font-family="Courier New">VEL_CMD → PUBLISH</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- State display -->
+  <div class="state-display">
+    <div class="state-item"><div class="state-lbl">X ERROR</div><div class="state-val o">+3.2cm</div></div>
+    <div class="state-item"><div class="state-lbl">Y ERROR</div><div class="state-val o">-1.8cm</div></div>
+    <div class="state-item"><div class="state-lbl">ALTITUDE</div><div class="state-val g">2.4m ↓</div></div>
+    <div class="state-item"><div class="state-lbl">PHASE</div><div class="state-val o">APPROACH</div></div>
+    <div class="state-item"><div class="state-lbl">MARKER</div><div class="state-val g">LOCKED</div></div>
+    <div class="state-item"><div class="state-lbl">WIND</div><div class="state-val g">0.2 m/s</div></div>
+  </div>
+
+  <div class="tech-left">
+    CONTROLLER: MATLAB/SIMULINK<br>
+    PLATFORM: PARROT_MAMBO<br>
+    VISION: OPENCV_ARUCO<br>
+    SIM_TRIALS: 25<br>
+    ACCURACY: 8cm_CEP
+  </div>
+  <div class="tech-right">
+    MODE: DIGITAL_TWIN<br>
+    TRACKING: CLOSED_LOOP<br>
+    RATE: 30Hz<br>
+    DESCENT: GUIDED<br>
+    TOUCHDOWN: PREDICTED
+  </div>
+</div>
+</body>
+</html>

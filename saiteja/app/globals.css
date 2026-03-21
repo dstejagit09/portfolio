@@ -1,115 +1,136 @@
 @import "tailwindcss";
 
-/* Custom CSS variables for theming */
-:root {
-  /* Dark theme colors */
-  --color-bg-dark: #050505;
-  --color-surface-dark: #0f0f0f;
-  --color-text-dark: #ffffff;
-  --color-text-dark-secondary: #888888;
-  --color-accent-gray: #333333;
+@theme {
+  /* ── Surface Hierarchy ── */
+  --color-surface: #131312;
+  --color-surface-dim: #131312;
+  --color-surface-bright: #3a3938;
+  --color-surface-container-lowest: #0e0e0d;
+  --color-surface-container-low: #1c1c1a;
+  --color-surface-container: #20201e;
+  --color-surface-container-high: #2a2a29;
+  --color-surface-container-highest: #353533;
+  --color-surface-variant: #353533;
 
-  /* Light theme colors */
-  --color-bg-light: #F3F4F6;
-  --color-surface-light: #ffffff;
-  --color-text-light: #050505;
-  --color-text-light-secondary: #737373;
+  /* ── Background ── */
+  --color-background: #131312;
+  --color-on-background: #e5e2e0;
 
-  /* Accent colors */
-  --color-accent: #3b82f6;
-  --color-accent-hover: #2563eb;
+  /* ── On-Surface ── */
+  --color-on-surface: #e5e2e0;
+  --color-on-surface-variant: #cac7b0;
 
-  /* Spacing system */
-  --spacing-section: 8rem;
-  --spacing-container: 1.5rem;
+  /* ── Primary (Yellow-Green Accent) ── */
+  --color-primary: #ffffff;
+  --color-primary-fixed: #eae95a;
+  --color-primary-fixed-dim: #cdcc40;
+  --color-primary-container: #eae95a;
+  --color-on-primary: #323200;
+  --color-on-primary-fixed: #1d1d00;
+  --color-on-primary-fixed-variant: #4a4900;
+  --color-on-primary-container: #686800;
+  --color-inverse-primary: #626200;
+  --color-surface-tint: #cdcc40;
 
-  /* Animation timing */
-  --duration-fast: 200ms;
-  --duration-medium: 400ms;
-  --duration-slow: 600ms;
-  --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  /* ── Secondary ── */
+  --color-secondary: #c3c7c6;
+  --color-secondary-fixed: #dfe3e2;
+  --color-secondary-fixed-dim: #c3c7c6;
+  --color-secondary-container: #454a49;
+  --color-on-secondary: #2c3131;
+  --color-on-secondary-fixed: #181d1c;
+  --color-on-secondary-container: #b5b9b8;
+  --color-on-secondary-fixed-variant: #434847;
+
+  /* ── Outline ── */
+  --color-outline: #93927c;
+  --color-outline-variant: #484835;
+
+  /* ── Misc ── */
+  --color-inverse-surface: #e5e2e0;
+  --color-inverse-on-surface: #31302f;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+
+  /* ── Fonts ── */
+  --font-headline: var(--font-fraunces), "Fraunces", serif;
+  --font-body: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-label: var(--font-space-grotesk), "Space Grotesk", sans-serif;
 }
 
-@theme inline {
-  --color-background-dark: #050505;
-  --color-background-light: #F3F4F6;
-  --color-surface-dark: #0f0f0f;
-  --color-surface-light: #ffffff;
-  --color-text-muted: #888888;
-  --color-accent-gray: #333333;
-
-  --font-display: var(--font-roboto);
-  --font-body: var(--font-quantico);
-  --font-sans: var(--font-quantico);
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
-/* Typography styles */
+/* Dot-grid mosaic overlay */
+.mosaic-bg {
+  background-image: radial-gradient(#484835 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: -19px -19px;
+  opacity: 0.1;
+}
+
+/* Ghost border (felt, not seen) */
+.ghost-border {
+  border: 1px solid rgba(72, 72, 53, 0.2);
+}
+
 @layer base {
-  h1, h2, h3 {
-    font-family: var(--font-roboto), sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-
-  body {
-    font-family: var(--font-quantico), sans-serif;
-  }
-
   html {
     scroll-behavior: smooth;
   }
 
-  /* Custom scrollbar */
+  body {
+    background-color: #131312;
+    color: #e5e2e0;
+  }
+
+  ::selection {
+    background-color: #eae95a;
+    color: #1d1d00;
+  }
+
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #050505;
+    background: #0e0e0d;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #484835;
   }
 }
 
-/* Custom utility classes */
-@layer utilities {
-  .mix-blend-difference-nav {
-    mix-blend-mode: difference;
-    color: white;
-  }
-
-  .section-padding {
-    padding: var(--spacing-section) var(--spacing-container);
-  }
-
-  .container-custom {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-container);
-  }
-
-  .text-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ── Light Theme Overrides ── */
+.light {
+  --color-surface: #F5F4EF;
+  --color-surface-dim: #ECEAE3;
+  --color-surface-bright: #ffffff;
+  --color-surface-container-lowest: #EAEAE5;
+  --color-surface-container-low: #EEECE6;
+  --color-surface-container: #E8E6E0;
+  --color-surface-container-high: #E1DFDA;
+  --color-surface-container-highest: #D9D7D0;
+  --color-on-surface: #131312;
+  --color-on-surface-variant: #4A4A42;
+  --color-secondary: #55554E;
+  --color-secondary-fixed-dim: #55554E;
+  --color-on-background: #131312;
+  --color-background: #F5F4EF;
+  --color-outline: #6A6A62;
+  --color-outline-variant: #C0BEB5;
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  * {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+.light body {
+  background-color: #F5F4EF;
+  color: #131312;
+}
+
+.light .mosaic-bg {
+  background-image: radial-gradient(#C0BEB5 1px, transparent 1px);
 }
