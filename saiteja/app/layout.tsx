@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Space_Grotesk } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -50,6 +51,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased font-body bg-surface text-on-surface">
         {children}
+        <Script src="/widget.js" strategy="afterInteractive" />
       </body>
     </html>
   );
