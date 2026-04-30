@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Courier New', monospace; overflow: hidden; }
+.canvas { width: 1080px; height: 760px; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; }
+.corner { position: absolute; width: 20px; height: 20px; }
+.corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-tr { top: 20px; right: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.scan-line { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,80,40,0.12), transparent); animation: scan 5s linear infinite; pointer-events: none; z-index: 10; }
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+.tech-left { position: absolute; bottom: 40px; left: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; letter-spacing: 0.5px; }
+.tech-right { position: absolute; top: 40px; right: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; letter-spacing: 0.5px; text-align: right; }
+
+/* Quadrotor SVG */
+.quad-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+/* Telemetry strips */
+.telemetry-strip { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; gap: 40px; }
+.telem-item { text-align: center; }
+.telem-label { font-size: 7px; color: rgba(255,255,255,0.2); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+.telem-val { font-size: 11px; letter-spacing: 1px; }
+.telem-val.ok { color: rgba(80,200,120,0.6); }
+.telem-val.warn { color: rgba(200,80,40,0.7); }
+.telem-val.crit { color: rgba(255,60,60,0.7); }
+
+/* Status indicators */
+.motor-status { position: absolute; display: flex; gap: 6px; font-size: 7px; letter-spacing: 1px; }
+.motor-status .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; margin-right: 3px; }
+.dot-ok { background: rgba(80,200,120,0.7); box-shadow: 0 0 6px rgba(80,200,120,0.3); }
+.dot-fail { background: rgba(255,60,60,0.8); box-shadow: 0 0 8px rgba(255,60,60,0.4); animation: blink 1s infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.m1-status { top: 155px; left: 280px; color: rgba(80,200,120,0.5); }
+.m2-status { top: 155px; right: 280px; color: rgba(80,200,120,0.5); }
+.m3-status { bottom: 205px; right: 280px; color: rgba(255,60,60,0.6); }
+.m4-status { bottom: 205px; left: 280px; color: rgba(80,200,120,0.5); }
+
+/* FDI detection callout */
+.fdi-callout {
+  position: absolute;
+  bottom: 180px;
+  right: 200px;
+  border: 1px solid rgba(255,60,60,0.2);
+  background: rgba(255,60,60,0.03);
+  padding: 8px 14px;
+  font-size: 8px;
+  color: rgba(255,60,60,0.6);
+  letter-spacing: 1px;
+}
+.fdi-callout::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  width: 28px;
+  height: 1px;
+  background: rgba(255,60,60,0.2);
+}
+
+/* Recovery callout */
+.recovery-callout {
+  position: absolute;
+  top: 160px;
+  left: 140px;
+  border: 1px solid rgba(200,80,40,0.2);
+  background: rgba(200,80,40,0.03);
+  padding: 8px 14px;
+  font-size: 8px;
+  color: rgba(200,80,40,0.6);
+  letter-spacing: 1px;
+  line-height: 1.6;
+}
+
+/* Attitude indicator */
+.attitude { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); }
+
+@keyframes rotor { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -31.4; } }
+@keyframes rotorSlow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -31.4; } }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="scan-line"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Attitude indicator -->
+  <div class="attitude">
+    <svg width="80" height="80" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+      <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+      <line x1="10" y1="40" x2="28" y2="40" stroke="rgba(200,80,40,0.3)" stroke-width="0.5"/>
+      <line x1="52" y1="40" x2="70" y2="40" stroke="rgba(200,80,40,0.3)" stroke-width="0.5"/>
+      <line x1="40" y1="10" x2="40" y2="28" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+      <!-- Tilt indicator showing compensation -->
+      <line x1="30" y1="42" x2="50" y2="38" stroke="rgba(200,80,40,0.5)" stroke-width="1"/>
+      <circle cx="40" cy="40" r="2" fill="rgba(200,80,40,0.4)"/>
+      <text x="40" y="72" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="6" font-family="Courier New">ATTITUDE</text>
+    </svg>
+  </div>
+
+  <!-- Main quadrotor diagram -->
+  <div class="quad-container">
+    <svg width="460" height="460" viewBox="0 0 460 460">
+      <!-- Center glow -->
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(200,80,40,0.08)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <circle cx="230" cy="230" r="200" fill="url(#glow)"/>
+
+      <!-- Thrust vectors (faint) -->
+      <line x1="130" y1="130" x2="130" y2="80" stroke="rgba(80,200,120,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="330" y1="130" x2="330" y2="80" stroke="rgba(80,200,120,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="130" y1="330" x2="130" y2="280" stroke="rgba(80,200,120,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
+      <!-- M3 - no thrust vector (failed) -->
+
+      <!-- Arms -->
+      <line x1="200" y1="200" x2="140" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+      <line x1="260" y1="200" x2="320" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+      <line x1="260" y1="260" x2="320" y2="320" stroke="rgba(255,60,60,0.12)" stroke-width="2" stroke-dasharray="6 4"/>
+      <line x1="200" y1="260" x2="140" y2="320" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+
+      <!-- Center body -->
+      <rect x="195" y="195" width="70" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <rect x="210" y="210" width="40" height="40" rx="4" fill="rgba(200,80,40,0.05)" stroke="rgba(200,80,40,0.2)" stroke-width="0.5"/>
+      <text x="230" y="234" text-anchor="middle" fill="rgba(200,80,40,0.4)" font-size="7" font-family="Courier New">FCU</text>
+
+      <!-- Motor 1 (OK) - top left -->
+      <circle cx="130" cy="130" r="36" fill="none" stroke="rgba(80,200,120,0.15)" stroke-width="0.5"/>
+      <circle cx="130" cy="130" r="5" fill="rgba(80,200,120,0.2)" stroke="rgba(80,200,120,0.4)" stroke-width="0.8"/>
+      <!-- Spinning rotor -->
+      <circle cx="130" cy="130" r="28" fill="none" stroke="rgba(80,200,120,0.25)" stroke-width="1.5" stroke-dasharray="8 8" style="animation: rotor 0.8s linear infinite;"/>
+      <text x="130" y="180" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="7" font-family="Courier New">M1: 78%</text>
+
+      <!-- Motor 2 (OK) - top right -->
+      <circle cx="330" cy="130" r="36" fill="none" stroke="rgba(80,200,120,0.15)" stroke-width="0.5"/>
+      <circle cx="330" cy="130" r="5" fill="rgba(80,200,120,0.2)" stroke="rgba(80,200,120,0.4)" stroke-width="0.8"/>
+      <circle cx="330" cy="130" r="28" fill="none" stroke="rgba(80,200,120,0.25)" stroke-width="1.5" stroke-dasharray="8 8" style="animation: rotor 0.7s linear infinite reverse;"/>
+      <text x="330" y="180" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="7" font-family="Courier New">M2: 82%</text>
+
+      <!-- Motor 3 (FAILED) - bottom right -->
+      <circle cx="330" cy="330" r="36" fill="none" stroke="rgba(255,60,60,0.12)" stroke-width="0.5" stroke-dasharray="4 3"/>
+      <circle cx="330" cy="330" r="5" fill="rgba(255,60,60,0.15)" stroke="rgba(255,60,60,0.4)" stroke-width="0.8"/>
+      <!-- Static rotor (stopped) -->
+      <circle cx="330" cy="330" r="28" fill="none" stroke="rgba(255,60,60,0.1)" stroke-width="1" stroke-dasharray="8 8"/>
+      <!-- X mark -->
+      <line x1="318" y1="318" x2="342" y2="342" stroke="rgba(255,60,60,0.5)" stroke-width="1.5"/>
+      <line x1="342" y1="318" x2="318" y2="342" stroke="rgba(255,60,60,0.5)" stroke-width="1.5"/>
+      <text x="330" y="380" text-anchor="middle" fill="rgba(255,60,60,0.4)" font-size="7" font-family="Courier New">M3: FAULT</text>
+
+      <!-- Motor 4 (OK, compensating) - bottom left -->
+      <circle cx="130" cy="330" r="36" fill="none" stroke="rgba(80,200,120,0.15)" stroke-width="0.5"/>
+      <circle cx="130" cy="330" r="5" fill="rgba(80,200,120,0.2)" stroke="rgba(80,200,120,0.4)" stroke-width="0.8"/>
+      <circle cx="130" cy="330" r="28" fill="none" stroke="rgba(80,200,120,0.25)" stroke-width="1.5" stroke-dasharray="8 8" style="animation: rotor 0.6s linear infinite;"/>
+      <text x="130" y="380" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="7" font-family="Courier New">M4: 95%</text>
+
+      <!-- CRTP communication lines -->
+      <line x1="215" y1="215" x2="145" y2="145" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 4"/>
+      <line x1="245" y1="215" x2="315" y2="145" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 4"/>
+      <line x1="245" y1="245" x2="315" y2="315" stroke="rgba(255,60,60,0.08)" stroke-width="0.5" stroke-dasharray="2 4"/>
+      <line x1="215" y1="245" x2="145" y2="315" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 4"/>
+
+      <!-- Compensation arrows showing redistribution -->
+      <path d="M 310 310 Q 280 230 145 140" fill="none" stroke="rgba(200,80,40,0.15)" stroke-width="0.8" stroke-dasharray="4 4">
+        <animate attributeName="stroke-dashoffset" values="0;-16" dur="2s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 310 310 Q 330 230 335 145" fill="none" stroke="rgba(200,80,40,0.15)" stroke-width="0.8" stroke-dasharray="4 4">
+        <animate attributeName="stroke-dashoffset" values="0;-16" dur="2s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 310 310 Q 230 330 145 335" fill="none" stroke="rgba(200,80,40,0.15)" stroke-width="0.8" stroke-dasharray="4 4">
+        <animate attributeName="stroke-dashoffset" values="0;-16" dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Yaw rotation indicator (spinning with 3 motors) -->
+      <circle cx="230" cy="230" r="160" fill="none" stroke="rgba(200,80,40,0.06)" stroke-width="0.5" stroke-dasharray="12 8">
+        <animateTransform attributeName="transform" type="rotate" values="0 230 230;360 230 230" dur="8s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+
+  <!-- FDI Callout -->
+  <div class="fdi-callout">
+    FDI_DETECTED: MOTOR_3<br>
+    TIMESTAMP: 00:04.217<br>
+    ACTION: CTRL_RECONFIG
+  </div>
+
+  <!-- Recovery Callout -->
+  <div class="recovery-callout">
+    RECOVERY_MODE: 3_MOTOR<br>
+    THRUST_REDISTRIB: ACTIVE<br>
+    YAW_CTRL: SACRIFICED<br>
+    STABILITY: MAINTAINED
+  </div>
+
+  <!-- Telemetry strip -->
+  <div class="telemetry-strip">
+    <div class="telem-item">
+      <div class="telem-label">Roll</div>
+      <div class="telem-val ok">+2.4°</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">Pitch</div>
+      <div class="telem-val ok">-1.8°</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">Yaw</div>
+      <div class="telem-val warn">UNCTL</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">Alt</div>
+      <div class="telem-val ok">1.2m</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">FDI</div>
+      <div class="telem-val crit">ACTIVE</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">CRTP</div>
+      <div class="telem-val ok">LINKED</div>
+    </div>
+    <div class="telem-item">
+      <div class="telem-label">PWM Ovrd</div>
+      <div class="telem-val warn">ON</div>
+    </div>
+  </div>
+
+  <div class="tech-left">
+    PROTOCOL: CRTP_V2<br>
+    FIRMWARE: CF2.X<br>
+    CONTROLLER: HYBRID_PC<br>
+    FDI_METHOD: RESIDUAL<br>
+    RECOVERY: 3_MOTOR_FLT
+  </div>
+  <div class="tech-right">
+    DETECTION_TIME: &lt;50ms<br>
+    RECONFIG_LAT: 12ms<br>
+    HOVER_STABLE: TRUE<br>
+    MOTOR_PWM: DIRECT<br>
+    TEST_ENV: INDOOR_LAB
+  </div>
+</div>
+</body>
+</html>

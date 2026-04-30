@@ -48,16 +48,16 @@ function ProjectVisual({ src, alt }: { src: string; alt: string }) {
 
 export function ProjectsShowcase() {
   return (
-    <section id="bio" className="px-6 md:px-10 pt-28 pb-32 max-w-7xl mx-auto">
+    <section id="deployments" className="px-6 md:px-10 pt-20 md:pt-28 pb-16 md:pb-32 max-w-7xl mx-auto">
       {/* Section Header */}
-      <header className="mb-24">
+      <header className="mb-12 md:mb-24">
         <div className="flex items-center space-x-4 mb-4">
           <span className="w-3 h-3 bg-primary-fixed" />
           <span className="font-label text-sm uppercase tracking-[0.3em] text-outline">
             [ SYSTEM: READY ] [ MODE: DEPLOYMENTS ]
           </span>
         </div>
-        <h1 className="font-headline text-7xl md:text-8xl italic leading-tight text-on-surface">
+        <h1 className="font-headline text-5xl sm:text-7xl md:text-8xl italic leading-tight text-on-surface">
           Deployments
         </h1>
         <p className="font-label text-secondary mt-4 tracking-wider uppercase">
@@ -66,14 +66,14 @@ export function ProjectsShowcase() {
       </header>
 
       {/* Projects — 3/12 | 6/12 | 3/12 layout */}
-      <div className="space-y-24">
-        {PROJECTS.map(({ index, slug, title, period, metrics, visual, visualAlt, codeFile, codeIcon, code, description, reversed }) => (
+      <div className="space-y-10 md:space-y-24">
+        {PROJECTS.map(({ index, slug, title, period, metrics, visual, visualAlt, codeFile, codeIcon, code, description, reversed, github, liveDemo }) => (
           <article
             key={index}
             className="grid grid-cols-1 lg:grid-cols-12 gap-px bg-outline-variant/15 border border-outline-variant/20"
           >
             {/* Metrics column — 3 cols */}
-            <div className={`lg:col-span-3 bg-surface p-8 flex flex-col ${reversed ? "order-1 lg:order-3" : "order-1"}`}>
+            <div className={`lg:col-span-3 bg-surface p-5 md:p-8 flex flex-col ${reversed ? "order-1 lg:order-3" : "order-1"}`}>
               <div className="space-y-1 mb-8">
                 <span className="font-label text-primary-fixed text-xs tracking-widest uppercase">
                   {index}
@@ -83,7 +83,7 @@ export function ProjectsShowcase() {
                     {title}
                   </h2>
                 </Link>
-                <p className="font-label text-[10px] text-outline uppercase tracking-widest">
+                <p className="font-label text-xs text-outline uppercase tracking-widest">
                   {period}
                 </p>
               </div>
@@ -91,18 +91,18 @@ export function ProjectsShowcase() {
               <div className="border-l-2 border-primary-fixed/30 pl-6 space-y-6 flex-1">
                 {metrics.map(({ label, value }) => (
                   <div key={label}>
-                    <p className="font-label text-[9px] text-outline uppercase tracking-widest mb-1">
+                    <p className="font-label text-[11px] text-outline uppercase tracking-widest mb-1">
                       {label}
                     </p>
-                    <p className="font-label text-xl text-primary-fixed leading-none">
+                    <p className="font-label text-2xl text-primary-fixed leading-none">
                       {value}
                     </p>
                   </div>
                 ))}
               </div>
 
-              {/* View detail link */}
-              <div className="mt-8 pt-6 border-t border-outline-variant/15">
+              {/* View detail + Repo + Live demo links */}
+              <div className="mt-8 pt-6 border-t border-outline-variant/15 space-y-3">
                 <Link
                   href={`/projects/${slug}`}
                   className="font-label text-[9px] uppercase tracking-widest text-outline hover:text-primary-fixed transition-colors flex items-center gap-2"
@@ -110,6 +110,30 @@ export function ProjectsShowcase() {
                   <span>View Full Detail</span>
                   <span className="material-symbols-outlined text-xs">arrow_forward</span>
                 </Link>
+                {liveDemo && (
+                  <a
+                    href={liveDemo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-label text-[9px] uppercase tracking-widest bg-primary-fixed text-on-primary-fixed hover:bg-primary-fixed-dim transition-colors flex items-center gap-2 px-2 py-1.5 -ml-2 w-fit"
+                  >
+                    <span className="material-symbols-outlined text-xs">bolt</span>
+                    <span>Live Demo</span>
+                    <span className="material-symbols-outlined text-xs">open_in_new</span>
+                  </a>
+                )}
+                {github?.url && (
+                  <a
+                    href={github.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-label text-[9px] uppercase tracking-widest text-outline hover:text-primary-fixed transition-colors flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-xs">terminal</span>
+                    <span>Repo</span>
+                    <span className="material-symbols-outlined text-xs">open_in_new</span>
+                  </a>
+                )}
               </div>
             </div>
 
@@ -125,7 +149,7 @@ export function ProjectsShowcase() {
             </Link>
 
             {/* Code column — 3 cols */}
-            <div className={`lg:col-span-3 bg-surface-container-lowest p-8 flex flex-col ${reversed ? "order-3 lg:order-1 border-r border-outline-variant/10" : "order-3 border-l border-outline-variant/10"}`}>
+            <div className={`lg:col-span-3 bg-surface-container-lowest p-5 md:p-8 flex flex-col ${reversed ? "order-3 lg:order-1 border-r border-outline-variant/10" : "order-3 border-l border-outline-variant/10"}`}>
               <div className="flex justify-between items-center mb-5">
                 <span className="font-label text-[9px] text-outline uppercase tracking-widest truncate pr-2">{codeFile}</span>
                 <span className="material-symbols-outlined text-outline text-sm shrink-0">{codeIcon}</span>
@@ -134,10 +158,11 @@ export function ProjectsShowcase() {
                 {code}
               </pre>
               <div className="mt-6 pt-6 border-t border-outline-variant/15">
-                <p className="font-body text-xs text-on-surface-variant leading-relaxed">
+                <p className="font-body text-sm text-on-surface-variant leading-relaxed text-justify hyphens-auto">
                   {description}
                 </p>
               </div>
+
             </div>
           </article>
         ))}

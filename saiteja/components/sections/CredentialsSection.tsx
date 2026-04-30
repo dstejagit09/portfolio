@@ -42,16 +42,16 @@ const PUBLICATIONS = [
 
 export function CredentialsSection() {
   return (
-    <section id="manifest" className="px-6 md:px-10 pt-28 pb-24 max-w-7xl mx-auto">
+    <section id="manifest" className="px-6 md:px-10 pt-20 md:pt-28 pb-16 md:pb-24 max-w-7xl mx-auto">
       {/* Section Header */}
-      <header className="mb-24">
+      <header className="mb-12 md:mb-24">
         <div className="flex items-center space-x-4 mb-4">
           <span className="w-3 h-3 bg-primary-fixed" />
           <span className="font-label text-sm uppercase tracking-[0.3em] text-outline">
             [ SYSTEM: READY ] [ MODE: MANIFEST ]
           </span>
         </div>
-        <h1 className="font-headline text-7xl md:text-8xl italic leading-tight text-on-surface">
+        <h1 className="font-headline text-5xl sm:text-7xl md:text-8xl italic leading-tight text-on-surface">
           Manifest
         </h1>
         <p className="font-label text-secondary mt-4 tracking-wider uppercase">
@@ -80,17 +80,17 @@ export function CredentialsSection() {
                 </span>
                 <div className="flex-1">
                   <div className="flex justify-between items-start gap-4">
-                    <h3 className="font-label text-sm text-on-surface tracking-wide">
+                    <h3 className="font-label text-base text-on-surface tracking-wide">
                       {name}
                     </h3>
                     <span className="font-label text-[9px] text-outline uppercase tracking-widest shrink-0">
                       {id}
                     </span>
                   </div>
-                  <p className="font-label text-[10px] text-secondary uppercase tracking-widest mt-1">
+                  <p className="font-label text-xs text-secondary uppercase tracking-widest mt-1">
                     {detail}
                   </p>
-                  <p className="font-label text-[10px] text-outline mt-0.5">
+                  <p className="font-label text-xs text-outline mt-0.5">
                     {issuer}
                   </p>
                 </div>
@@ -122,7 +122,7 @@ export function CredentialsSection() {
                 </span>
                 <div className="flex-1">
                   <div className="flex justify-between items-start gap-4">
-                    <h3 className="font-label text-sm text-on-surface leading-snug tracking-wide group-hover:text-primary-fixed transition-colors">
+                    <h3 className="font-label text-base text-on-surface leading-snug tracking-wide group-hover:text-primary-fixed transition-colors">
                       {title}
                     </h3>
                     <div className="flex items-center gap-2 shrink-0">
@@ -134,10 +134,10 @@ export function CredentialsSection() {
                       </span>
                     </div>
                   </div>
-                  <p className="font-label text-[10px] text-secondary uppercase tracking-widest mt-1">
+                  <p className="font-label text-xs text-secondary uppercase tracking-widest mt-1">
                     {type}
                   </p>
-                  <p className="font-label text-[10px] text-outline mt-0.5">
+                  <p className="font-label text-xs text-outline mt-0.5">
                     {venue}
                   </p>
                 </div>
@@ -155,23 +155,26 @@ export function CredentialsSection() {
             </div>
             <div className="space-y-px bg-outline-variant/10">
               <div className="bg-surface p-6 hover:bg-surface-container-low transition-colors group">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-label text-sm text-on-surface tracking-wide">Arizona State University</h3>
-                    <p className="font-label text-[10px] text-secondary uppercase tracking-widest mt-1">M.S. Robotics &amp; Autonomous Systems</p>
-                    <p className="font-label text-[10px] text-outline mt-0.5">GPA: 3.89 / 4.0</p>
+                <div className="flex flex-wrap justify-between items-start gap-2">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-label text-base text-on-surface tracking-wide">Arizona State University</h3>
+                    <p className="font-label text-xs text-secondary uppercase tracking-widest mt-1">M.S. Robotics &amp; Autonomous Systems, Systems Engineering Track</p>
+                    <p className="font-label text-xs text-outline mt-0.5">GPA: 3.89 / 4.0</p>
+                    <p className="font-label text-xs text-outline mt-2 leading-relaxed">
+                      <span className="text-secondary">Coursework:</span> Aerial Robotics, Mechatronics, Multi-Robot Systems, Controls &amp; Systems
+                    </p>
                   </div>
-                  <span className="font-label text-[9px] text-outline uppercase tracking-widest shrink-0">2024–2026</span>
+                  <span className="font-label text-[9px] text-outline uppercase tracking-widest shrink-0">2024 to 2026</span>
                 </div>
               </div>
               <div className="bg-surface p-6 hover:bg-surface-container-low transition-colors group">
-                <div className="flex justify-between items-start">
+                <div className="flex flex-wrap justify-between items-start gap-2">
                   <div>
-                    <h3 className="font-label text-sm text-on-surface tracking-wide">Chaitanya Bharathi Institute of Technology</h3>
-                    <p className="font-label text-[10px] text-secondary uppercase tracking-widest mt-1">B.E. Electrical &amp; Electronics Engineering</p>
-                    <p className="font-label text-[10px] text-outline mt-0.5">Hyderabad, Telangana</p>
+                    <h3 className="font-label text-base text-on-surface tracking-wide">Chaitanya Bharathi Institute of Technology</h3>
+                    <p className="font-label text-xs text-secondary uppercase tracking-widest mt-1">B.E. Electrical &amp; Electronics Engineering</p>
+                    <p className="font-label text-xs text-outline mt-0.5">Hyderabad, Telangana</p>
                   </div>
-                  <span className="font-label text-[9px] text-outline uppercase tracking-widest shrink-0">2020–2024</span>
+                  <span className="font-label text-[9px] text-outline uppercase tracking-widest shrink-0">2020 to 2024</span>
                 </div>
               </div>
             </div>

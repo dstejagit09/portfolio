@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 
 const NAV_LINKS = [
   { label: "ARCHIVE",     href: "#archive" },
+  { label: "BIO",         href: "#bio" },
   { label: "SPECS",       href: "#telemetry" },
   { label: "BUILD LOG",   href: "#experience" },
-  { label: "DEPLOYMENTS", href: "#bio" },
+  { label: "NOW",         href: "#now" },
+  { label: "DEPLOYMENTS", href: "#deployments" },
   { label: "MANIFEST",    href: "#manifest" },
   { label: "CONTACT",     href: "#contact" },
 ];
@@ -46,12 +48,18 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const sections = ["bio", "deployments", "experience", "telemetry", "archive", "contact"];
-    const sectionIds = ["bio", "contact", "experience", "telemetry", "archive"];
-
     const handleScroll = () => {
       // Iterate bottom-to-top: first section whose top <= 120px wins
-      const orderedIds = ["contact", "manifest", "bio", "experience", "telemetry", "archive"];
+      const orderedIds = [
+        "contact",
+        "manifest",
+        "deployments",
+        "now",
+        "experience",
+        "telemetry",
+        "bio",
+        "archive",
+      ];
       let current = "archive";
       for (const id of orderedIds) {
         const el = document.getElementById(id);
@@ -70,21 +78,21 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="bg-surface fixed top-0 w-full flex justify-between items-center px-10 py-6 z-[100]">
+      <nav className="bg-surface fixed top-0 w-full flex justify-between items-center px-6 md:px-10 py-6 z-[100]">
         {/* Logo — clicks back to top / archive */}
         <a href="#archive" aria-label="Home" className="flex items-center group">
           <HexWebLogo />
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-10 items-center">
+        <div className="hidden lg:flex gap-6 xl:gap-10 items-center">
           {NAV_LINKS.map((link) => {
             const isActive = activeSection === link.href.slice(1);
             return (
               <a
                 key={link.href}
                 href={link.href}
-                className={`font-label text-xs tracking-widest transition-colors duration-150 pb-1 ${
+                className={`font-label text-sm tracking-widest transition-colors duration-150 pb-1 ${
                   isActive
                     ? "text-primary-fixed border-b-2 border-primary-fixed"
                     : "text-secondary hover:text-primary-fixed"
@@ -97,12 +105,12 @@ export function Navbar() {
         </div>
 
         {/* Right side */}
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-4 md:gap-6 items-center">
           <a
             href="https://github.com/dstejagit09"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-label text-xs tracking-widest text-secondary hover:text-primary-fixed transition-colors uppercase"
+            className="hidden xl:block font-label text-xs tracking-widest text-secondary hover:text-primary-fixed transition-colors uppercase"
           >
             GITHUB
           </a>
@@ -110,12 +118,12 @@ export function Navbar() {
             href="https://www.linkedin.com/in/sdasar38/"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-label text-xs tracking-widest text-secondary hover:text-primary-fixed transition-colors uppercase"
+            className="hidden xl:block font-label text-xs tracking-widest text-secondary hover:text-primary-fixed transition-colors uppercase"
           >
             LINKEDIN
           </a>
           <button
-            className="md:hidden text-secondary hover:text-primary-fixed"
+            className="lg:hidden text-secondary hover:text-primary-fixed"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -131,13 +139,13 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden fixed top-[85px] left-0 w-full bg-surface border-b border-outline-variant/20 z-[98] px-10 py-6 flex flex-col gap-6">
+        <div className="lg:hidden fixed top-[85px] left-0 w-full bg-surface border-b border-outline-variant/20 z-[98] px-6 md:px-10 py-6 flex flex-col gap-6 max-h-[calc(100vh-85px)] overflow-y-auto">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className={`font-label text-sm tracking-widest ${
+              className={`font-label text-base tracking-widest ${
                 activeSection === link.href.slice(1) ? "text-primary-fixed" : "text-secondary"
               }`}
             >

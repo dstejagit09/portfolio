@@ -15,6 +15,9 @@ export function HeroSection() {
             [ SYSTEM: READY ]
           </span>
         </div>
+        <div className="px-3 py-1 border border-primary-fixed/40 font-label text-xs uppercase tracking-[0.2em] text-primary-fixed">
+          [ GRAD: MAY 2026 ]
+        </div>
         <div className="px-3 py-1 border border-outline-variant/20 font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant">
           [ CORE: V4.0.2-STABLE ]
         </div>
@@ -30,19 +33,31 @@ export function HeroSection() {
           <h2 className="font-label text-primary-fixed text-sm tracking-[0.4em] mb-6 uppercase">
             MS Robotics &amp; Autonomous Systems · ASU
           </h2>
-          <h1 className="text-6xl md:text-8xl font-headline italic leading-[0.9] text-on-surface mb-8">
-            Saiteja
+
+          {/* Primary role headline */}
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-headline italic font-black leading-[0.95] text-primary-fixed mb-4">
+            Robotics
             <br />
-            Venkateshwa
-            <br />
-            Rao Dasari
+            Engineer
           </h1>
-          <p className="max-w-xl text-secondary text-lg leading-relaxed border-l border-primary-fixed/30 pl-8 py-2">
-            Building intelligent robotic systems at the intersection of control
-            theory, computer vision, and multi-robot coordination. ROS2,
-            MATLAB/Simulink, Python, and C from simulation to hardware.
+
+          {/* Name signature */}
+          <div className="mb-8">
+            <p className="font-headline italic text-3xl sm:text-4xl md:text-6xl text-on-surface leading-none">
+              Saiteja Dasari
+            </p>
+          </div>
+
+          <p className="max-w-xl text-secondary text-base md:text-lg leading-relaxed text-justify hyphens-auto border-l border-primary-fixed/30 pl-5 md:pl-8 py-2">
+            M.S. Robotics candidate with 6+ projects across autonomy, controls,
+            perception, and UAV systems. Experience deploying real-time
+            robotic stacks from MATLAB and Simulink digital twins to ROS2
+            hardware, including multi-robot coordination, fault-tolerant
+            flight, and vision-based landing. Strong in Python, C/C++,
+            MATLAB/Simulink, and Linux.
           </p>
-          <div className="mt-12 border border-outline-variant/30 bg-surface-container-low p-5">
+
+          <div className="mt-8 md:mt-12 border border-outline-variant/30 bg-surface-container-low p-5">
             <p className="font-label text-[10px] text-outline uppercase tracking-widest mb-4">
               Target Roles
             </p>
@@ -50,9 +65,11 @@ export function HeroSection() {
               {[
                 "Robotics Engineer",
                 "Controls Engineer",
-                "Autonomy Engineer",
                 "UAV Systems",
-                "Robotics SWE",
+                "Systems Engineer",
+                "Robotics Software Engineer",
+                "Autonomy Engineer",
+                "Test & Validation Engineer",
               ].map((role) => (
                 <span
                   key={role}
@@ -76,12 +93,12 @@ export function HeroSection() {
                 <div className="w-2.5 h-2.5 rounded-full bg-secondary/40" />
               </div>
               <div className="font-label text-[10px] tracking-widest text-on-surface-variant/60 uppercase">
-                bash — 80x24
+                bash : 80x24
               </div>
             </div>
 
             {/* Terminal Body */}
-            <div className="p-6 font-label text-sm leading-relaxed overflow-hidden">
+            <div className="p-4 md:p-6 font-label text-xs md:text-sm leading-relaxed overflow-x-auto">
               {[
                 { n: "01", prompt: true, cmd: "ros2 launch autonomy bringup.launch.py" },
                 { n: "02", out: "[INFO] [launch]: Starting /fdi_controller" },
@@ -94,18 +111,18 @@ export function HeroSection() {
                 { n: "09", json: '  "status": "NOMINAL"' },
                 { n: "10", json: "}" },
               ].map(({ n, prompt, cmd, out, json }) => (
-                <div key={n} className="flex gap-4 mb-2">
+                <div key={n} className="flex gap-2 md:gap-4 mb-2 min-w-0">
                   <span className="text-primary-fixed/50 shrink-0">{n}</span>
                   {prompt && (
                     <>
                       <span className="text-primary-fixed shrink-0">
                         saiteja@asu:~$
                       </span>
-                      <span className="text-on-surface">{cmd}</span>
+                      <span className="text-on-surface break-all">{cmd}</span>
                     </>
                   )}
                   {out && (
-                    <span className="text-secondary-fixed-dim">{out}</span>
+                    <span className="text-secondary-fixed-dim break-all">{out}</span>
                   )}
                   {json && (
                     <span className="text-on-surface-variant">{json}</span>
@@ -113,10 +130,10 @@ export function HeroSection() {
                 </div>
               ))}
               {/* Cursor line */}
-              <div className="flex gap-4">
+              <div className="flex gap-2 md:gap-4">
                 <span className="text-primary-fixed/50">11</span>
                 <span className="text-primary-fixed">saiteja@asu:~$</span>
-                <span className="w-2 h-5 bg-primary-fixed animate-pulse" />
+                <span className="w-2 h-4 md:h-5 bg-primary-fixed animate-pulse" />
               </div>
             </div>
           </div>

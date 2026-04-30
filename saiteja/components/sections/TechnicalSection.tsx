@@ -1,87 +1,99 @@
 const SKILL_BLOCKS = [
   {
     id: "01",
-    icon: "settings_input_component",
-    title: "Control Systems",
-    tools: ["MATLAB", "Simulink", "ROS2", "ArduPilot", "PID", "FDI"],
-    metric: { label: "FDI Recovery", value: "<50ms" },
+    icon: "code",
+    title: "Programming & Tools",
+    tools: ["Python", "C/C++", "MATLAB/Simulink", "Bash", "Linux", "Git", "SolidWorks"],
+    metric: { label: "Languages", value: "Python, C/C++" },
     description:
-      "PID, FDI, and controller reconfiguration for fault-tolerant UAV systems. Validated from MATLAB/Simulink digital twin through Crazyflie hardware.",
+      "Day-to-day stack for robotics software, simulation, and analysis. Python and C/C++ across embedded, ROS2 nodes, and tooling. MATLAB/Simulink for control design and digital twins.",
   },
   {
     id: "02",
-    icon: "visibility",
-    title: "Computer Vision",
-    tools: ["YOLOv8", "OpenCV", "Python", "ROSMaster X3"],
-    metric: { label: "Detection", value: "97% @ 12 FPS" },
+    icon: "auto_videocam",
+    title: "Robotics & Simulation",
+    tools: [
+      "ROS1/ROS2", "Gazebo", "MuJoCo", "CrazySim SITL", "RViz",
+      "tf2", "URDF/xacro", "ArduPilot", "Mission Planner", "cflib",
+    ],
+    metric: { label: "Sim Stack", value: "Gazebo + MuJoCo" },
     description:
-      "YOLOv8 and OpenCV pipelines for weed detection on ROSMaster X3. ArUco-based maze detection for 6-DOF robotic arm control.",
+      "Centralized ROS2 autonomy and Gazebo multi-robot environments. MuJoCo and CrazySim SITL for higher-fidelity quadrotor dynamics, with ArduPilot and Mission Planner on production UAVs.",
   },
   {
     id: "03",
-    icon: "auto_videocam",
-    title: "Robot Autonomy",
-    tools: ["ROS2", "Gazebo", "A*", "Hungarian", "Python"],
-    metric: { label: "Mission Success", value: "99%" },
+    icon: "settings_input_component",
+    title: "Controls, GNC & Test",
+    tools: [
+      "PID", "Closed-Loop Control", "State Estimation", "Sensor Fusion",
+      "FDI", "Control Allocation", "Controller Reconfiguration", "SITL",
+      "Log Replay", "Flight-Log Analysis",
+    ],
+    metric: { label: "Roll Reduction", value: "145° → 7.2°" },
     description:
-      "Centralized autonomy stack for 5 TurtleBots. Hungarian task allocation and A* motion planning validated across 10 scenarios.",
+      "Fault detection and isolation, control allocation, and controller reconfiguration on Crazyflie 2.1. SITL workflows, log replay, and flight-log analysis on hardware.",
   },
   {
     id: "04",
-    icon: "flight",
-    title: "Flight Platforms",
-    tools: ["Crazyflie 2.1", "Parrot Mambo", "P80 Multirotor", "ArduPilot", "Mission Planner"],
-    metric: { label: "Landing Accuracy", value: "8 cm CEP" },
+    icon: "visibility",
+    title: "Autonomy & Perception",
+    tools: [
+      "A*", "Hungarian Algorithm", "Path Planning", "Costmaps",
+      "Occupancy Grids", "Collision Avoidance", "OpenCV", "YOLOv8",
+      "ArUco", "Pose Estimation",
+    ],
+    metric: { label: "Detection", value: "97% @ 12 FPS" },
     description:
-      "Hands-on experience with Crazyflie 2.1 (fault-tolerant control), Parrot Mambo (autonomous vision landing), and P80 heavy-payload multirotor (ArduPilot PID tuning).",
+      "Hungarian task assignment and A* planning over costmaps for multi-robot fleets. YOLOv8 and OpenCV pipelines for weed detection; ArUco-based pose estimation for the maze solver arm task.",
   },
   {
     id: "05",
-    icon: "memory",
-    title: "Embedded & Software",
-    tools: ["C", "Python", "MATLAB", "Git", "Linux"],
-    metric: { label: "GPA", value: "3.89 / 4.0" },
+    icon: "flight",
+    title: "Flight Platforms",
+    tools: ["Crazyflie 2.1", "Parrot Mambo", "P80 Multirotor", "ArduPilot", "Mission Planner"],
+    metric: { label: "Landing CEP", value: "8 cm" },
     description:
-      "ROS2 stacks, OpenCV pipelines, and sensor fusion nodes. Embedded C for low-level motor control and hardware interfacing.",
+      "Hands-on with Crazyflie 2.1 (fault-tolerant control), Parrot Mambo (vision-based landing), and P80 heavy-payload multirotor (ArduPilot PID tuning across 3 variants).",
   },
   {
     id: "06",
     icon: "engineering",
-    title: "Simulation",
-    tools: ["Gazebo", "Simulink", "Digital Twin", "RViz"],
-    metric: { label: "Sim Trials", value: "25+" },
+    title: "Sim-to-Hardware",
+    tools: ["Digital Twin", "MuJoCo", "CrazySim SITL", "Simulink", "Gazebo"],
+    metric: { label: "Sim Conditions", value: "24 validated" },
     description:
-      "Digital twin development in Simulink for autonomous drone landing. Multi-robot Gazebo environments with full collision avoidance.",
+      "Digital twin in Simulink for autonomous landing. MuJoCo rigid-body sim for gyroscopic coupling on Crazyflie, with CrazySim SITL bridging to firmware-in-the-loop testing.",
   },
 ];
 
 const META_ROWS = [
-  { param: "FDI Recovery Time",      value: "< 50ms — Crazyflie 2.1 motor fault injection",   dev: "± 2ms",    status: "ACTIVE" },
-  { param: "CV Detection Accuracy",  value: "97% @ 12 FPS — YOLOv8n on ROSMaster X3",         dev: "± 0.5%",   status: "PEAK" },
-  { param: "Navigation Success Rate",value: "99% — 5 TurtleBots, 10 Gazebo scenarios",         dev: "0.01%",    status: "OPTIMIZED" },
-  { param: "Autonomous Landing CEP", value: "8 cm radius — Parrot Mambo on moving platform",   dev: "± 1.2 cm", status: "VALIDATED" },
-  { param: "Maze Plan & Execution",  value: "60 s total — myCobot600 8x8 ArUco grid (A*)",     dev: "± 3 s",    status: "NOMINAL" },
-  { param: "UAV Stability Gain",     value: "+5% — ArduPilot PID tuning on P80 multirotor",   dev: "± 1%",     status: "NOMINAL" },
+  { param: "Max Roll Reduction",       value: "145° → 7.2° via thrust clamp on Crazyflie 2.1",    dev: "± 0.5°",   status: "VALIDATED" },
+  { param: "Allocation Methods Tested",value: "9 methods across 4 single-motor failure cases",     dev: "n/a",      status: "ACTIVE" },
+  { param: "Sim Attitude Error",       value: "0° across 24 test conditions in MuJoCo",            dev: "n/a",      status: "NOMINAL" },
+  { param: "CV Detection Accuracy",    value: "97% @ 12 FPS, YOLOv8n on ROSMaster X3",             dev: "± 0.5%",   status: "PEAK" },
+  { param: "Multi-Robot Success Rate", value: "99% across 5 TurtleBots, 10 Gazebo scenarios",      dev: "0.01%",    status: "OPTIMIZED" },
+  { param: "Autonomous Landing CEP",   value: "8 cm radius, Parrot Mambo, moving platform",        dev: "± 1.2 cm", status: "VALIDATED" },
+  { param: "UAV Stability Gain",       value: "10% improvement, ArduPilot PID, 3 UAV variants",    dev: "± 1%",     status: "NOMINAL" },
 ];
 
 export function TechnicalSection() {
   return (
     <section
       id="telemetry"
-      className="px-6 md:px-10 pt-28 pb-32 bg-surface max-w-7xl mx-auto"
+      className="px-6 md:px-10 pt-20 md:pt-28 pb-16 md:pb-32 bg-surface max-w-7xl mx-auto"
     >
       {/* Status Bar */}
-      <div className="mb-10 flex items-center gap-4 text-[10px] font-label text-secondary tracking-[0.2em]">
+      <div className="mb-10 flex flex-wrap items-center gap-3 md:gap-4 text-[10px] font-label text-secondary tracking-[0.2em]">
         <span className="text-primary-fixed">[ SYSTEM: READY ]</span>
         <span>[ LATENCY: 12ms ]</span>
         <span className="text-primary-fixed">[ MODE: SPECS ]</span>
-        <div className="h-[1px] flex-grow bg-outline-variant/20" />
+        <div className="hidden md:block h-[1px] flex-grow bg-outline-variant/20" />
         <span>v4.0.2_CORE</span>
       </div>
 
       {/* Section Title */}
-      <div className="mb-20">
-        <h1 className="text-6xl md:text-8xl font-headline font-light leading-tight italic">
+      <div className="mb-10 md:mb-20">
+        <h1 className="text-4xl sm:text-6xl md:text-8xl font-headline font-light leading-tight italic">
           Technical{" "}
           <span className="text-primary-fixed italic font-black">
             Specification
@@ -90,7 +102,7 @@ export function TechnicalSection() {
       </div>
 
       {/* Skill Blocks — 3-column grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-outline-variant/20 border border-outline-variant/20 mb-24">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-outline-variant/20 border border-outline-variant/20 mb-12 md:mb-24">
         {SKILL_BLOCKS.map(({ id, icon, title, tools, metric, description }) => (
           <div
             key={id}
@@ -111,7 +123,7 @@ export function TechnicalSection() {
               <h2 className="font-headline text-2xl italic text-on-surface mb-3">
                 {title}
               </h2>
-              <p className="font-body text-sm text-on-surface-variant leading-relaxed">
+              <p className="font-body text-base text-on-surface-variant leading-relaxed text-justify hyphens-auto">
                 {description}
               </p>
             </div>
@@ -131,7 +143,7 @@ export function TechnicalSection() {
               {tools.map((tool) => (
                 <span
                   key={tool}
-                  className="font-label text-[9px] uppercase tracking-widest px-2 py-0.5 border border-outline-variant/30 text-on-surface-variant"
+                  className="font-label text-xs uppercase tracking-widest px-2.5 py-1 border border-outline-variant/30 text-on-surface-variant"
                 >
                   {tool}
                 </span>
@@ -151,14 +163,14 @@ export function TechnicalSection() {
             </span>
           </div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left font-label text-sm">
+        <div className="overflow-x-auto -mx-6 md:mx-0 px-6 md:px-0">
+          <table className="w-full min-w-[640px] text-left font-label text-base">
             <thead className="text-outline uppercase tracking-widest text-[10px]">
               <tr className="border-b border-outline-variant/10">
-                <th className="py-6 px-4">Parameter</th>
-                <th className="py-6 px-4">Value</th>
-                <th className="py-6 px-4">Variance</th>
-                <th className="py-6 px-4 text-right">Status</th>
+                <th className="py-4 md:py-6 px-3 md:px-4">Parameter</th>
+                <th className="py-4 md:py-6 px-3 md:px-4">Value</th>
+                <th className="py-4 md:py-6 px-3 md:px-4">Variance</th>
+                <th className="py-4 md:py-6 px-3 md:px-4 text-right">Status</th>
               </tr>
             </thead>
             <tbody className="text-secondary">
@@ -167,10 +179,10 @@ export function TechnicalSection() {
                   key={param}
                   className="border-b border-outline-variant/5 hover:bg-surface-container-low transition-colors"
                 >
-                  <td className="py-8 px-4 text-on-surface font-medium">{param}</td>
-                  <td className="py-8 px-4 uppercase">{value}</td>
-                  <td className="py-8 px-4">{dev}</td>
-                  <td className="py-8 px-4 text-right text-primary-fixed">[ {status} ]</td>
+                  <td className="py-5 md:py-8 px-3 md:px-4 text-on-surface font-medium">{param}</td>
+                  <td className="py-5 md:py-8 px-3 md:px-4 uppercase">{value}</td>
+                  <td className="py-5 md:py-8 px-3 md:px-4">{dev}</td>
+                  <td className="py-5 md:py-8 px-3 md:px-4 text-right text-primary-fixed">[ {status} ]</td>
                 </tr>
               ))}
             </tbody>

@@ -80,12 +80,18 @@
 
 @layer base {
   html {
+    /* Bumped from browser default 16px for better readability across the site */
+    font-size: 18px;
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     background-color: #131312;
     color: #e5e2e0;
+    overflow-x: hidden;
+    /* Long URLs / technical strings break instead of overflowing on mobile */
+    overflow-wrap: anywhere;
   }
 
   ::selection {
