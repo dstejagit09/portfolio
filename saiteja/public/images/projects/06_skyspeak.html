@@ -3,252 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkySpeak AI</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0a0a0a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Courier New', monospace; overflow: hidden; }
-.canvas { width: 1080px; height: 760px; position: relative; overflow: hidden; background: #0a0a0a; }
-.canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; }
-.corner { position: absolute; width: 20px; height: 20px; }
-.corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
-.corner-tr { top: 20px; right: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
-.corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
-.corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
-.scan-line { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,80,40,0.12), transparent); animation: scan 5s linear infinite; pointer-events: none; z-index: 10; }
-@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-.tech-left { position: absolute; bottom: 40px; left: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; letter-spacing: 0.5px; }
-.tech-right { position: absolute; top: 40px; right: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; letter-spacing: 0.5px; text-align: right; }
-
-/* Quadrotor SVG */
-.quad-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-/* Telemetry strips */
-.telemetry-strip { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; gap: 40px; }
-.telem-item { text-align: center; }
-.telem-label { font-size: 7px; color: rgba(255,255,255,0.2); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
-.telem-val { font-size: 11px; letter-spacing: 1px; }
-.telem-val.ok { color: rgba(80,200,120,0.6); }
-.telem-val.warn { color: rgba(200,80,40,0.7); }
-.telem-val.crit { color: rgba(255,60,60,0.7); }
-
-/* Status indicators */
-.motor-status { position: absolute; display: flex; gap: 6px; font-size: 7px; letter-spacing: 1px; }
-.motor-status .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; margin-right: 3px; }
-.dot-ok { background: rgba(80,200,120,0.7); box-shadow: 0 0 6px rgba(80,200,120,0.3); }
-.dot-fail { background: rgba(255,60,60,0.8); box-shadow: 0 0 8px rgba(255,60,60,0.4); animation: blink 1s infinite; }
-@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-.m1-status { top: 155px; left: 280px; color: rgba(80,200,120,0.5); }
-.m2-status { top: 155px; right: 280px; color: rgba(80,200,120,0.5); }
-.m3-status { bottom: 205px; right: 280px; color: rgba(255,60,60,0.6); }
-.m4-status { bottom: 205px; left: 280px; color: rgba(80,200,120,0.5); }
-
-/* FDI detection callout */
-.fdi-callout {
-  position: absolute;
-  bottom: 180px;
-  right: 200px;
-  border: 1px solid rgba(255,60,60,0.2);
-  background: rgba(255,60,60,0.03);
-  padding: 8px 14px;
-  font-size: 8px;
-  color: rgba(255,60,60,0.6);
-  letter-spacing: 1px;
-}
-.fdi-callout::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: -30px;
-  width: 28px;
-  height: 1px;
-  background: rgba(255,60,60,0.2);
-}
-
-/* Recovery callout */
-.recovery-callout {
-  position: absolute;
-  top: 160px;
-  left: 140px;
-  border: 1px solid rgba(200,80,40,0.2);
-  background: rgba(200,80,40,0.03);
-  padding: 8px 14px;
-  font-size: 8px;
-  color: rgba(200,80,40,0.6);
-  letter-spacing: 1px;
-  line-height: 1.6;
-}
-
-/* Attitude indicator */
-.attitude { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); }
-
-@keyframes rotor { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -31.4; } }
-@keyframes rotorSlow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -31.4; } }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; width: 100%; background: #08090e; overflow: hidden; }
+  svg { display: block; width: 100%; height: 100%; }
+  @keyframes ssFlowDash { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -6; } }
+  @keyframes ssPulseStroke { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.55; } }
+  @keyframes ssGlowFade { 0%, 100% { opacity: 0; } 50% { opacity: 0.6; } }
+  @keyframes ssVadFlicker { 0%, 100% { opacity: 0.08; } 50% { opacity: 0.28; } }
+  @keyframes ssTickGlow { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+  .ss-flow-arrow { animation: ssFlowDash 1.2s linear infinite; }
+  .ss-reason-block { animation: ssPulseStroke 2.4s ease-in-out infinite; }
+  .ss-reason-glow { animation: ssGlowFade 2.4s ease-in-out infinite; }
+  .ss-vad-1 { animation: ssVadFlicker 1.4s ease-in-out infinite; }
+  .ss-vad-2 { animation: ssVadFlicker 1.7s ease-in-out infinite 0.3s; }
+  .ss-vad-3 { animation: ssVadFlicker 1.1s ease-in-out infinite 0.6s; }
+  .ss-reticle-tick { animation: ssTickGlow 1.8s ease-in-out infinite; }
 </style>
 </head>
 <body>
-<div class="canvas">
-  <div class="scan-line"></div>
-  <div class="corner corner-tl"></div>
-  <div class="corner corner-tr"></div>
-  <div class="corner corner-bl"></div>
-  <div class="corner corner-br"></div>
-
-  <!-- Attitude indicator -->
-  <div class="attitude">
-    <svg width="80" height="80" viewBox="0 0 80 80">
-      <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
-      <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-      <line x1="10" y1="40" x2="28" y2="40" stroke="rgba(200,80,40,0.3)" stroke-width="0.5"/>
-      <line x1="52" y1="40" x2="70" y2="40" stroke="rgba(200,80,40,0.3)" stroke-width="0.5"/>
-      <line x1="40" y1="10" x2="40" y2="28" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
-      <!-- Tilt indicator showing compensation -->
-      <line x1="30" y1="42" x2="50" y2="38" stroke="rgba(200,80,40,0.5)" stroke-width="1"/>
-      <circle cx="40" cy="40" r="2" fill="rgba(200,80,40,0.4)"/>
-      <text x="40" y="72" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="6" font-family="Courier New">ATTITUDE</text>
-    </svg>
-  </div>
-
-  <!-- Main quadrotor diagram -->
-  <div class="quad-container">
-    <svg width="460" height="460" viewBox="0 0 460 460">
-      <!-- Center glow -->
-      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="rgba(200,80,40,0.08)"/>
-        <stop offset="100%" stop-color="transparent"/>
-      </radialGradient>
-      <circle cx="230" cy="230" r="200" fill="url(#glow)"/>
-
-      <!-- Thrust vectors (faint) -->
-      <line x1="130" y1="130" x2="130" y2="80" stroke="rgba(80,200,120,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
-      <line x1="330" y1="130" x2="330" y2="80" stroke="rgba(80,200,120,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
-      <line x1="130" y1="330" x2="130" y2="280" stroke="rgba(80,200,120,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
-      <!-- M3 - no thrust vector (failed) -->
-
-      <!-- Arms -->
-      <line x1="200" y1="200" x2="140" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-      <line x1="260" y1="200" x2="320" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-      <line x1="260" y1="260" x2="320" y2="320" stroke="rgba(255,60,60,0.12)" stroke-width="2" stroke-dasharray="6 4"/>
-      <line x1="200" y1="260" x2="140" y2="320" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-
-      <!-- Center body -->
-      <rect x="195" y="195" width="70" height="70" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-      <rect x="210" y="210" width="40" height="40" rx="4" fill="rgba(200,80,40,0.05)" stroke="rgba(200,80,40,0.2)" stroke-width="0.5"/>
-      <text x="230" y="234" text-anchor="middle" fill="rgba(200,80,40,0.4)" font-size="7" font-family="Courier New">FCU</text>
-
-      <!-- Motor 1 (OK) - top left -->
-      <circle cx="130" cy="130" r="36" fill="none" stroke="rgba(80,200,120,0.15)" stroke-width="0.5"/>
-      <circle cx="130" cy="130" r="5" fill="rgba(80,200,120,0.2)" stroke="rgba(80,200,120,0.4)" stroke-width="0.8"/>
-      <!-- Spinning rotor -->
-      <circle cx="130" cy="130" r="28" fill="none" stroke="rgba(80,200,120,0.25)" stroke-width="1.5" stroke-dasharray="8 8" style="animation: rotor 0.8s linear infinite;"/>
-      <text x="130" y="180" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="7" font-family="Courier New">M1: 78%</text>
-
-      <!-- Motor 2 (OK) - top right -->
-      <circle cx="330" cy="130" r="36" fill="none" stroke="rgba(80,200,120,0.15)" stroke-width="0.5"/>
-      <circle cx="330" cy="130" r="5" fill="rgba(80,200,120,0.2)" stroke="rgba(80,200,120,0.4)" stroke-width="0.8"/>
-      <circle cx="330" cy="130" r="28" fill="none" stroke="rgba(80,200,120,0.25)" stroke-width="1.5" stroke-dasharray="8 8" style="animation: rotor 0.7s linear infinite reverse;"/>
-      <text x="330" y="180" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="7" font-family="Courier New">M2: 82%</text>
-
-      <!-- Motor 3 (FAILED) - bottom right -->
-      <circle cx="330" cy="330" r="36" fill="none" stroke="rgba(255,60,60,0.12)" stroke-width="0.5" stroke-dasharray="4 3"/>
-      <circle cx="330" cy="330" r="5" fill="rgba(255,60,60,0.15)" stroke="rgba(255,60,60,0.4)" stroke-width="0.8"/>
-      <!-- Static rotor (stopped) -->
-      <circle cx="330" cy="330" r="28" fill="none" stroke="rgba(255,60,60,0.1)" stroke-width="1" stroke-dasharray="8 8"/>
-      <!-- X mark -->
-      <line x1="318" y1="318" x2="342" y2="342" stroke="rgba(255,60,60,0.5)" stroke-width="1.5"/>
-      <line x1="342" y1="318" x2="318" y2="342" stroke="rgba(255,60,60,0.5)" stroke-width="1.5"/>
-      <text x="330" y="380" text-anchor="middle" fill="rgba(255,60,60,0.4)" font-size="7" font-family="Courier New">M3: FAULT</text>
-
-      <!-- Motor 4 (OK, compensating) - bottom left -->
-      <circle cx="130" cy="330" r="36" fill="none" stroke="rgba(80,200,120,0.15)" stroke-width="0.5"/>
-      <circle cx="130" cy="330" r="5" fill="rgba(80,200,120,0.2)" stroke="rgba(80,200,120,0.4)" stroke-width="0.8"/>
-      <circle cx="130" cy="330" r="28" fill="none" stroke="rgba(80,200,120,0.25)" stroke-width="1.5" stroke-dasharray="8 8" style="animation: rotor 0.6s linear infinite;"/>
-      <text x="130" y="380" text-anchor="middle" fill="rgba(255,255,255,0.12)" font-size="7" font-family="Courier New">M4: 95%</text>
-
-      <!-- CRTP communication lines -->
-      <line x1="215" y1="215" x2="145" y2="145" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 4"/>
-      <line x1="245" y1="215" x2="315" y2="145" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 4"/>
-      <line x1="245" y1="245" x2="315" y2="315" stroke="rgba(255,60,60,0.08)" stroke-width="0.5" stroke-dasharray="2 4"/>
-      <line x1="215" y1="245" x2="145" y2="315" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 4"/>
-
-      <!-- Compensation arrows showing redistribution -->
-      <path d="M 310 310 Q 280 230 145 140" fill="none" stroke="rgba(200,80,40,0.15)" stroke-width="0.8" stroke-dasharray="4 4">
-        <animate attributeName="stroke-dashoffset" values="0;-16" dur="2s" repeatCount="indefinite"/>
-      </path>
-      <path d="M 310 310 Q 330 230 335 145" fill="none" stroke="rgba(200,80,40,0.15)" stroke-width="0.8" stroke-dasharray="4 4">
-        <animate attributeName="stroke-dashoffset" values="0;-16" dur="2s" repeatCount="indefinite"/>
-      </path>
-      <path d="M 310 310 Q 230 330 145 335" fill="none" stroke="rgba(200,80,40,0.15)" stroke-width="0.8" stroke-dasharray="4 4">
-        <animate attributeName="stroke-dashoffset" values="0;-16" dur="2s" repeatCount="indefinite"/>
-      </path>
-
-      <!-- Yaw rotation indicator (spinning with 3 motors) -->
-      <circle cx="230" cy="230" r="160" fill="none" stroke="rgba(200,80,40,0.06)" stroke-width="0.5" stroke-dasharray="12 8">
-        <animateTransform attributeName="transform" type="rotate" values="0 230 230;360 230 230" dur="8s" repeatCount="indefinite"/>
-      </circle>
-    </svg>
-  </div>
-
-  <!-- FDI Callout -->
-  <div class="fdi-callout">
-    FDI_DETECTED: MOTOR_3<br>
-    TIMESTAMP: 00:04.217<br>
-    ACTION: CTRL_RECONFIG
-  </div>
-
-  <!-- Recovery Callout -->
-  <div class="recovery-callout">
-    RECOVERY_MODE: 3_MOTOR<br>
-    THRUST_REDISTRIB: ACTIVE<br>
-    YAW_CTRL: SACRIFICED<br>
-    STABILITY: MAINTAINED
-  </div>
-
-  <!-- Telemetry strip -->
-  <div class="telemetry-strip">
-    <div class="telem-item">
-      <div class="telem-label">Roll</div>
-      <div class="telem-val ok">+2.4°</div>
-    </div>
-    <div class="telem-item">
-      <div class="telem-label">Pitch</div>
-      <div class="telem-val ok">-1.8°</div>
-    </div>
-    <div class="telem-item">
-      <div class="telem-label">Yaw</div>
-      <div class="telem-val warn">UNCTL</div>
-    </div>
-    <div class="telem-item">
-      <div class="telem-label">Alt</div>
-      <div class="telem-val ok">1.2m</div>
-    </div>
-    <div class="telem-item">
-      <div class="telem-label">FDI</div>
-      <div class="telem-val crit">ACTIVE</div>
-    </div>
-    <div class="telem-item">
-      <div class="telem-label">CRTP</div>
-      <div class="telem-val ok">LINKED</div>
-    </div>
-    <div class="telem-item">
-      <div class="telem-label">PWM Ovrd</div>
-      <div class="telem-val warn">ON</div>
-    </div>
-  </div>
-
-  <div class="tech-left">
-    PROTOCOL: CRTP_V2<br>
-    FIRMWARE: CF2.X<br>
-    CONTROLLER: HYBRID_PC<br>
-    FDI_METHOD: RESIDUAL<br>
-    RECOVERY: 3_MOTOR_FLT
-  </div>
-  <div class="tech-right">
-    DETECTION_TIME: &lt;50ms<br>
-    RECONFIG_LAT: 12ms<br>
-    HOVER_STABLE: TRUE<br>
-    MOTOR_PWM: DIRECT<br>
-    TEST_ENV: INDOOR_LAB
-  </div>
-</div>
+<svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="font-family: ui-monospace, 'SF Mono', Menlo, monospace;">
+  <defs>
+    <pattern id="grid-ssk" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M 22 0 L 0 0 0 22" fill="none" stroke="#15171f" stroke-width="0.5"/></pattern>
+    <radialGradient id="reason-glow-grad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8d800" stop-opacity="0.7"/><stop offset="60%" stop-color="#c8d800" stop-opacity="0.2"/><stop offset="100%" stop-color="#c8d800" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1100" height="540" fill="#08090e"/>
+  <rect width="1100" height="540" fill="url(#grid-ssk)" opacity="0.6"/>
+  <path d="M 28 65 L 28 28 L 65 28" fill="none" stroke="#c5b994" stroke-width="1.6"/>
+  <path d="M 1035 28 L 1072 28 L 1072 65" fill="none" stroke="#c5b994" stroke-width="1.6"/>
+  <path d="M 28 475 L 28 512 L 65 512" fill="none" stroke="#c5b994" stroke-width="1.6"/>
+  <path d="M 1035 512 L 1072 512 L 1072 475" fill="none" stroke="#c5b994" stroke-width="1.6"/>
+  <g transform="translate(550, 92)"><circle r="16" fill="none" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/><line class="ss-reticle-tick" x1="0" y1="-16" x2="0" y2="-10" stroke="#d8a82c" stroke-width="1.6"/><text y="-22" fill="#c5b994" font-size="10" text-anchor="middle">N</text></g>
+  <g transform="translate(140, 100)"><rect width="260" height="62" fill="#0d0a0a" stroke="#c34545" stroke-width="1.1"/><text x="10" y="15" fill="#c34545" font-size="10">PIPELINE_MODE: VOICE_AGENT</text><text x="10" y="28" fill="#c34545" font-size="10">TARGET_LATENCY: ACTIVE</text><text x="10" y="41" fill="#c34545" font-size="10">VAR_CTRL: BACKUPFIXED</text><text x="10" y="54" fill="#c34545" font-size="10">STABILITY: MAINTAINED</text></g>
+  <g transform="translate(815, 96)" fill="#a8a08a" font-size="10"><text y="0">voicePipe_msec: cl287m</text><text y="13">sttWindow_var: 120ms</text><text y="26">ttsDecode_msec: 056mn</text><text y="39">vadThresh_pwm: yinVad</text><text y="52">cbta_swt: voiceCo_iaa</text></g>
+  <line x1="200" y1="216" x2="835" y2="216" stroke="#c5b994" stroke-width="0.5" stroke-dasharray="1 2"/>
+  <text x="517" y="208" fill="#c5b994" font-size="11" text-anchor="middle">END_TO_END BUDGET: 300ms     OBSERVED: 287ms     MARGIN: +13ms</text>
+  <g transform="translate(118, 270)"><circle r="16" fill="none" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/><rect x="-5" y="-10" width="10" height="14" rx="3" fill="none" stroke="#c5b994" stroke-width="0.8"/><line x1="0" y1="5" x2="0" y2="11" stroke="#c5b994" stroke-width="0.8"/><text y="34" fill="#c5b994" font-size="10" text-anchor="middle">PILOT_MIC</text></g>
+  <path d="M 138 270 L 153 270 L 156 264 L 159 276 L 162 265 L 165 275 L 168 270 L 184 270" fill="none" stroke="#d8a82c" stroke-width="1.2"/>
+  <g transform="translate(194, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">LiveKit</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">INGEST</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">40 ms</text></g>
+  <line class="ss-flow-arrow" x1="305" y1="270" x2="330" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
+  <polygon points="330,270 323,266 323,274" fill="#c5b994"/>
+  <g transform="translate(333, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">Deepgram</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">STT</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">110 ms</text></g>
+  <line class="ss-flow-arrow" x1="444" y1="270" x2="469" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
+  <polygon points="469,270 462,266 462,274" fill="#c5b994"/>
+  <ellipse class="ss-reason-glow" cx="526" cy="270" rx="78" ry="56" fill="url(#reason-glow-grad)"/>
+  <g transform="translate(472, 232)"><rect class="ss-reason-block" width="108" height="76" fill="#0c1000" fill-opacity="0.6" stroke="#c8d800" stroke-width="1.5" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">LLM_Agent</text><text x="54" y="46" fill="#c8d800" font-size="17" text-anchor="middle" font-weight="500">REASON</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">80 ms</text></g>
+  <line class="ss-flow-arrow" x1="583" y1="270" x2="608" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
+  <polygon points="608,270 601,266 601,274" fill="#c5b994"/>
+  <g transform="translate(611, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">ElevenLabs</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">TTS</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">50 ms</text></g>
+  <line class="ss-flow-arrow" x1="722" y1="270" x2="747" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
+  <polygon points="747,270 740,266 740,274" fill="#c5b994"/>
+  <g transform="translate(750, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">LiveKit</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">EGRESS</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">20 ms</text></g>
+  <path d="M 861 270 L 876 270 L 879 264 L 882 276 L 885 265 L 888 275 L 891 270 L 906 270" fill="none" stroke="#d8a82c" stroke-width="1.2"/>
+  <g transform="translate(925, 270)"><circle r="16" fill="none" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/><polygon points="-7,-8 -2,-8 6,-11 6,11 -2,8 -7,8" fill="none" stroke="#c5b994" stroke-width="0.8"/><path d="M 8 -6 Q 13 0 8 6" fill="none" stroke="#c5b994" stroke-width="0.7"/><text y="34" fill="#c5b994" font-size="10" text-anchor="middle">ATC_OUT</text></g>
+  <circle r="3.5" fill="#d8a82c" cx="118" cy="270">
+    <animate attributeName="cx" values="118;248;387;526;665;804;925;925" keyTimes="0;0.13;0.30;0.50;0.69;0.86;0.97;1" dur="4.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;1;1;1;1;0" keyTimes="0;0.04;0.12;0.30;0.50;0.70;0.93;1" dur="4.5s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="3;3;4;5.5;4;3;3;3" keyTimes="0;0.20;0.40;0.50;0.60;0.80;0.95;1" dur="4.5s" repeatCount="indefinite"/>
+  </circle>
+  <rect class="ss-vad-1" x="195" y="335" width="180" height="24" fill="#d8a82c"/>
+  <rect class="ss-vad-2" x="430" y="335" width="280" height="24" fill="#d8a82c"/>
+  <rect class="ss-vad-3" x="755" y="335" width="100" height="24" fill="#d8a82c"/>
+  <path d="M 195 347 L 200 347 L 202 343 L 204 351 L 206 340 L 208 353 L 210 343 L 212 350 L 220 347 L 225 347 L 228 342 L 230 352 L 233 340 L 236 353 L 238 342 L 240 351 L 245 347 L 260 347 L 263 341 L 266 352 L 269 342 L 272 350 L 275 343 L 278 350 L 290 347 L 305 347 L 308 343 L 311 350 L 314 341 L 317 351 L 320 344 L 323 348 L 335 347 L 360 347 L 364 343 L 368 350 L 372 341 L 376 350 L 380 344 L 384 348 L 395 347 L 432 347 L 436 341 L 440 354 L 444 339 L 448 355 L 452 340 L 456 352 L 465 347 L 480 347 L 483 341 L 486 352 L 489 340 L 492 354 L 495 341 L 498 350 L 510 347 L 540 347 L 544 340 L 548 354 L 552 338 L 556 355 L 560 341 L 564 351 L 580 347 L 610 347 L 614 341 L 618 351 L 622 341 L 626 351 L 630 343 L 634 350 L 650 347 L 690 347 L 693 343 L 696 350 L 700 341 L 704 351 L 707 343 L 710 348 L 715 347 L 755 347 L 759 343 L 763 351 L 767 341 L 771 350 L 774 344 L 778 348 L 790 347 L 815 347 L 818 344 L 821 348 L 824 344 L 827 348 L 830 345 L 833 347 L 855 347" fill="none" stroke="#d8a82c" stroke-width="1.2"/>
+  <path d="M 195 328 Q 260 324 320 326 T 450 322 T 580 325 T 700 323 T 855 327" fill="none" stroke="#d8a82c" stroke-width="1" stroke-dasharray="3 2" opacity="0.65"/>
+  <line x1="195" y1="362" x2="855" y2="362" stroke="#3a4252" stroke-width="0.5"/>
+  <text x="195" y="322" fill="#d8a82c" font-size="9">YIN_F0</text>
+  <text x="195" y="375" fill="#c5b994" font-size="9">VAD</text>
+  <g transform="translate(870, 332)"><rect width="60" height="30" fill="#1a1408" fill-opacity="0.5" stroke="#d8a82c" stroke-width="1"/><text x="6" y="11" fill="#a8a08a" font-size="8">Z_SCORE</text><text x="6" y="24" fill="#d8a82c" font-size="12" font-weight="500">-0.42</text></g>
+  <text x="870" y="378" fill="#c5b994" font-size="9">ABSTAIN&lt;0.60</text>
+  <path d="M 925 290 Q 980 380 855 410" fill="none" stroke="#c5b994" stroke-width="0.7" stroke-dasharray="1 2"/>
+  <polygon points="855,410 862,407 861,412" fill="#c5b994"/>
+  <text x="960" y="378" fill="#c5b994" font-size="9">CBTA_FB</text>
+  <g transform="translate(680, 408)"><rect width="210" height="48" fill="#0d0a0a" stroke="#c34545" stroke-width="1.1"/><text x="10" y="14" fill="#c34545" font-size="10">LAT_OBSERVED: AGENT_2</text><text x="10" y="28" fill="#c34545" font-size="10">TIMESTAMP: 23.55.317</text><text x="10" y="42" fill="#c34545" font-size="10">ACTION: SYNC_PIPELINE</text></g>
+  <g transform="translate(80, 415)" fill="#a8a08a" font-size="10"><text y="0">voicePipe: voice_v3</text><text y="13">framework: liveKit.s</text><text y="26">STTEngine: deepgram_v2</text><text y="39">vad_method: yin_voice</text><text y="52">ttsModel: eleven_v3_aud</text></g>
+  <g font-family="ui-monospace, monospace">
+    <g fill="#5a5852" font-size="10"><text x="335" y="478" text-anchor="middle">- - - -</text><text x="410" y="478" text-anchor="middle">- - - -</text><text x="485" y="478" text-anchor="middle">- - -</text><text x="560" y="478" text-anchor="middle">- - -</text><text x="635" y="478" text-anchor="middle">- - - -</text><text x="710" y="478" text-anchor="middle">- - - -</text><text x="785" y="478" text-anchor="middle">- - -</text></g>
+    <g font-size="13"><text x="335" y="494" fill="#c8d800" text-anchor="middle">+0.4ms</text><text x="410" y="494" fill="#c34545" text-anchor="middle">-1.8ms</text><text x="485" y="494" fill="#c5b994" text-anchor="middle">VAD1</text><text x="560" y="494" fill="#c5b994" text-anchor="middle">287ms</text><text x="635" y="494" fill="#c8d800" text-anchor="middle">ACTIVE</text><text x="710" y="494" fill="#c8d800" text-anchor="middle">LINKED</text><text x="785" y="494" fill="#c8d800" text-anchor="middle">ON</text></g>
+  </g>
+</svg>
 </body>
 </html>
