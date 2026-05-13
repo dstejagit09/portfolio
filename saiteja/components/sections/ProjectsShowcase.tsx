@@ -25,8 +25,8 @@ function ProjectVisual({ src, alt }: { src: string; alt: string }) {
   return (
     <div
       ref={wrapRef}
-      className="w-full overflow-hidden bg-[#0a0a0a]"
-      style={{ height: `${scaledHeight}px` }}
+      className="w-full h-full overflow-hidden bg-[#0a0a0a]"
+      style={{ minHeight: `${scaledHeight}px` }}
       aria-label={alt}
     >
       <iframe
@@ -138,7 +138,7 @@ export function ProjectsShowcase() {
             </div>
 
             {/* Visual column — 6 cols (center) — clickable */}
-            <Link href={`/projects/${slug}`} className="lg:col-span-6 bg-surface-container-low overflow-hidden order-2 block group relative">
+            <Link href={`/projects/${slug}`} className="lg:col-span-6 bg-[#0a0a0a] overflow-hidden order-2 block group relative">
               <ProjectVisual src={visual} alt={visualAlt} />
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-primary-fixed/0 group-hover:bg-primary-fixed/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">

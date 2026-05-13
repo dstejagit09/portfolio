@@ -7,7 +7,7 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Courier New', monospace; overflow: hidden; }
-.canvas { width: 100%; height: 100%; aspect-ratio: 1080/760; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas { width: 100%; height: 100%; position: relative; overflow: hidden; background: #0a0a0a; }
 .canvas-inner { position: absolute; top: 0; left: 0; width: 1080px; height: 760px; transform-origin: top left; }
 .canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
 .grid-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 520px; height: 520px; background: radial-gradient(circle, rgba(200,80,40,0.06) 0%, transparent 70%); pointer-events: none; }
@@ -68,7 +68,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
   <div class="corner corner-tr"></div>
   <div class="corner corner-bl"></div>
   <div class="corner corner-br"></div>
-
   <div class="aruco aruco-tl">
     <div class="aruco-label">ARUCO_ID:07</div>
     <div class="aruco-inner">
@@ -79,7 +78,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
       <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
     </div>
   </div>
-
   <div class="aruco aruco-br">
     <div class="aruco-label">ARUCO_ID:13</div>
     <div class="aruco-inner">
@@ -90,10 +88,8 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
       <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
     </div>
   </div>
-
   <div class="label-start">ORIGIN [0,0]</div>
   <div class="label-end">GOAL [7,7]</div>
-
   <div class="maze-grid">
     <div class="cell start path-dot"><span class="cell-cost">0</span></div>
     <div class="cell path path-dot"><span class="cell-cost">1</span></div>
@@ -160,11 +156,9 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     <div class="cell visited"></div>
     <div class="cell end"><span class="cell-cost">12</span></div>
   </div>
-
   <svg class="path-overlay" viewBox="0 0 472 472" xmlns="http://www.w3.org/2000/svg">
     <path d="M 29 29 L 88 29 L 88 88 L 147 88 L 206 88 L 206 147 L 206 206 L 265 206 L 265 265 L 324 265 L 383 265 L 383 324 L 383 383 L 442 383 L 442 442" fill="none" stroke="rgba(200,80,40,0.2)" stroke-width="2" stroke-dasharray="6 4"/>
   </svg>
-
   <svg class="arm-overlay" width="160" height="280" viewBox="0 0 160 280" xmlns="http://www.w3.org/2000/svg">
     <ellipse cx="80" cy="268" rx="50" ry="10" fill="none" stroke="white" stroke-width="0.8"/>
     <rect x="65" y="240" width="30" height="28" rx="3" fill="none" stroke="white" stroke-width="0.8"/>
@@ -189,7 +183,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     <text x="92" y="120" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J3</text>
     <text x="52" y="68" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J4</text>
   </svg>
-
   <div class="tech-overlay">
     ASTAR_HEURISTIC: MANHATTAN<br>
     GRID_RESOLUTION: 8x8<br>

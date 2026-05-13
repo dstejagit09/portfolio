@@ -5,7 +5,7 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Courier New', monospace; overflow: hidden; }
-.canvas { width: 100%; height: 100%; aspect-ratio: 1080/760; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas { width: 100%; height: 100%; position: relative; overflow: hidden; background: #0a0a0a; }
 .canvas-inner { position: absolute; top: 0; left: 0; width: 1080px; height: 760px; transform-origin: top left; }
 .canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; }
 .corner { position: absolute; width: 20px; height: 20px; }
@@ -40,7 +40,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
   <div class="corner corner-tr"></div>
   <div class="corner corner-bl"></div>
   <div class="corner corner-br"></div>
-
   <div class="pid-plot">
     <div class="pid-label">PID_ERROR (X-AXIS)</div>
     <svg width="180" height="70" viewBox="0 0 180 70">
@@ -59,7 +58,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
       <text x="165" y="32" fill="rgba(80,200,120,0.4)" font-size="5" font-family="Courier New">0</text>
     </svg>
   </div>
-
   <div class="lz-callout">
     MARKER_DETECTED: TRUE<br>
     TRACKING_LOCK: STABLE<br>
@@ -67,7 +65,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     PRED_HORIZON: 2.0s<br>
     LANDING_CLEAR: TRUE
   </div>
-
   <div class="scene-container">
     <svg width="650" height="520" viewBox="0 0 650 520">
       <g opacity="0.06">
@@ -149,7 +146,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
       </g>
     </svg>
   </div>
-
   <div class="state-display">
     <div class="state-item"><div class="state-lbl">X ERROR</div><div class="state-val o">+3.2cm</div></div>
     <div class="state-item"><div class="state-lbl">Y ERROR</div><div class="state-val o">-1.8cm</div></div>
@@ -158,7 +154,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     <div class="state-item"><div class="state-lbl">MARKER</div><div class="state-val g">LOCKED</div></div>
     <div class="state-item"><div class="state-lbl">WIND</div><div class="state-val g">0.2 m/s</div></div>
   </div>
-
   <div class="tech-left">
     CONTROLLER: MATLAB/SIMULINK<br>
     PLATFORM: PARROT_MAMBO<br>

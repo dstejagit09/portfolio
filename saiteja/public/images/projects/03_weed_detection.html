@@ -5,7 +5,7 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Courier New', monospace; overflow: hidden; }
-.canvas { width: 100%; height: 100%; aspect-ratio: 1080/760; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas { width: 100%; height: 100%; position: relative; overflow: hidden; background: #0a0a0a; }
 .canvas-inner { position: absolute; top: 0; left: 0; width: 1080px; height: 760px; transform-origin: top left; }
 .canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; }
 .corner { position: absolute; width: 20px; height: 20px; }
@@ -36,7 +36,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
   <div class="corner corner-tr"></div>
   <div class="corner corner-bl"></div>
   <div class="corner corner-br"></div>
-
   <div class="det-log">
     [FRAME_0847]<br>
     <span class="crop">CROP&nbsp;&nbsp;conf:0.96 box:[124,89,210,198]</span><br>
@@ -52,7 +51,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     AVG_CONF: 0.916<br>
     INFERENCE: 83ms
   </div>
-
   <div class="conf-hist">
     <div class="conf-bar" style="height: 8px;"></div>
     <div class="conf-bar" style="height: 12px;"></div>
@@ -66,7 +64,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     <div class="conf-bar" style="height: 20px;"></div>
     <span class="conf-label">CONFIDENCE DIST.</span>
   </div>
-
   <div class="model-info">
     MODEL: YOLOv8n<br>
     INPUT: 640x640<br>
@@ -76,29 +73,16 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     DEPLOY: ROSMASTER_X3<br>
     NODE: /weed_detector
   </div>
-
   <div class="view-container">
     <svg width="620" height="560" viewBox="0 0 620 560">
       <rect x="0" y="0" width="620" height="560" rx="2" fill="rgba(255,255,255,0.01)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
       <g opacity="0.06">
-        <g>
-          <circle cx="60" cy="50" r="8" fill="rgba(100,180,80,0.8)"/><circle cx="110" cy="55" r="10" fill="rgba(100,180,80,0.6)"/><circle cx="160" cy="48" r="9" fill="rgba(100,180,80,0.7)"/><circle cx="210" cy="52" r="7" fill="rgba(80,160,60,0.7)"/><circle cx="260" cy="47" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="310" cy="55" r="8" fill="rgba(120,200,80,0.6)"/><circle cx="360" cy="50" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="410" cy="48" r="9" fill="rgba(80,160,60,0.6)"/><circle cx="460" cy="53" r="7" fill="rgba(100,180,80,0.8)"/><circle cx="510" cy="50" r="10" fill="rgba(100,180,80,0.5)"/><circle cx="560" cy="47" r="8" fill="rgba(120,200,80,0.7)"/>
-        </g>
-        <g transform="translate(25, 60)">
-          <circle cx="60" cy="50" r="9" fill="rgba(100,180,80,0.6)"/><circle cx="110" cy="55" r="7" fill="rgba(80,160,60,0.7)"/><circle cx="160" cy="48" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="210" cy="52" r="8" fill="rgba(120,200,80,0.8)"/><circle cx="260" cy="47" r="10" fill="rgba(100,180,80,0.6)"/><circle cx="310" cy="55" r="9" fill="rgba(80,160,60,0.7)"/><circle cx="360" cy="50" r="7" fill="rgba(100,180,80,0.7)"/><circle cx="410" cy="48" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="460" cy="53" r="8" fill="rgba(100,180,80,0.6)"/><circle cx="510" cy="50" r="9" fill="rgba(80,160,60,0.8)"/>
-        </g>
-        <g transform="translate(-10, 120)">
-          <circle cx="60" cy="50" r="10" fill="rgba(100,180,80,0.5)"/><circle cx="110" cy="55" r="8" fill="rgba(120,200,80,0.7)"/><circle cx="160" cy="48" r="7" fill="rgba(100,180,80,0.6)"/><circle cx="210" cy="52" r="11" fill="rgba(80,160,60,0.5)"/><circle cx="260" cy="47" r="9" fill="rgba(100,180,80,0.8)"/><circle cx="310" cy="55" r="10" fill="rgba(120,200,80,0.6)"/><circle cx="360" cy="50" r="8" fill="rgba(100,180,80,0.7)"/><circle cx="410" cy="48" r="7" fill="rgba(80,160,60,0.6)"/><circle cx="460" cy="53" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="510" cy="50" r="8" fill="rgba(120,200,80,0.7)"/><circle cx="560" cy="47" r="9" fill="rgba(100,180,80,0.6)"/>
-        </g>
-        <g transform="translate(15, 180)">
-          <circle cx="60" cy="50" r="8" fill="rgba(80,160,60,0.7)"/><circle cx="110" cy="55" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="160" cy="48" r="9" fill="rgba(120,200,80,0.6)"/><circle cx="210" cy="52" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="260" cy="47" r="7" fill="rgba(80,160,60,0.8)"/><circle cx="310" cy="55" r="8" fill="rgba(100,180,80,0.6)"/><circle cx="360" cy="50" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="410" cy="48" r="9" fill="rgba(100,180,80,0.7)"/><circle cx="460" cy="53" r="10" fill="rgba(80,160,60,0.6)"/><circle cx="510" cy="50" r="7" fill="rgba(100,180,80,0.8)"/>
-        </g>
-        <g transform="translate(-5, 240)">
-          <circle cx="60" cy="50" r="9" fill="rgba(120,200,80,0.6)"/><circle cx="110" cy="55" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="160" cy="48" r="8" fill="rgba(80,160,60,0.5)"/><circle cx="210" cy="52" r="7" fill="rgba(100,180,80,0.8)"/><circle cx="310" cy="55" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="360" cy="50" r="9" fill="rgba(100,180,80,0.6)"/><circle cx="460" cy="53" r="8" fill="rgba(80,160,60,0.7)"/><circle cx="510" cy="50" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="560" cy="47" r="10" fill="rgba(120,200,80,0.6)"/>
-        </g>
-        <g transform="translate(20, 300)">
-          <circle cx="60" cy="50" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="110" cy="55" r="8" fill="rgba(80,160,60,0.6)"/><circle cx="160" cy="48" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="260" cy="47" r="9" fill="rgba(100,180,80,0.6)"/><circle cx="310" cy="55" r="7" fill="rgba(80,160,60,0.8)"/><circle cx="410" cy="48" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="460" cy="53" r="9" fill="rgba(120,200,80,0.5)"/><circle cx="510" cy="50" r="8" fill="rgba(100,180,80,0.6)"/>
-        </g>
+        <g><circle cx="60" cy="50" r="8" fill="rgba(100,180,80,0.8)"/><circle cx="110" cy="55" r="10" fill="rgba(100,180,80,0.6)"/><circle cx="160" cy="48" r="9" fill="rgba(100,180,80,0.7)"/><circle cx="210" cy="52" r="7" fill="rgba(80,160,60,0.7)"/><circle cx="260" cy="47" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="310" cy="55" r="8" fill="rgba(120,200,80,0.6)"/><circle cx="360" cy="50" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="410" cy="48" r="9" fill="rgba(80,160,60,0.6)"/><circle cx="460" cy="53" r="7" fill="rgba(100,180,80,0.8)"/><circle cx="510" cy="50" r="10" fill="rgba(100,180,80,0.5)"/><circle cx="560" cy="47" r="8" fill="rgba(120,200,80,0.7)"/></g>
+        <g transform="translate(25, 60)"><circle cx="60" cy="50" r="9" fill="rgba(100,180,80,0.6)"/><circle cx="110" cy="55" r="7" fill="rgba(80,160,60,0.7)"/><circle cx="160" cy="48" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="210" cy="52" r="8" fill="rgba(120,200,80,0.8)"/><circle cx="260" cy="47" r="10" fill="rgba(100,180,80,0.6)"/><circle cx="310" cy="55" r="9" fill="rgba(80,160,60,0.7)"/><circle cx="360" cy="50" r="7" fill="rgba(100,180,80,0.7)"/><circle cx="410" cy="48" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="460" cy="53" r="8" fill="rgba(100,180,80,0.6)"/><circle cx="510" cy="50" r="9" fill="rgba(80,160,60,0.8)"/></g>
+        <g transform="translate(-10, 120)"><circle cx="60" cy="50" r="10" fill="rgba(100,180,80,0.5)"/><circle cx="110" cy="55" r="8" fill="rgba(120,200,80,0.7)"/><circle cx="160" cy="48" r="7" fill="rgba(100,180,80,0.6)"/><circle cx="210" cy="52" r="11" fill="rgba(80,160,60,0.5)"/><circle cx="260" cy="47" r="9" fill="rgba(100,180,80,0.8)"/><circle cx="310" cy="55" r="10" fill="rgba(120,200,80,0.6)"/><circle cx="360" cy="50" r="8" fill="rgba(100,180,80,0.7)"/><circle cx="410" cy="48" r="7" fill="rgba(80,160,60,0.6)"/><circle cx="460" cy="53" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="510" cy="50" r="8" fill="rgba(120,200,80,0.7)"/><circle cx="560" cy="47" r="9" fill="rgba(100,180,80,0.6)"/></g>
+        <g transform="translate(15, 180)"><circle cx="60" cy="50" r="8" fill="rgba(80,160,60,0.7)"/><circle cx="110" cy="55" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="160" cy="48" r="9" fill="rgba(120,200,80,0.6)"/><circle cx="210" cy="52" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="260" cy="47" r="7" fill="rgba(80,160,60,0.8)"/><circle cx="310" cy="55" r="8" fill="rgba(100,180,80,0.6)"/><circle cx="360" cy="50" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="410" cy="48" r="9" fill="rgba(100,180,80,0.7)"/><circle cx="460" cy="53" r="10" fill="rgba(80,160,60,0.6)"/><circle cx="510" cy="50" r="7" fill="rgba(100,180,80,0.8)"/></g>
+        <g transform="translate(-5, 240)"><circle cx="60" cy="50" r="9" fill="rgba(120,200,80,0.6)"/><circle cx="110" cy="55" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="160" cy="48" r="8" fill="rgba(80,160,60,0.5)"/><circle cx="210" cy="52" r="7" fill="rgba(100,180,80,0.8)"/><circle cx="310" cy="55" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="360" cy="50" r="9" fill="rgba(100,180,80,0.6)"/><circle cx="460" cy="53" r="8" fill="rgba(80,160,60,0.7)"/><circle cx="510" cy="50" r="11" fill="rgba(100,180,80,0.5)"/><circle cx="560" cy="47" r="10" fill="rgba(120,200,80,0.6)"/></g>
+        <g transform="translate(20, 300)"><circle cx="60" cy="50" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="110" cy="55" r="8" fill="rgba(80,160,60,0.6)"/><circle cx="160" cy="48" r="11" fill="rgba(120,200,80,0.5)"/><circle cx="260" cy="47" r="9" fill="rgba(100,180,80,0.6)"/><circle cx="310" cy="55" r="7" fill="rgba(80,160,60,0.8)"/><circle cx="410" cy="48" r="10" fill="rgba(100,180,80,0.7)"/><circle cx="460" cy="53" r="9" fill="rgba(120,200,80,0.5)"/><circle cx="510" cy="50" r="8" fill="rgba(100,180,80,0.6)"/></g>
       </g>
       <rect x="80" y="60" width="100" height="120" rx="2" fill="none" stroke="rgba(80,200,120,0.5)" stroke-width="1.2" style="animation: fadeBox 3s infinite;"/>
       <rect x="80" y="52" width="75" height="12" rx="1" fill="rgba(80,200,120,0.12)"/>
@@ -142,7 +126,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
       <text x="514" y="46" fill="rgba(255,80,80,0.5)" font-size="7" font-family="Courier New">WEED (SPRAY TARGET)</text>
     </svg>
   </div>
-
   <div class="tech-left">
     PIPELINE: ROS_YOLO_V8<br>
     CAMERA: USB_CAM_720P<br>

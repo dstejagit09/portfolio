@@ -2,209 +2,229 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maze Solver Visual</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Courier New', monospace; overflow: hidden; }
-.canvas { width: 100%; height: 100%; aspect-ratio: 1080/760; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas { width: 100%; height: 100%; position: relative; overflow: hidden; background: #0a0a0a; }
 .canvas-inner { position: absolute; top: 0; left: 0; width: 1080px; height: 760px; transform-origin: top left; }
-.canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
-.grid-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 520px; height: 520px; background: radial-gradient(circle, rgba(200,80,40,0.06) 0%, transparent 70%); pointer-events: none; }
-.maze-grid { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; grid-template-columns: repeat(8, 56px); grid-template-rows: repeat(8, 56px); gap: 3px; }
-.cell { width: 56px; height: 56px; border: 1px solid rgba(255,255,255,0.06); position: relative; transition: all 0.3s; }
-.cell.obstacle { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
-.cell.obstacle::after { content: ''; position: absolute; inset: 8px; background: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.04) 3px, rgba(255,255,255,0.04) 4px); }
-.cell.path { background: rgba(200,80,40,0.12); border-color: rgba(200,80,40,0.25); }
-.cell.path::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: #c85028; border-radius: 50%; box-shadow: 0 0 12px rgba(200,80,40,0.6); }
-.cell.visited { background: rgba(200,80,40,0.04); border-color: rgba(200,80,40,0.1); }
-.cell.start { background: rgba(200,80,40,0.2); border: 1.5px solid rgba(200,80,40,0.5); }
-.cell.end { background: rgba(80,200,120,0.15); border: 1.5px solid rgba(80,200,120,0.4); }
-.aruco { position: absolute; width: 40px; height: 40px; border: 2px solid rgba(255,255,255,0.5); }
-.aruco-inner { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); width: 100%; height: 100%; }
-.aruco-bit { background: rgba(255,255,255,0.08); }
-.aruco-bit.on { background: rgba(255,255,255,0.7); }
-.aruco-label { position: absolute; font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 1px; white-space: nowrap; }
-.aruco-tl { top: 95px; left: 258px; }
-.aruco-tl .aruco-label { top: -14px; left: 0; }
-.aruco-br { bottom: 95px; right: 258px; }
-.aruco-br .aruco-label { bottom: -14px; right: 0; }
-.path-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 472px; height: 472px; pointer-events: none; }
-.arm-overlay { position: absolute; top: 40px; right: 60px; opacity: 0.12; pointer-events: none; }
-.label-start { position: absolute; top: 50%; left: 50%; font-size: 9px; color: #c85028; letter-spacing: 2px; text-transform: uppercase; transform: translate(-310px, -260px); }
-.label-end { position: absolute; top: 50%; left: 50%; font-size: 9px; color: rgba(80,200,120,0.7); letter-spacing: 2px; text-transform: uppercase; transform: translate(230px, 240px); }
-.tech-overlay { position: absolute; bottom: 40px; left: 50px; font-size: 9px; color: rgba(255,255,255,0.12); line-height: 1.8; letter-spacing: 0.5px; }
-.tech-right { position: absolute; top: 50px; right: 50px; font-size: 9px; color: rgba(255,255,255,0.12); line-height: 1.8; letter-spacing: 0.5px; text-align: right; }
-.scan-line { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(200,80,40,0.15) 50%, transparent 100%); animation: scan 4s linear infinite; pointer-events: none; }
-@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-.corner { position: absolute; width: 20px; height: 20px; pointer-events: none; }
+.canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; }
+.corner { position: absolute; width: 20px; height: 20px; }
 .corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
 .corner-tr { top: 20px; right: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
 .corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
 .corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
-@keyframes pathPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
-.path-dot { animation: pathPulse 2s ease-in-out infinite; }
-.path-dot:nth-child(2) { animation-delay: 0.15s; }
-.path-dot:nth-child(3) { animation-delay: 0.3s; }
-.path-dot:nth-child(4) { animation-delay: 0.45s; }
-.path-dot:nth-child(5) { animation-delay: 0.6s; }
-.path-dot:nth-child(6) { animation-delay: 0.75s; }
-.path-dot:nth-child(7) { animation-delay: 0.9s; }
-.path-dot:nth-child(8) { animation-delay: 1.05s; }
-.path-dot:nth-child(9) { animation-delay: 1.2s; }
-.path-dot:nth-child(10) { animation-delay: 1.35s; }
-.cell.end::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: rgba(80,200,120,0.8); border-radius: 50%; box-shadow: 0 0 16px rgba(80,200,120,0.5); animation: endPulse 2s ease-in-out infinite; }
-@keyframes endPulse { 0%, 100% { box-shadow: 0 0 8px rgba(80,200,120,0.3); } 50% { box-shadow: 0 0 20px rgba(80,200,120,0.6); } }
-.cell.start::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: rgba(200,80,40,0.9); border-radius: 50%; box-shadow: 0 0 16px rgba(200,80,40,0.5); }
-.cell-cost { position: absolute; bottom: 3px; right: 4px; font-size: 7px; color: rgba(200,80,40,0.25); font-family: 'Courier New', monospace; }
+.scan-line { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,80,40,0.12), transparent); animation: scan 5s linear infinite; z-index: 10; }
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+.tech-left { position: absolute; bottom: 40px; left: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; letter-spacing: 0.5px; }
+.tech-right { position: absolute; top: 40px; right: 50px; font-size: 9px; color: rgba(255,255,255,0.1); line-height: 1.8; text-align: right; letter-spacing: 0.5px; }
+.scene-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.latency-budget { position: absolute; top: 60px; left: 60px; border: 1px solid rgba(200,80,40,0.15); background: rgba(200,80,40,0.02); padding: 10px 14px; font-size: 7px; color: rgba(200,80,40,0.4); letter-spacing: 0.5px; line-height: 1.6; }
+.latency-budget .header { color: rgba(200,80,40,0.6); margin-bottom: 4px; font-size: 8px; }
+.voice-result { position: absolute; bottom: 60px; right: 60px; border: 1px solid rgba(80,200,120,0.15); background: rgba(80,200,120,0.02); padding: 10px 14px; font-size: 7px; color: rgba(80,200,120,0.5); letter-spacing: 0.5px; line-height: 1.8; }
 </style>
 </head>
 <body>
 <div class="canvas">
 <div class="canvas-inner" id="ci">
-  <div class="grid-glow"></div>
   <div class="scan-line"></div>
   <div class="corner corner-tl"></div>
   <div class="corner corner-tr"></div>
   <div class="corner corner-bl"></div>
   <div class="corner corner-br"></div>
 
-  <div class="aruco aruco-tl">
-    <div class="aruco-label">ARUCO_ID:07</div>
-    <div class="aruco-inner">
-      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
-    </div>
+  <div class="latency-budget">
+    <div class="header">VOICE_PIPELINE_BUDGET</div>
+    LIVEKIT_IN&nbsp;&nbsp;[ 040 ms ]<br>
+    DEEPGRAM&nbsp;&nbsp;&nbsp;&nbsp;[ 110 ms ]<br>
+    LLM_AGENT&nbsp;&nbsp;&nbsp;[ 080 ms ]<br>
+    ELEVENLABS&nbsp;&nbsp;[ 050 ms ]<br>
+    LIVEKIT_OUT&nbsp;[ 020 ms ]<br>
+    -----------------------<br>
+    OBSERVED:&nbsp;&nbsp;287 / 300 ms<br>
+    MARGIN:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+13 ms
   </div>
 
-  <div class="aruco aruco-br">
-    <div class="aruco-label">ARUCO_ID:13</div>
-    <div class="aruco-inner">
-      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
-      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
-    </div>
+  <div class="voice-result">
+    YIN_F0: 142 Hz<br>
+    VAD: ACTIVE<br>
+    Z_SCORE: -0.42<br>
+    ABSTAIN: PASS<br>
+    CBTA_GRADE: PASS<br>
+    PILOT_COMP: 0.91
   </div>
 
-  <div class="label-start">ORIGIN [0,0]</div>
-  <div class="label-end">GOAL [7,7]</div>
+  <div class="scene-container">
+    <svg width="580" height="580" viewBox="0 0 580 580" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="pipeGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(200,80,40,0.05)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+      <circle cx="290" cy="290" r="260" fill="url(#pipeGlow)"/>
 
-  <div class="maze-grid">
-    <div class="cell start path-dot"><span class="cell-cost">0</span></div>
-    <div class="cell path path-dot"><span class="cell-cost">1</span></div>
-    <div class="cell visited"></div>
-    <div class="cell visited"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell visited"></div>
-    <div class="cell path path-dot"><span class="cell-cost">2</span></div>
-    <div class="cell path path-dot"><span class="cell-cost">3</span></div>
-    <div class="cell visited"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell visited"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell visited"></div>
-    <div class="cell path path-dot"><span class="cell-cost">4</span></div>
-    <div class="cell visited"></div>
-    <div class="cell visited"></div>
-    <div class="cell visited"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell path path-dot"><span class="cell-cost">5</span></div>
-    <div class="cell path path-dot"><span class="cell-cost">6</span></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell visited"></div>
-    <div class="cell path path-dot"><span class="cell-cost">7</span></div>
-    <div class="cell visited"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell visited"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell visited"></div>
-    <div class="cell path path-dot"><span class="cell-cost">8</span></div>
-    <div class="cell path path-dot"><span class="cell-cost">9</span></div>
-    <div class="cell visited"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell visited"></div>
-    <div class="cell path path-dot"><span class="cell-cost">10</span></div>
-    <div class="cell path path-dot"><span class="cell-cost">11</span></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell obstacle"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell visited"></div>
-    <div class="cell end"><span class="cell-cost">12</span></div>
+      <text x="290" y="40" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="9" font-family="Courier New" letter-spacing="3">END-TO-END VOICE PIPELINE</text>
+      <line x1="60" y1="55" x2="520" y2="55" stroke="rgba(200,80,40,0.15)" stroke-width="0.5" stroke-dasharray="3 2"/>
+      <text x="60" y="70" fill="rgba(200,80,40,0.5)" font-size="6" font-family="Courier New">T+0ms</text>
+      <text x="520" y="70" text-anchor="end" fill="rgba(80,200,120,0.5)" font-size="6" font-family="Courier New">T+287ms / 300ms</text>
+
+      <g transform="translate(40, 200)">
+        <circle r="14" fill="rgba(200,80,40,0.1)" stroke="rgba(200,80,40,0.5)" stroke-width="1"/>
+        <rect x="-3" y="-7" width="6" height="10" rx="2" fill="none" stroke="rgba(200,80,40,0.6)" stroke-width="0.7"/>
+        <line x1="0" y1="3" x2="0" y2="7" stroke="rgba(200,80,40,0.6)" stroke-width="0.7"/>
+        <circle r="22" fill="none" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 3">
+          <animateTransform attributeName="transform" type="rotate" values="0;360" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <text y="36" text-anchor="middle" fill="rgba(200,80,40,0.5)" font-size="7" font-family="Courier New">PILOT_MIC</text>
+      </g>
+
+      <path d="M 55 200 L 65 200 L 67 196 L 69 204 L 71 195 L 73 205 L 75 200 L 88 200" fill="none" stroke="rgba(200,80,40,0.45)" stroke-width="1"/>
+
+      <rect x="92" y="160" width="78" height="82" rx="2" fill="rgba(200,80,40,0.04)" stroke="rgba(200,80,40,0.4)" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="131" y="178" text-anchor="middle" fill="rgba(255,255,255,0.18)" font-size="7" font-family="Courier New">LiveKit</text>
+      <text x="131" y="210" text-anchor="middle" fill="rgba(200,80,40,0.8)" font-size="12" font-family="Courier New" letter-spacing="1">INGEST</text>
+      <text x="131" y="230" text-anchor="middle" fill="rgba(200,80,40,0.45)" font-size="7" font-family="Courier New">40 ms</text>
+
+      <line x1="170" y1="200" x2="192" y2="200" stroke="rgba(200,80,40,0.4)" stroke-width="0.9" stroke-dasharray="3 2">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.2s" repeatCount="indefinite"/>
+      </line>
+      <polygon points="192,200 187,197 187,203" fill="rgba(200,80,40,0.5)"/>
+
+      <rect x="194" y="160" width="78" height="82" rx="2" fill="rgba(200,80,40,0.04)" stroke="rgba(200,80,40,0.4)" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="233" y="178" text-anchor="middle" fill="rgba(255,255,255,0.18)" font-size="7" font-family="Courier New">Deepgram</text>
+      <text x="233" y="210" text-anchor="middle" fill="rgba(200,80,40,0.8)" font-size="12" font-family="Courier New" letter-spacing="1">STT</text>
+      <text x="233" y="230" text-anchor="middle" fill="rgba(200,80,40,0.45)" font-size="7" font-family="Courier New">110 ms</text>
+
+      <line x1="272" y1="200" x2="294" y2="200" stroke="rgba(80,200,120,0.5)" stroke-width="1" stroke-dasharray="3 2">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.2s" repeatCount="indefinite"/>
+      </line>
+      <polygon points="294,200 289,197 289,203" fill="rgba(80,200,120,0.6)"/>
+
+      <circle cx="335" cy="200" r="55" fill="none" stroke="rgba(80,200,120,0.18)" stroke-width="0.5">
+        <animate attributeName="r" values="50;58;50" dur="2.4s" repeatCount="indefinite"/>
+        <animate attributeName="stroke-opacity" values="0.25;0;0.25" dur="2.4s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="296" y="158" width="78" height="86" rx="2" fill="rgba(80,200,120,0.07)" stroke="rgba(80,200,120,0.6)" stroke-width="1.3" stroke-dasharray="3 2">
+        <animate attributeName="stroke-opacity" values="0.6;0.95;0.6" dur="2.4s" repeatCount="indefinite"/>
+      </rect>
+      <text x="335" y="178" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Courier New">LLM_Agent</text>
+      <text x="335" y="210" text-anchor="middle" fill="rgba(80,200,120,0.95)" font-size="12" font-family="Courier New" letter-spacing="1">REASON</text>
+      <text x="335" y="230" text-anchor="middle" fill="rgba(80,200,120,0.6)" font-size="7" font-family="Courier New">80 ms</text>
+
+      <line x1="374" y1="200" x2="396" y2="200" stroke="rgba(200,80,40,0.4)" stroke-width="0.9" stroke-dasharray="3 2">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.2s" repeatCount="indefinite"/>
+      </line>
+      <polygon points="396,200 391,197 391,203" fill="rgba(200,80,40,0.5)"/>
+
+      <rect x="398" y="160" width="78" height="82" rx="2" fill="rgba(200,80,40,0.04)" stroke="rgba(200,80,40,0.4)" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="437" y="178" text-anchor="middle" fill="rgba(255,255,255,0.18)" font-size="7" font-family="Courier New">ElevenLabs</text>
+      <text x="437" y="210" text-anchor="middle" fill="rgba(200,80,40,0.8)" font-size="12" font-family="Courier New" letter-spacing="1">TTS</text>
+      <text x="437" y="230" text-anchor="middle" fill="rgba(200,80,40,0.45)" font-size="7" font-family="Courier New">50 ms</text>
+
+      <line x1="476" y1="200" x2="494" y2="200" stroke="rgba(200,80,40,0.4)" stroke-width="0.9" stroke-dasharray="3 2">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.2s" repeatCount="indefinite"/>
+      </line>
+      <polygon points="494,200 489,197 489,203" fill="rgba(200,80,40,0.5)"/>
+
+      <rect x="496" y="170" width="42" height="62" rx="2" fill="rgba(200,80,40,0.04)" stroke="rgba(200,80,40,0.4)" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="517" y="188" text-anchor="middle" fill="rgba(255,255,255,0.18)" font-size="6" font-family="Courier New">LiveKit</text>
+      <text x="517" y="208" text-anchor="middle" fill="rgba(200,80,40,0.8)" font-size="9" font-family="Courier New">OUT</text>
+      <text x="517" y="222" text-anchor="middle" fill="rgba(200,80,40,0.45)" font-size="6" font-family="Courier New">20 ms</text>
+
+      <circle r="3.5" fill="rgba(200,80,40,0.95)">
+        <animate attributeName="cx" values="40;131;233;335;437;517;545;545" keyTimes="0;0.14;0.30;0.50;0.69;0.83;0.94;1" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="200;200;200;200;200;200;200;200" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;1;1;1;1;0" keyTimes="0;0.04;0.12;0.30;0.50;0.70;0.93;1" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="2.5;3;4;5.5;4;3;2.5;2.5" keyTimes="0;0.20;0.40;0.50;0.60;0.80;0.95;1" dur="5s" repeatCount="indefinite"/>
+      </circle>
+
+      <path d="M 544 200 L 555 200 L 557 196 L 559 204 L 561 195 L 563 205 L 565 200 L 575 200" fill="none" stroke="rgba(200,80,40,0.45)" stroke-width="1"/>
+
+      <text x="60" y="300" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Courier New" letter-spacing="2">VOICE_ANALYTICS_LAYER</text>
+      <line x1="60" y1="306" x2="520" y2="306" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="3 2"/>
+
+      <text x="60" y="324" fill="rgba(200,80,40,0.45)" font-size="6" font-family="Courier New">YIN_F0</text>
+      <path d="M 90 322 Q 150 318 220 320 T 360 316 T 460 319 T 520 318" fill="none" stroke="rgba(200,80,40,0.4)" stroke-width="0.8" stroke-dasharray="3 2">
+        <animate attributeName="stroke-dashoffset" values="0;-10" dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <rect x="60" y="335" width="135" height="22" fill="rgba(200,80,40,0.08)">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="205" y="335" width="195" height="22" fill="rgba(200,80,40,0.08)">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" begin="0.3s"/>
+      </rect>
+      <rect x="410" y="335" width="110" height="22" fill="rgba(200,80,40,0.08)">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="1.2s" repeatCount="indefinite" begin="0.6s"/>
+      </rect>
+
+      <path d="M 60 346 L 64 346 L 66 343 L 68 349 L 70 341 L 72 351 L 74 343 L 76 349 L 84 346 L 90 346 L 93 342 L 96 350 L 99 341 L 102 351 L 105 343 L 110 348 L 130 346 L 135 343 L 140 349 L 145 342 L 150 350 L 155 343 L 160 348 L 180 346 L 200 346 L 204 342 L 208 350 L 212 341 L 216 351 L 220 343 L 225 348 L 240 346 L 270 346 L 274 341 L 278 351 L 282 340 L 286 352 L 290 341 L 295 350 L 310 346 L 350 346 L 354 340 L 358 352 L 362 339 L 366 353 L 370 341 L 375 351 L 390 346 L 410 346 L 414 342 L 418 350 L 422 341 L 426 351 L 430 343 L 435 349 L 450 346 L 480 346 L 484 343 L 488 349 L 492 343 L 496 348 L 500 344 L 504 347 L 520 346" fill="none" stroke="rgba(200,80,40,0.7)" stroke-width="1"/>
+
+      <text x="60" y="376" fill="rgba(200,80,40,0.45)" font-size="6" font-family="Courier New">VAD</text>
+
+      <line x1="60" y1="395" x2="520" y2="395" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+
+      <text x="60" y="420" fill="rgba(255,255,255,0.25)" font-size="8" font-family="Courier New" letter-spacing="2">CBTA_INSTRUCTOR_DASHBOARD</text>
+      <line x1="60" y1="427" x2="520" y2="427" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="3 2"/>
+
+      <g transform="translate(60, 440)">
+        <text fill="rgba(255,255,255,0.2)" font-size="6" font-family="Courier New">COGLOAD</text>
+        <rect x="0" y="6" width="80" height="6" fill="rgba(255,255,255,0.04)" stroke="rgba(200,80,40,0.15)" stroke-width="0.4"/>
+        <rect x="0" y="6" width="58" height="6" fill="rgba(200,80,40,0.5)"/>
+        <text x="84" y="11" fill="rgba(200,80,40,0.7)" font-size="7" font-family="Courier New">0.72</text>
+      </g>
+
+      <g transform="translate(60, 458)">
+        <text fill="rgba(255,255,255,0.2)" font-size="6" font-family="Courier New">COMM_COMP</text>
+        <rect x="0" y="6" width="80" height="6" fill="rgba(255,255,255,0.04)" stroke="rgba(80,200,120,0.15)" stroke-width="0.4"/>
+        <rect x="0" y="6" width="70" height="6" fill="rgba(80,200,120,0.5)"/>
+        <text x="84" y="11" fill="rgba(80,200,120,0.7)" font-size="7" font-family="Courier New">0.87</text>
+      </g>
+
+      <g transform="translate(60, 476)">
+        <text fill="rgba(255,255,255,0.2)" font-size="6" font-family="Courier New">DECISION</text>
+        <rect x="0" y="6" width="80" height="6" fill="rgba(255,255,255,0.04)" stroke="rgba(80,200,120,0.15)" stroke-width="0.4"/>
+        <rect x="0" y="6" width="74" height="6" fill="rgba(80,200,120,0.5)"/>
+        <text x="84" y="11" fill="rgba(80,200,120,0.7)" font-size="7" font-family="Courier New">0.92</text>
+      </g>
+
+      <g transform="translate(240, 440)">
+        <rect x="0" y="0" width="280" height="50" rx="2" fill="rgba(0,0,0,0.25)" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <text x="6" y="12" fill="rgba(200,80,40,0.55)" font-size="6" font-family="Courier New">[12:04:17] PILOT</text>
+        <text x="6" y="22" fill="rgba(255,255,255,0.18)" font-size="6" font-family="Courier New">"Phoenix Tower, United 238,</text>
+        <text x="6" y="32" fill="rgba(255,255,255,0.18)" font-size="6" font-family="Courier New">request runway two five left."</text>
+        <text x="6" y="44" fill="rgba(80,200,120,0.55)" font-size="6" font-family="Courier New">[12:04:19] ATC_AGENT (LLM)</text>
+      </g>
+
+      <text x="60" y="515" fill="rgba(255,255,255,0.08)" font-size="6" font-family="Courier New">SESSION: 042 | TURN: 17 | TRANSCRIPT_ID: c2af9b | PIPELINE_TICK: 287</text>
+
+      <rect x="50" y="20" width="480" height="510" rx="2" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+
+      <g transform="translate(545, 200)">
+        <circle r="14" fill="rgba(200,80,40,0.1)" stroke="rgba(200,80,40,0.5)" stroke-width="1"/>
+        <polygon points="-6,-6 -2,-6 4,-9 4,9 -2,6 -6,6" fill="none" stroke="rgba(200,80,40,0.6)" stroke-width="0.7"/>
+        <path d="M 6 -4 Q 10 0 6 4" fill="none" stroke="rgba(200,80,40,0.6)" stroke-width="0.6"/>
+        <circle r="22" fill="none" stroke="rgba(200,80,40,0.1)" stroke-width="0.5" stroke-dasharray="2 3">
+          <animateTransform attributeName="transform" type="rotate" values="0;360" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <text y="36" text-anchor="middle" fill="rgba(200,80,40,0.5)" font-size="7" font-family="Courier New">ATC_OUT</text>
+      </g>
+    </svg>
   </div>
 
-  <svg class="path-overlay" viewBox="0 0 472 472" xmlns="http://www.w3.org/2000/svg">
-    <path d="M 29 29 L 88 29 L 88 88 L 147 88 L 206 88 L 206 147 L 206 206 L 265 206 L 265 265 L 324 265 L 383 265 L 383 324 L 383 383 L 442 383 L 442 442" fill="none" stroke="rgba(200,80,40,0.2)" stroke-width="2" stroke-dasharray="6 4"/>
-  </svg>
-
-  <svg class="arm-overlay" width="160" height="280" viewBox="0 0 160 280" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="80" cy="268" rx="50" ry="10" fill="none" stroke="white" stroke-width="0.8"/>
-    <rect x="65" y="240" width="30" height="28" rx="3" fill="none" stroke="white" stroke-width="0.8"/>
-    <circle cx="80" cy="240" r="6" fill="none" stroke="white" stroke-width="0.8"/>
-    <line x1="80" y1="234" x2="60" y2="180" stroke="white" stroke-width="0.8"/>
-    <line x1="80" y1="234" x2="68" y2="180" stroke="white" stroke-width="0.8"/>
-    <circle cx="64" cy="180" r="5" fill="none" stroke="white" stroke-width="0.8"/>
-    <line x1="64" y1="175" x2="85" y2="120" stroke="white" stroke-width="0.8"/>
-    <line x1="64" y1="175" x2="77" y2="120" stroke="white" stroke-width="0.8"/>
-    <circle cx="81" cy="120" r="5" fill="none" stroke="white" stroke-width="0.8"/>
-    <line x1="81" y1="115" x2="65" y2="70" stroke="white" stroke-width="0.8"/>
-    <line x1="81" y1="115" x2="73" y2="70" stroke="white" stroke-width="0.8"/>
-    <circle cx="69" cy="70" r="4" fill="none" stroke="white" stroke-width="0.8"/>
-    <line x1="69" y1="66" x2="60" y2="42" stroke="white" stroke-width="0.8"/>
-    <line x1="69" y1="66" x2="78" y2="42" stroke="white" stroke-width="0.8"/>
-    <line x1="56" y1="42" x2="60" y2="30" stroke="white" stroke-width="0.7"/>
-    <line x1="64" y1="42" x2="60" y2="30" stroke="white" stroke-width="0.7"/>
-    <line x1="74" y1="42" x2="78" y2="30" stroke="white" stroke-width="0.7"/>
-    <line x1="82" y1="42" x2="78" y2="30" stroke="white" stroke-width="0.7"/>
-    <text x="94" y="242" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J1</text>
-    <text x="48" y="178" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J2</text>
-    <text x="92" y="120" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J3</text>
-    <text x="52" y="68" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J4</text>
-  </svg>
-
-  <div class="tech-overlay">
-    ASTAR_HEURISTIC: MANHATTAN<br>
-    GRID_RESOLUTION: 8x8<br>
-    MARKER_DICT: ARUCO_4X4_50<br>
-    DETECTION_FPS: 30<br>
-    ARM_MODEL: MYCOBOT_600<br>
-    DOF: 6
+  <div class="tech-left">
+    FRAMEWORK: LIVEKIT_AGENT<br>
+    STT: DEEPGRAM_NOVA_2<br>
+    LLM: REASONING_AGENT<br>
+    TTS: ELEVENLABS_V2<br>
+    PITCH: YIN_F0_DETECT
   </div>
   <div class="tech-right">
-    OCCUPANCY_MAP: LOADED<br>
-    PATH_STATUS: OPTIMAL<br>
-    COST: 12 STEPS<br>
-    COLLISION: CLEAR<br>
-    WAYPOINTS: COMPUTED<br>
-    ARM_STATE: EXECUTING
+    DEPLOY: HONEYWELL_ANTHEM<br>
+    SCENARIO: ATC_TRAINING<br>
+    SESSIONS: 20+<br>
+    LATENCY: 287ms<br>
+    DASHBOARD: CBTA_LIVE
   </div>
 </div>
 </div>
@@ -212,11 +232,13 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
 (function(){
   var inner = document.getElementById('ci');
   function fit(){
-    var p = inner.parentElement;
-    var s = Math.min(p.clientWidth / 1080, p.clientHeight / 760);
+    var parent = inner.parentElement;
+    var sx = parent.clientWidth / 1080;
+    var sy = parent.clientHeight / 760;
+    var s = Math.min(sx, sy);
     inner.style.transform = 'scale(' + s + ')';
-    inner.style.left = ((p.clientWidth - 1080 * s) / 2) + 'px';
-    inner.style.top = ((p.clientHeight - 760 * s) / 2) + 'px';
+    inner.style.left = ((parent.clientWidth - 1080 * s) / 2) + 'px';
+    inner.style.top = ((parent.clientHeight - 760 * s) / 2) + 'px';
   }
   fit();
   window.addEventListener('resize', fit);
