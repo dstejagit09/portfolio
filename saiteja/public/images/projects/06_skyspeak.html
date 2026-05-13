@@ -3,84 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SkySpeak AI</title>
+<title>Maze Solver Visual</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; height: 100%; width: 100%; background: #08090e; overflow: hidden; }
-  svg { display: block; width: 100%; height: 100%; }
-  @keyframes ssFlowDash { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -6; } }
-  @keyframes ssPulseStroke { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.55; } }
-  @keyframes ssGlowFade { 0%, 100% { opacity: 0; } 50% { opacity: 0.6; } }
-  @keyframes ssVadFlicker { 0%, 100% { opacity: 0.08; } 50% { opacity: 0.28; } }
-  @keyframes ssTickGlow { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-  .ss-flow-arrow { animation: ssFlowDash 1.2s linear infinite; }
-  .ss-reason-block { animation: ssPulseStroke 2.4s ease-in-out infinite; }
-  .ss-reason-glow { animation: ssGlowFade 2.4s ease-in-out infinite; }
-  .ss-vad-1 { animation: ssVadFlicker 1.4s ease-in-out infinite; }
-  .ss-vad-2 { animation: ssVadFlicker 1.7s ease-in-out infinite 0.3s; }
-  .ss-vad-3 { animation: ssVadFlicker 1.1s ease-in-out infinite 0.6s; }
-  .ss-reticle-tick { animation: ssTickGlow 1.8s ease-in-out infinite; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Courier New', monospace; overflow: hidden; }
+.canvas { width: 100%; height: 100%; aspect-ratio: 1080/760; position: relative; overflow: hidden; background: #0a0a0a; }
+.canvas-inner { position: absolute; top: 0; left: 0; width: 1080px; height: 760px; transform-origin: top left; }
+.canvas::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.grid-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 520px; height: 520px; background: radial-gradient(circle, rgba(200,80,40,0.06) 0%, transparent 70%); pointer-events: none; }
+.maze-grid { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; grid-template-columns: repeat(8, 56px); grid-template-rows: repeat(8, 56px); gap: 3px; }
+.cell { width: 56px; height: 56px; border: 1px solid rgba(255,255,255,0.06); position: relative; transition: all 0.3s; }
+.cell.obstacle { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+.cell.obstacle::after { content: ''; position: absolute; inset: 8px; background: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.04) 3px, rgba(255,255,255,0.04) 4px); }
+.cell.path { background: rgba(200,80,40,0.12); border-color: rgba(200,80,40,0.25); }
+.cell.path::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: #c85028; border-radius: 50%; box-shadow: 0 0 12px rgba(200,80,40,0.6); }
+.cell.visited { background: rgba(200,80,40,0.04); border-color: rgba(200,80,40,0.1); }
+.cell.start { background: rgba(200,80,40,0.2); border: 1.5px solid rgba(200,80,40,0.5); }
+.cell.end { background: rgba(80,200,120,0.15); border: 1.5px solid rgba(80,200,120,0.4); }
+.aruco { position: absolute; width: 40px; height: 40px; border: 2px solid rgba(255,255,255,0.5); }
+.aruco-inner { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); width: 100%; height: 100%; }
+.aruco-bit { background: rgba(255,255,255,0.08); }
+.aruco-bit.on { background: rgba(255,255,255,0.7); }
+.aruco-label { position: absolute; font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 1px; white-space: nowrap; }
+.aruco-tl { top: 95px; left: 258px; }
+.aruco-tl .aruco-label { top: -14px; left: 0; }
+.aruco-br { bottom: 95px; right: 258px; }
+.aruco-br .aruco-label { bottom: -14px; right: 0; }
+.path-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 472px; height: 472px; pointer-events: none; }
+.arm-overlay { position: absolute; top: 40px; right: 60px; opacity: 0.12; pointer-events: none; }
+.label-start { position: absolute; top: 50%; left: 50%; font-size: 9px; color: #c85028; letter-spacing: 2px; text-transform: uppercase; transform: translate(-310px, -260px); }
+.label-end { position: absolute; top: 50%; left: 50%; font-size: 9px; color: rgba(80,200,120,0.7); letter-spacing: 2px; text-transform: uppercase; transform: translate(230px, 240px); }
+.tech-overlay { position: absolute; bottom: 40px; left: 50px; font-size: 9px; color: rgba(255,255,255,0.12); line-height: 1.8; letter-spacing: 0.5px; }
+.tech-right { position: absolute; top: 50px; right: 50px; font-size: 9px; color: rgba(255,255,255,0.12); line-height: 1.8; letter-spacing: 0.5px; text-align: right; }
+.scan-line { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(200,80,40,0.15) 50%, transparent 100%); animation: scan 4s linear infinite; pointer-events: none; }
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+.corner { position: absolute; width: 20px; height: 20px; pointer-events: none; }
+.corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-tr { top: 20px; right: 20px; border-top: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+.corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-left: 1px solid rgba(255,255,255,0.08); }
+.corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08); }
+@keyframes pathPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+.path-dot { animation: pathPulse 2s ease-in-out infinite; }
+.path-dot:nth-child(2) { animation-delay: 0.15s; }
+.path-dot:nth-child(3) { animation-delay: 0.3s; }
+.path-dot:nth-child(4) { animation-delay: 0.45s; }
+.path-dot:nth-child(5) { animation-delay: 0.6s; }
+.path-dot:nth-child(6) { animation-delay: 0.75s; }
+.path-dot:nth-child(7) { animation-delay: 0.9s; }
+.path-dot:nth-child(8) { animation-delay: 1.05s; }
+.path-dot:nth-child(9) { animation-delay: 1.2s; }
+.path-dot:nth-child(10) { animation-delay: 1.35s; }
+.cell.end::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: rgba(80,200,120,0.8); border-radius: 50%; box-shadow: 0 0 16px rgba(80,200,120,0.5); animation: endPulse 2s ease-in-out infinite; }
+@keyframes endPulse { 0%, 100% { box-shadow: 0 0 8px rgba(80,200,120,0.3); } 50% { box-shadow: 0 0 20px rgba(80,200,120,0.6); } }
+.cell.start::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: rgba(200,80,40,0.9); border-radius: 50%; box-shadow: 0 0 16px rgba(200,80,40,0.5); }
+.cell-cost { position: absolute; bottom: 3px; right: 4px; font-size: 7px; color: rgba(200,80,40,0.25); font-family: 'Courier New', monospace; }
 </style>
 </head>
 <body>
-<svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="font-family: ui-monospace, 'SF Mono', Menlo, monospace;">
-  <defs>
-    <pattern id="grid-ssk" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M 22 0 L 0 0 0 22" fill="none" stroke="#15171f" stroke-width="0.5"/></pattern>
-    <radialGradient id="reason-glow-grad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8d800" stop-opacity="0.7"/><stop offset="60%" stop-color="#c8d800" stop-opacity="0.2"/><stop offset="100%" stop-color="#c8d800" stop-opacity="0"/></radialGradient>
-  </defs>
-  <rect width="1100" height="540" fill="#08090e"/>
-  <rect width="1100" height="540" fill="url(#grid-ssk)" opacity="0.6"/>
-  <path d="M 28 65 L 28 28 L 65 28" fill="none" stroke="#c5b994" stroke-width="1.6"/>
-  <path d="M 1035 28 L 1072 28 L 1072 65" fill="none" stroke="#c5b994" stroke-width="1.6"/>
-  <path d="M 28 475 L 28 512 L 65 512" fill="none" stroke="#c5b994" stroke-width="1.6"/>
-  <path d="M 1035 512 L 1072 512 L 1072 475" fill="none" stroke="#c5b994" stroke-width="1.6"/>
-  <g transform="translate(550, 92)"><circle r="16" fill="none" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/><line class="ss-reticle-tick" x1="0" y1="-16" x2="0" y2="-10" stroke="#d8a82c" stroke-width="1.6"/><text y="-22" fill="#c5b994" font-size="10" text-anchor="middle">N</text></g>
-  <g transform="translate(140, 100)"><rect width="260" height="62" fill="#0d0a0a" stroke="#c34545" stroke-width="1.1"/><text x="10" y="15" fill="#c34545" font-size="10">PIPELINE_MODE: VOICE_AGENT</text><text x="10" y="28" fill="#c34545" font-size="10">TARGET_LATENCY: ACTIVE</text><text x="10" y="41" fill="#c34545" font-size="10">VAR_CTRL: BACKUPFIXED</text><text x="10" y="54" fill="#c34545" font-size="10">STABILITY: MAINTAINED</text></g>
-  <g transform="translate(815, 96)" fill="#a8a08a" font-size="10"><text y="0">voicePipe_msec: cl287m</text><text y="13">sttWindow_var: 120ms</text><text y="26">ttsDecode_msec: 056mn</text><text y="39">vadThresh_pwm: yinVad</text><text y="52">cbta_swt: voiceCo_iaa</text></g>
-  <line x1="200" y1="216" x2="835" y2="216" stroke="#c5b994" stroke-width="0.5" stroke-dasharray="1 2"/>
-  <text x="517" y="208" fill="#c5b994" font-size="11" text-anchor="middle">END_TO_END BUDGET: 300ms     OBSERVED: 287ms     MARGIN: +13ms</text>
-  <g transform="translate(118, 270)"><circle r="16" fill="none" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/><rect x="-5" y="-10" width="10" height="14" rx="3" fill="none" stroke="#c5b994" stroke-width="0.8"/><line x1="0" y1="5" x2="0" y2="11" stroke="#c5b994" stroke-width="0.8"/><text y="34" fill="#c5b994" font-size="10" text-anchor="middle">PILOT_MIC</text></g>
-  <path d="M 138 270 L 153 270 L 156 264 L 159 276 L 162 265 L 165 275 L 168 270 L 184 270" fill="none" stroke="#d8a82c" stroke-width="1.2"/>
-  <g transform="translate(194, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">LiveKit</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">INGEST</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">40 ms</text></g>
-  <line class="ss-flow-arrow" x1="305" y1="270" x2="330" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
-  <polygon points="330,270 323,266 323,274" fill="#c5b994"/>
-  <g transform="translate(333, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">Deepgram</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">STT</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">110 ms</text></g>
-  <line class="ss-flow-arrow" x1="444" y1="270" x2="469" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
-  <polygon points="469,270 462,266 462,274" fill="#c5b994"/>
-  <ellipse class="ss-reason-glow" cx="526" cy="270" rx="78" ry="56" fill="url(#reason-glow-grad)"/>
-  <g transform="translate(472, 232)"><rect class="ss-reason-block" width="108" height="76" fill="#0c1000" fill-opacity="0.6" stroke="#c8d800" stroke-width="1.5" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">LLM_Agent</text><text x="54" y="46" fill="#c8d800" font-size="17" text-anchor="middle" font-weight="500">REASON</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">80 ms</text></g>
-  <line class="ss-flow-arrow" x1="583" y1="270" x2="608" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
-  <polygon points="608,270 601,266 601,274" fill="#c5b994"/>
-  <g transform="translate(611, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">ElevenLabs</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">TTS</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">50 ms</text></g>
-  <line class="ss-flow-arrow" x1="722" y1="270" x2="747" y2="270" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/>
-  <polygon points="747,270 740,266 740,274" fill="#c5b994"/>
-  <g transform="translate(750, 232)"><rect width="108" height="76" fill="#1a1408" fill-opacity="0.5" stroke="#c5b994" stroke-width="1" stroke-dasharray="3 1.5"/><text x="54" y="16" fill="#a8a08a" font-size="10" text-anchor="middle">LiveKit</text><text x="54" y="46" fill="#d8a82c" font-size="17" text-anchor="middle" font-weight="500">EGRESS</text><text x="54" y="66" fill="#c5b994" font-size="11" text-anchor="middle">20 ms</text></g>
-  <path d="M 861 270 L 876 270 L 879 264 L 882 276 L 885 265 L 888 275 L 891 270 L 906 270" fill="none" stroke="#d8a82c" stroke-width="1.2"/>
-  <g transform="translate(925, 270)"><circle r="16" fill="none" stroke="#c5b994" stroke-width="0.9" stroke-dasharray="2 1"/><polygon points="-7,-8 -2,-8 6,-11 6,11 -2,8 -7,8" fill="none" stroke="#c5b994" stroke-width="0.8"/><path d="M 8 -6 Q 13 0 8 6" fill="none" stroke="#c5b994" stroke-width="0.7"/><text y="34" fill="#c5b994" font-size="10" text-anchor="middle">ATC_OUT</text></g>
-  <circle r="3.5" fill="#d8a82c" cx="118" cy="270">
-    <animate attributeName="cx" values="118;248;387;526;665;804;925;925" keyTimes="0;0.13;0.30;0.50;0.69;0.86;0.97;1" dur="4.5s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0;1;1;1;1;1;1;0" keyTimes="0;0.04;0.12;0.30;0.50;0.70;0.93;1" dur="4.5s" repeatCount="indefinite"/>
-    <animate attributeName="r" values="3;3;4;5.5;4;3;3;3" keyTimes="0;0.20;0.40;0.50;0.60;0.80;0.95;1" dur="4.5s" repeatCount="indefinite"/>
-  </circle>
-  <rect class="ss-vad-1" x="195" y="335" width="180" height="24" fill="#d8a82c"/>
-  <rect class="ss-vad-2" x="430" y="335" width="280" height="24" fill="#d8a82c"/>
-  <rect class="ss-vad-3" x="755" y="335" width="100" height="24" fill="#d8a82c"/>
-  <path d="M 195 347 L 200 347 L 202 343 L 204 351 L 206 340 L 208 353 L 210 343 L 212 350 L 220 347 L 225 347 L 228 342 L 230 352 L 233 340 L 236 353 L 238 342 L 240 351 L 245 347 L 260 347 L 263 341 L 266 352 L 269 342 L 272 350 L 275 343 L 278 350 L 290 347 L 305 347 L 308 343 L 311 350 L 314 341 L 317 351 L 320 344 L 323 348 L 335 347 L 360 347 L 364 343 L 368 350 L 372 341 L 376 350 L 380 344 L 384 348 L 395 347 L 432 347 L 436 341 L 440 354 L 444 339 L 448 355 L 452 340 L 456 352 L 465 347 L 480 347 L 483 341 L 486 352 L 489 340 L 492 354 L 495 341 L 498 350 L 510 347 L 540 347 L 544 340 L 548 354 L 552 338 L 556 355 L 560 341 L 564 351 L 580 347 L 610 347 L 614 341 L 618 351 L 622 341 L 626 351 L 630 343 L 634 350 L 650 347 L 690 347 L 693 343 L 696 350 L 700 341 L 704 351 L 707 343 L 710 348 L 715 347 L 755 347 L 759 343 L 763 351 L 767 341 L 771 350 L 774 344 L 778 348 L 790 347 L 815 347 L 818 344 L 821 348 L 824 344 L 827 348 L 830 345 L 833 347 L 855 347" fill="none" stroke="#d8a82c" stroke-width="1.2"/>
-  <path d="M 195 328 Q 260 324 320 326 T 450 322 T 580 325 T 700 323 T 855 327" fill="none" stroke="#d8a82c" stroke-width="1" stroke-dasharray="3 2" opacity="0.65"/>
-  <line x1="195" y1="362" x2="855" y2="362" stroke="#3a4252" stroke-width="0.5"/>
-  <text x="195" y="322" fill="#d8a82c" font-size="9">YIN_F0</text>
-  <text x="195" y="375" fill="#c5b994" font-size="9">VAD</text>
-  <g transform="translate(870, 332)"><rect width="60" height="30" fill="#1a1408" fill-opacity="0.5" stroke="#d8a82c" stroke-width="1"/><text x="6" y="11" fill="#a8a08a" font-size="8">Z_SCORE</text><text x="6" y="24" fill="#d8a82c" font-size="12" font-weight="500">-0.42</text></g>
-  <text x="870" y="378" fill="#c5b994" font-size="9">ABSTAIN&lt;0.60</text>
-  <path d="M 925 290 Q 980 380 855 410" fill="none" stroke="#c5b994" stroke-width="0.7" stroke-dasharray="1 2"/>
-  <polygon points="855,410 862,407 861,412" fill="#c5b994"/>
-  <text x="960" y="378" fill="#c5b994" font-size="9">CBTA_FB</text>
-  <g transform="translate(680, 408)"><rect width="210" height="48" fill="#0d0a0a" stroke="#c34545" stroke-width="1.1"/><text x="10" y="14" fill="#c34545" font-size="10">LAT_OBSERVED: AGENT_2</text><text x="10" y="28" fill="#c34545" font-size="10">TIMESTAMP: 23.55.317</text><text x="10" y="42" fill="#c34545" font-size="10">ACTION: SYNC_PIPELINE</text></g>
-  <g transform="translate(80, 415)" fill="#a8a08a" font-size="10"><text y="0">voicePipe: voice_v3</text><text y="13">framework: liveKit.s</text><text y="26">STTEngine: deepgram_v2</text><text y="39">vad_method: yin_voice</text><text y="52">ttsModel: eleven_v3_aud</text></g>
-  <g font-family="ui-monospace, monospace">
-    <g fill="#5a5852" font-size="10"><text x="335" y="478" text-anchor="middle">- - - -</text><text x="410" y="478" text-anchor="middle">- - - -</text><text x="485" y="478" text-anchor="middle">- - -</text><text x="560" y="478" text-anchor="middle">- - -</text><text x="635" y="478" text-anchor="middle">- - - -</text><text x="710" y="478" text-anchor="middle">- - - -</text><text x="785" y="478" text-anchor="middle">- - -</text></g>
-    <g font-size="13"><text x="335" y="494" fill="#c8d800" text-anchor="middle">+0.4ms</text><text x="410" y="494" fill="#c34545" text-anchor="middle">-1.8ms</text><text x="485" y="494" fill="#c5b994" text-anchor="middle">VAD1</text><text x="560" y="494" fill="#c5b994" text-anchor="middle">287ms</text><text x="635" y="494" fill="#c8d800" text-anchor="middle">ACTIVE</text><text x="710" y="494" fill="#c8d800" text-anchor="middle">LINKED</text><text x="785" y="494" fill="#c8d800" text-anchor="middle">ON</text></g>
-  </g>
-</svg>
+<div class="canvas">
+<div class="canvas-inner" id="ci">
+  <div class="grid-glow"></div>
+  <div class="scan-line"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="aruco aruco-tl">
+    <div class="aruco-label">ARUCO_ID:07</div>
+    <div class="aruco-inner">
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+    </div>
+  </div>
+
+  <div class="aruco aruco-br">
+    <div class="aruco-label">ARUCO_ID:13</div>
+    <div class="aruco-inner">
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit"></div><div class="aruco-bit"></div><div class="aruco-bit on"></div>
+      <div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div><div class="aruco-bit on"></div>
+    </div>
+  </div>
+
+  <div class="label-start">ORIGIN [0,0]</div>
+  <div class="label-end">GOAL [7,7]</div>
+
+  <div class="maze-grid">
+    <div class="cell start path-dot"><span class="cell-cost">0</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">1</span></div>
+    <div class="cell visited"></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">2</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">3</span></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">4</span></div>
+    <div class="cell visited"></div>
+    <div class="cell visited"></div>
+    <div class="cell visited"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell path path-dot"><span class="cell-cost">5</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">6</span></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">7</span></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">8</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">9</span></div>
+    <div class="cell visited"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell path path-dot"><span class="cell-cost">10</span></div>
+    <div class="cell path path-dot"><span class="cell-cost">11</span></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell obstacle"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell visited"></div>
+    <div class="cell end"><span class="cell-cost">12</span></div>
+  </div>
+
+  <svg class="path-overlay" viewBox="0 0 472 472" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 29 29 L 88 29 L 88 88 L 147 88 L 206 88 L 206 147 L 206 206 L 265 206 L 265 265 L 324 265 L 383 265 L 383 324 L 383 383 L 442 383 L 442 442" fill="none" stroke="rgba(200,80,40,0.2)" stroke-width="2" stroke-dasharray="6 4"/>
+  </svg>
+
+  <svg class="arm-overlay" width="160" height="280" viewBox="0 0 160 280" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="80" cy="268" rx="50" ry="10" fill="none" stroke="white" stroke-width="0.8"/>
+    <rect x="65" y="240" width="30" height="28" rx="3" fill="none" stroke="white" stroke-width="0.8"/>
+    <circle cx="80" cy="240" r="6" fill="none" stroke="white" stroke-width="0.8"/>
+    <line x1="80" y1="234" x2="60" y2="180" stroke="white" stroke-width="0.8"/>
+    <line x1="80" y1="234" x2="68" y2="180" stroke="white" stroke-width="0.8"/>
+    <circle cx="64" cy="180" r="5" fill="none" stroke="white" stroke-width="0.8"/>
+    <line x1="64" y1="175" x2="85" y2="120" stroke="white" stroke-width="0.8"/>
+    <line x1="64" y1="175" x2="77" y2="120" stroke="white" stroke-width="0.8"/>
+    <circle cx="81" cy="120" r="5" fill="none" stroke="white" stroke-width="0.8"/>
+    <line x1="81" y1="115" x2="65" y2="70" stroke="white" stroke-width="0.8"/>
+    <line x1="81" y1="115" x2="73" y2="70" stroke="white" stroke-width="0.8"/>
+    <circle cx="69" cy="70" r="4" fill="none" stroke="white" stroke-width="0.8"/>
+    <line x1="69" y1="66" x2="60" y2="42" stroke="white" stroke-width="0.8"/>
+    <line x1="69" y1="66" x2="78" y2="42" stroke="white" stroke-width="0.8"/>
+    <line x1="56" y1="42" x2="60" y2="30" stroke="white" stroke-width="0.7"/>
+    <line x1="64" y1="42" x2="60" y2="30" stroke="white" stroke-width="0.7"/>
+    <line x1="74" y1="42" x2="78" y2="30" stroke="white" stroke-width="0.7"/>
+    <line x1="82" y1="42" x2="78" y2="30" stroke="white" stroke-width="0.7"/>
+    <text x="94" y="242" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J1</text>
+    <text x="48" y="178" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J2</text>
+    <text x="92" y="120" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J3</text>
+    <text x="52" y="68" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J4</text>
+  </svg>
+
+  <div class="tech-overlay">
+    ASTAR_HEURISTIC: MANHATTAN<br>
+    GRID_RESOLUTION: 8x8<br>
+    MARKER_DICT: ARUCO_4X4_50<br>
+    DETECTION_FPS: 30<br>
+    ARM_MODEL: MYCOBOT_600<br>
+    DOF: 6
+  </div>
+  <div class="tech-right">
+    OCCUPANCY_MAP: LOADED<br>
+    PATH_STATUS: OPTIMAL<br>
+    COST: 12 STEPS<br>
+    COLLISION: CLEAR<br>
+    WAYPOINTS: COMPUTED<br>
+    ARM_STATE: EXECUTING
+  </div>
+</div>
+</div>
+<script>
+(function(){
+  var inner = document.getElementById('ci');
+  function fit(){
+    var p = inner.parentElement;
+    var s = Math.min(p.clientWidth / 1080, p.clientHeight / 760);
+    inner.style.transform = 'scale(' + s + ')';
+    inner.style.left = ((p.clientWidth - 1080 * s) / 2) + 'px';
+    inner.style.top = ((p.clientHeight - 760 * s) / 2) + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  new ResizeObserver(fit).observe(inner.parentElement);
+})();
+</script>
 </body>
 </html>
