@@ -6,12 +6,15 @@ import { PROJECTS } from "@/lib/projects";
 
 function ProjectVisual({ src, alt }: { src: string; alt: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.5);
+  const [dims, setDims] = useState({ w: 0, h: 0 });
 
   useEffect(() => {
     const update = () => {
       if (wrapRef.current) {
-        setScale(wrapRef.current.offsetWidth / 1080);
+        setDims({
+          w: wrapRef.current.offsetWidth,
+          h: wrapRef.current.offsetHeight,
+        });
       }
     };
     update();
@@ -20,13 +23,15 @@ function ProjectVisual({ src, alt }: { src: string; alt: string }) {
     return () => ro.disconnect();
   }, []);
 
-  const scaledHeight = Math.round(760 * scale);
+  // Contain-fit: scale so the whole 1080x760 canvas always fits inside the
+  // column — nothing gets cropped. Any leftover margin is filled with the same
+  // #0a0a0a as the diagram background, so it reads as seamless, not a gap.
+  const scale = Math.min(dims.w / 1080, dims.h / 760) || 0.5;
 
   return (
     <div
       ref={wrapRef}
-      className="w-full h-full overflow-hidden bg-[#0a0a0a]"
-      style={{ minHeight: `${scaledHeight}px` }}
+      className="absolute inset-0 overflow-hidden bg-[#0a0a0a]"
       aria-label={alt}
     >
       <iframe
@@ -36,8 +41,11 @@ function ProjectVisual({ src, alt }: { src: string; alt: string }) {
           width: "1080px",
           height: "760px",
           border: "none",
-          transform: `scale(${scale})`,
-          transformOrigin: "top left",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%) scale(${scale})`,
+          transformOrigin: "center center",
           pointerEvents: "none",
           filter: "brightness(1.35) contrast(1.05)",
         }}
@@ -138,7 +146,7 @@ export function ProjectsShowcase() {
             </div>
 
             {/* Visual column — 6 cols (center) — clickable */}
-            <Link href={`/projects/${slug}`} className="lg:col-span-6 bg-[#0a0a0a] overflow-hidden order-2 block group relative">
+            <Link href={`/projects/${slug}`} className="lg:col-span-6 bg-[#0a0a0a] overflow-hidden order-2 block group relative aspect-[1080/760] lg:aspect-auto">
               <ProjectVisual src={visual} alt={visualAlt} />
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-primary-fixed/0 group-hover:bg-primary-fixed/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">

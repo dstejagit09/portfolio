@@ -69,6 +69,10 @@ motor.set_pwm(
       "Closed-form 3-motor allocation derived and validated for all 4 single-motor failure cases. Identified motor saturation as the root cause of attitude loss; a thrust clamp reduced max roll from 145° to 7.2° on hardware. MuJoCo rigid-body sim built for gyroscopic coupling, with sim-to-real validation across PID, INDI, and gyroscopic-compensation controllers.",
     reversed: false,
     videoFile: "/videos/01-fault-tolerant-crazyflie.mp4",
+    videoLabel: "Sim Demo",
+    additionalVideos: [
+      { src: "/videos/01-fault-tolerant-crazyflie-2.mp4", label: "Hardware Run" },
+    ],
     github: { url: "https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project" },
   },
   {
