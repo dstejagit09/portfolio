@@ -106,7 +106,7 @@ export function HeroSection() {
                 { n: "04", prompt: true, cmd: "ros2 topic echo /system_status" },
                 { n: "05", json: "{" },
                 { n: "06", json: '  "identity": "Saiteja Dasari",' },
-                { n: "07", json: '  "gpa": "3.89 / 4.0",' },
+                { n: "07", json: '  "gpa": "3.93 / 4.0",' },
                 { n: "08", json: '  "focus": ["Controls", "Vision", "Autonomy"],' },
                 { n: "09", json: '  "status": "NOMINAL"' },
                 { n: "10", json: "}" },

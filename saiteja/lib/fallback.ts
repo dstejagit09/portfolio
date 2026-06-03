@@ -67,13 +67,13 @@ const RESPONSES: Record<string, string> = {
     "Gazebo is his primary simulation environment, used for the 5-robot TurtleBot coordination stack with Nav2 and costmaps. He builds custom worlds, configures robot models with URDF/xacro, and validates autonomy stacks before hardware deployment. [View specs](/#telemetry)",
 
   "asu":
-    "**Arizona State University** (Aug 2024 to May 2026): MS Robotics and Autonomous Systems (Systems Engineering Track), GPA **3.89/4.0**. Coursework: Aerial Robotics, Mechatronics, Multi-Robot Systems, Controls and Systems. Also serving as Teaching Assistant for MATLAB and Controls labs. [View specs](/#telemetry)",
+    "**Arizona State University** (Aug 2024 to May 2026): MS Robotics and Autonomous Systems (Systems Engineering Track), GPA **3.93/4.0**. Coursework: Aerial Robotics, Mechatronics, Multi-Robot Systems, Controls and Systems. Also serving as Teaching Assistant for MATLAB and Controls labs. [View specs](/#telemetry)",
 
   "education":
-    "**MS Robotics**, Arizona State University (2024 to 2026), GPA 3.89/4.0. **BE Electrical and Electronics Engineering**, Chaitanya Bharathi Institute of Technology, Hyderabad (2020 to 2024). [View specs](/#telemetry)",
+    "**MS Robotics**, Arizona State University (2024 to 2026), GPA 3.93/4.0. **BE Electrical and Electronics Engineering**, Chaitanya Bharathi Institute of Technology, Hyderabad (2020 to 2024). [View specs](/#telemetry)",
 
   "gpa":
-    "Saiteja holds a **3.89/4.0 GPA** in his MS Robotics and Autonomous Systems program at Arizona State University (graduating May 2026).",
+    "Saiteja holds a **3.93/4.0 GPA** in his MS Robotics and Autonomous Systems program at Arizona State University (graduating May 2026).",
 
   "certification":
     "Certifications: **Universal Robots e-Series** (Core and Pro), **MathWorks AI** (ML and DL), **Hugging Face RL**, and **Udemy ROS and ROS2**. Publication: *SCADA-Based Substation Control Panel and Operations*. [View manifest](/#manifest)",
@@ -97,7 +97,7 @@ const RESPONSES: Record<string, string> = {
     "Hey there! I'm Saiteja's portfolio assistant. Ask me about his **projects**, **experience**, **skills**, or **how to get in touch**.",
 
   "who":
-    "**Saiteja Venkateshwa Rao Dasari**, MS Robotics candidate at ASU (GPA 3.89, graduating May 2026), specializing in autonomous systems, control theory, and computer vision. Hands-on across ROS2 multi-robot stacks, UAV platforms, YOLOv8 perception, and MATLAB and Simulink. [Learn more](/#archive)",
+    "**Saiteja Venkateshwa Rao Dasari**, MS Robotics candidate at ASU (GPA 3.93, graduating May 2026), specializing in autonomous systems, control theory, and computer vision. Hands-on across ROS2 multi-robot stacks, UAV platforms, YOLOv8 perception, and MATLAB and Simulink. [Learn more](/#archive)",
 };
 
 /* Keyword to topic map (order matters; specific first) */

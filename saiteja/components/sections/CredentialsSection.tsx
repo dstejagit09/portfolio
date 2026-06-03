@@ -159,7 +159,7 @@ export function CredentialsSection() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-label text-base text-on-surface tracking-wide">Arizona State University</h3>
                     <p className="font-label text-xs text-secondary uppercase tracking-widest mt-1">M.S. Robotics &amp; Autonomous Systems, Systems Engineering Track</p>
-                    <p className="font-label text-xs text-outline mt-0.5">GPA: 3.89 / 4.0</p>
+                    <p className="font-label text-xs text-outline mt-0.5">GPA: 3.93 / 4.0</p>
                     <p className="font-label text-xs text-outline mt-2 leading-relaxed">
                       <span className="text-secondary">Coursework:</span> Aerial Robotics, Mechatronics, Multi-Robot Systems, Controls &amp; Systems
                     </p>

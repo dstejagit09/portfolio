@@ -257,7 +257,7 @@ export const ABOUT_CONTENT = {
     masters: {
       degree: "M.S. Robotics and Autonomous Systems",
       school: "Arizona State University",
-      gpa: "3.89",
+      gpa: "3.93",
       period: "Aug. 2024 – 2026",
       coursework: ["Systems Engineering", "Aerial Robotics", "Mechatronics", "Multi-Robot Systems", "Soft Robotics"],
     },
