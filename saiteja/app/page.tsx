@@ -3,7 +3,6 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { BioSection } from "@/components/sections/BioSection";
 import { TechnicalSection } from "@/components/sections/TechnicalSection";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
-import { NowSection } from "@/components/sections/NowSection";
 import { ProjectsShowcase } from "@/components/sections/ProjectsShowcase";
 import { CredentialsSection } from "@/components/sections/CredentialsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
@@ -19,7 +18,6 @@ export default function Home() {
         <BioSection />
         <TechnicalSection />
         <ExperienceSection />
-        <NowSection />
         <ProjectsShowcase />
         <CredentialsSection />
         <ContactSection />

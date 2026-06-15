@@ -40,11 +40,11 @@ const SKILL_BLOCKS = [
     tools: [
       "A*", "Hungarian Algorithm", "Path Planning", "Costmaps",
       "Occupancy Grids", "Collision Avoidance", "OpenCV", "YOLOv8",
-      "ArUco", "Pose Estimation",
+      "Inverse Kinematics",
     ],
     metric: { label: "Detection", value: "97% @ 12 FPS" },
     description:
-      "Hungarian task assignment and A* planning over costmaps for multi-robot fleets. YOLOv8 and OpenCV pipelines for weed detection; ArUco-based pose estimation for the maze solver arm task.",
+      "Hungarian task assignment and A* planning over costmaps for multi-robot fleets. YOLOv8 and OpenCV pipelines for weed detection; camera-calibrated vision and inverse kinematics for the maze-solver arm task.",
   },
   {
     id: "05",

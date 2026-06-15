@@ -322,6 +322,35 @@ export function ProjectDetailClient({ project }: { project: Project }) {
           </p>
         </div>
 
+        {/* Key Equations (highlighted) — only when present */}
+        {project.keyEquations && (
+          <div className="border border-primary-fixed/30 border-l-2 border-l-primary-fixed bg-surface-container-lowest">
+            <div className="flex flex-wrap items-center justify-between gap-2 px-6 py-4 border-b border-outline-variant/15">
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-primary-fixed text-base">functions</span>
+                <span className="font-label text-xs uppercase tracking-widest text-outline">
+                  Control Allocation
+                </span>
+              </div>
+              <span className="font-label text-[9px] uppercase tracking-widest text-outline/50">
+                {project.keyEquations.caption}
+              </span>
+            </div>
+            <div className="p-6 md:p-8 space-y-6">
+              {project.keyEquations.blocks.map((b) => (
+                <div key={b.heading}>
+                  <p className="font-label text-[10px] text-primary-fixed uppercase tracking-widest mb-2">
+                    {b.heading}
+                  </p>
+                  <pre className="font-label text-xs md:text-sm leading-relaxed text-secondary-fixed-dim whitespace-pre overflow-x-auto">
+{b.body}
+                  </pre>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Code snippet */}
         <div className="border border-outline-variant/20 bg-surface-container-lowest">
           <div className="flex items-center justify-between px-6 py-4 border-b border-outline-variant/15">

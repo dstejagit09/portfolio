@@ -14,6 +14,15 @@ export interface FuturePrototypes {
   videos: ProjectVideo[];
 }
 
+export interface ProjectEquationBlock {
+  heading: string;
+  body: string; // preformatted monospace; newlines preserved
+}
+export interface ProjectEquations {
+  caption: string;
+  blocks: ProjectEquationBlock[];
+}
+
 export interface Project {
   index: string;
   slug: string;
@@ -34,6 +43,7 @@ export interface Project {
   videoLabel?: string;
   additionalVideos?: ProjectVideo[];
   futurePrototypes?: FuturePrototypes;
+  keyEquations?: ProjectEquations;
   github?: { url: string };
   liveDemo?: string;
 }
@@ -44,8 +54,8 @@ export const PROJECTS: Project[] = [
     slug: "01-fault-tolerant-crazyflie",
     title: "Fault-Tolerant Quadrotor Control",
     subtitle: "Crazyflie 2.1, MuJoCo, CrazySim SITL",
-    period: "Jan 2026 to Present",
-    status: "ACTIVE",
+    period: "Jan 2026 to May 2026",
+    status: "COMPLETE",
     tags: ["Controls", "Allocation", "MuJoCo", "CrazySim SITL", "ROS2", "UAV"],
     metrics: [
       { label: "Max Roll Reduction",  value: "145° to 7.2°" },
@@ -73,35 +83,70 @@ motor.set_pwm(
     additionalVideos: [
       { src: "/videos/01-fault-tolerant-crazyflie-2.mp4", label: "Hardware Run" },
     ],
+    keyEquations: {
+      caption: "firmware-scaled units · r = roll/2, p = pitch/2",
+      blocks: [
+        {
+          heading: "Motor mixer (Crazyflie legacy convention)",
+          body: `m1 = T - r + p + Y    (front-left,  CW)
+m2 = T - r - p - Y    (front-right, CCW)
+m3 = T + r - p + Y    (back-right,  CW)
+m4 = T + r + p - Y    (back-left,   CCW)`,
+        },
+        {
+          heading: "Control-effectiveness matrix  B   (u = 1/4 · B · m,  B^T B = 4I)",
+          body: `         m1   m2   m3   m4
+  T  [  1    1    1    1  ]
+  r  [ -1   -1    1    1  ]
+  p  [  1   -1   -1    1  ]
+  Y  [  1   -1    1   -1  ]`,
+        },
+        {
+          heading: "Closed-form 3-motor allocation (failed motor -> 0)",
+          body: `motor 1 fail:  m2 = 2(T - r)   m3 = 2(r - p)    m4 = 2(T + p)
+motor 2 fail:  m1 = 2(T - r)   m3 = 2(T - p)    m4 = 2(r + p)
+motor 3 fail:  m1 = 2(p - r)   m2 = 2(T - p)    m4 = 2(T + r)
+motor 4 fail:  m1 = 2(T + p)   m2 = -2(r + p)   m3 = 2(T + r)
+
+Thrust, roll, and pitch are tracked exactly; yaw is left as a residual.`,
+        },
+        {
+          heading: "Saturation clamp (uint16 PWM ceiling)",
+          body: `m_i = min(m_i, 65535)    # root-caused fix: max roll 145 deg -> 7.2 deg`,
+        },
+      ],
+    },
     github: { url: "https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project" },
   },
   {
     index: "002",
     slug: "02-multi-robot-task-allocation",
     title: "Multi-Robot Task Allocation",
-    subtitle: "ROS2, Gazebo, Hungarian, A*",
+    subtitle: "ROS2, Gazebo, AMCL, Hungarian, A*",
     period: "Dec 2025",
     status: "COMPLETE",
-    tags: ["ROS2", "Planning", "Hungarian", "A*", "Gazebo", "Autonomy"],
+    tags: ["ROS2", "Hungarian", "A*", "AMCL", "Costmap", "Path Cache", "Gazebo", "Autonomy"],
     metrics: [
-      { label: "Robots",       value: "5 TurtleBots" },
+      { label: "Robots",       value: "5 TurtleBot3" },
       { label: "Success Rate", value: "99%" },
-      { label: "Scenarios",    value: "10 validated" },
+      { label: "Tasks",        value: "8 dynamic" },
     ],
     visual: "/images/projects/02_multi_robot.html",
     visualAlt: "Multi-robot task allocation diagram",
     codeFile: "task_allocator.py",
     codeIcon: "schema",
-    code: `def allocate(robots, tasks):
-    C = build_cost_matrix(
-        robots, tasks
-    )
-    assign = hungarian(C)
+    code: `def distance_fn(r, t):          # double-duty: cost + cache
+    path, length = astar_plan(r.xy, t.xy)
+    cache[(round_xy(r.xy), t.id)] = path
+    return length
 
-    for r, t in assign:
-        plan_path(r, t, costmap)`,
+while tasks:                    # dynamic, time-stepped
+    free = [r for r in robots if r.busy_until <= now]
+    C = cost_matrix(free, tasks, distance_fn)
+    for r, t in hungarian(C):
+        r.busy_until = now + length(r, t) / v_max`,
     description:
-      "Centralized ROS2 autonomy stack in Gazebo for 5 TurtleBots. Hungarian task assignment and A* motion planning with costmap-based collision avoidance. Validated across 10 scenarios with 99% mission success.",
+      "A from-scratch ROS2 warehouse stack for 5 TurtleBot3 robots: hand-written A* planner, inflation costmap, Hungarian assignment, and PD trajectory control, with only Nav2's map server and AMCL off-the-shelf. A dynamic, time-stepped loop re-solves the Hungarian assignment as robots free up, and a path cache keyed on (start, task) makes each robot drive exactly the scored route. ~99% mission success across 5 robots and 8 tasks in Gazebo.",
     reversed: true,
     videoFile: "/videos/02-multi-robot-task-allocation.mp4",
     github: { url: "https://github.com/dstejagit09/Multi-Robot-Task-Allocation-main" },
@@ -147,7 +192,7 @@ motor.set_pwm(
     subtitle: "MATLAB and Simulink, OpenCV, Parrot Mambo",
     period: "May 2025",
     status: "COMPLETE",
-    tags: ["MATLAB", "Simulink", "OpenCV", "Parrot Mambo", "PID", "Vision Tracking", "Pose Estimation"],
+    tags: ["MATLAB", "Simulink", "OpenCV", "Parrot Mambo", "PID", "Vision Tracking"],
     metrics: [
       { label: "Landing Accuracy", value: "8 cm CEP" },
       { label: "Sim Trials",       value: "25 validated" },
@@ -164,7 +209,7 @@ motor.set_pwm(
     cmd = self.pid.compute(error)
     self.publish_velocity(cmd)`,
     description:
-      "Guidance and control logic built in MATLAB and Simulink as a digital twin across 25 trials. Onboard vision-based relative pose estimation on the Parrot Mambo, paired with closed-loop PID, achieves landing within 8 cm of a moving platform.",
+      "Guidance and control logic built in MATLAB and Simulink as a digital twin and validated across 25+ trials. An onboard downward-camera vision-tracking pipeline estimates the landing platform's position relative to the Parrot Mambo, and a closed-loop PID controller lands the drone within 8 cm of a moving platform.",
     reversed: true,
     videoFile: "/videos/04-autonomous-drone-landing.mp4",
     github: { url: "https://github.com/dstejagit09/autonomous_drone_landing" },
@@ -172,29 +217,31 @@ motor.set_pwm(
   {
     index: "005",
     slug: "05-maze-solver",
-    title: "Maze Solving with myCobot600",
-    subtitle: "OpenCV, ArUco, A*, 6-DOF Arm",
+    title: "Maze Solving with myCobot Pro 600",
+    subtitle: "OpenCV, A*, Inverse Kinematics, 6-DOF Arm",
     period: "Dec 2024",
     status: "COMPLETE",
-    tags: ["OpenCV", "A*", "Arm Robotics", "ArUco", "Path Planning"],
+    tags: ["OpenCV", "A*", "Inverse Kinematics", "Arm Robotics", "Path Planning"],
     metrics: [
-      { label: "Grid",      value: "8×8" },
+      { label: "Grid",      value: "34×34" },
       { label: "Plan Time", value: "60 s" },
-      { label: "Arm",       value: "6-DOF myCobot600" },
+      { label: "Arm",       value: "6-DOF myCobot Pro 600" },
     ],
     visual: "/images/projects/05_maze_solver.html",
     visualAlt: "6-DOF robot arm maze solving diagram",
     codeFile: "maze_solver.py",
     codeIcon: "route",
-    code: `grid = occupancy_grid(
-    frame, aruco_markers
+    code: `grid = occupancy_grid(          # threshold + perspective crop
+    calibrated(frame), cell=34
 )
-path = astar(grid, start, goal)
+grid = dilate_walls(grid)       # safety margin
+path = astar(grid, start, goal) # 4-connected, Manhattan
 
-for waypoint in path:
-    arm.move_to_waypoint(waypoint)`,
+for wp in path:
+    q = ik_pro600(wp)           # MATLAB RigidBodyTree
+    arm.set_angles(q)           # over TCP/IP`,
     description:
-      "OpenCV pipeline for maze detection using 2 ArUco markers on an 8×8 occupancy grid. A* path computed and executed via myCobot600 6-DOF motion control; 60 s planning time. Applicable to industrial pick-and-place workflows.",
+      "An OpenCV vision pipeline (camera calibration, binary thresholding, perspective crop) converts a maze image into a 34×34 occupancy grid, with walls dilated to enforce a safety margin. A from-scratch A* planner (4-connected, Manhattan heuristic) finds the path, and inverse kinematics solved with a MATLAB RigidBodyTree maps each waypoint to six joint angles, streamed over TCP/IP to drive a physical 6-DOF myCobot Pro 600 arm. Planning-to-execution runs in about 60 s.",
     reversed: false,
     videoFile: "/videos/05-maze-solver.mp4",
     github: { url: "https://github.com/dstejagit09/Maze-Solving-using-MyCobot600" },
@@ -204,8 +251,8 @@ for waypoint in path:
     slug: "06-skyspeak-ai",
     title: "SkySpeak AI",
     subtitle: "Honeywell Anthem, LLM Agents, Voice Analytics",
-    period: "Aug 2025 to Present",
-    status: "ACTIVE",
+    period: "Aug 2025 to Apr 2026",
+    status: "COMPLETE",
     tags: [
       "LLM Agents", "Voice Analytics", "LiveKit", "Deepgram",
       "ElevenLabs", "Python", "React", "CBTA",

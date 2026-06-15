@@ -12,31 +12,31 @@
 
   var QUICK_ACTIONS = [
     'Best projects for robotics roles',
-    'What makes him different?',
+    'Fault-tolerant Crazyflie control',
+    'Multi-robot task allocation',
+    'Autonomous drone landing',
+    'Maze solving with myCobot',
+    'Crop weed detection',
+    'Work at Honeywell (SkySpeak AI)',
+    'Controls & autonomy expertise',
     'UAV & drone experience',
-    'Controls expertise',
-    'Work at Honeywell',
-    'ROS2 projects',
     'Education at ASU',
-    'Python & MATLAB skills',
-    'Teaching assistant role',
-    'GPA & certifications',
     'Is he available to hire?',
     'How to contact him'
   ];
 
   var FALLBACK = {
-    'Best projects for robotics roles': 'For robotics roles, his three strongest projects are: (1) **Fault-Tolerant Crazyflie**, motor allocation reducing max roll from 145° to 7.2°, showing deep controls expertise; (2) **Multi-Robot Task Allocation**, 5 TurtleBots with Hungarian and A* at 99% success showing ROS2 autonomy; (3) **Autonomous Drone Landing**, 8cm precision showing vision and controls integration. [View projects](https://saitejadasari.com/#deployments)',
-    'What makes him different?': 'Three things: (1) He bridges sim-to-hardware. Every project goes from MATLAB and Gazebo to real robots. (2) He spans the full stack: controls, perception, planning, and embedded. (3) His Honeywell externship shows industry-grade aerospace work alongside academic research. [View experience](https://saitejadasari.com/#experience)',
-    'UAV & drone experience': 'Hands-on UAV experience across three platforms: Crazyflie 2.1 (fault-tolerant control), Parrot Mambo (autonomous vision landing), and P80 heavy-payload multirotor (ArduPilot PID tuning at Marut Drones). Works with ArduPilot, Mission Planner, and direct PWM control. [View projects](https://saitejadasari.com/#deployments)',
-    'Controls expertise': 'Controls is his deepest area: PID for UAV stabilization, control allocation and controller reconfiguration for degraded actuators, and LQR in simulation. He also teaches PID control and systems analysis to 90+ students as ASU TA. [View specs](https://saitejadasari.com/#telemetry)',
-    'Work at Honeywell': "At Honeywell Aerospace, he's architecting SkySpeak AI, a pilot training platform for the Anthem avionics ecosystem. Integrates voice analytics with CBTA competency grading to assess pilot cognitive load during ATC communications. Built a React instructor dashboard with real-time analytics. [View experience](https://saitejadasari.com/#experience)",
-    'ROS2 projects': 'Uses ROS2 across multiple projects: multi-robot coordination with Nav2 for 5 TurtleBots, YOLOv8 inference as ROS nodes on ROSMaster X3, and a ROS2 test harness for automated Crazyflie flight scenarios. Works with Gazebo, TF2, and custom launch files. [View projects](https://saitejadasari.com/#deployments)',
-    'Education at ASU': '**MS Robotics and Autonomous Systems** at Arizona State University (Aug 2024 to May 2026), GPA **3.93/4.0**. Coursework includes Aerial Robotics, Mechatronics, Multi-Robot Systems, and Controls and Systems. He is also a TA for MATLAB Programming and Controls labs. [View specs](https://saitejadasari.com/#telemetry)',
-    'Python & MATLAB skills': 'Python is his primary language: ROS2 nodes, CV pipelines (OpenCV, YOLOv8), path planning (A*, Hungarian), and data analysis. MATLAB and Simulink are used for control design and digital twin simulation (drone landing, PID and LQR). He also teaches MATLAB to 90+ students. [View specs](https://saitejadasari.com/#telemetry)',
-    'Teaching assistant role': 'ASU Teaching Assistant (Jan 2025 to present) for 90+ students across 5 lab sections: **Intro to MATLAB Programming** and **Controls and Systems Lab** at Fulton Schools of Engineering. Runs review sessions, office hours, and grades labs on PID control and systems analysis. [View experience](https://saitejadasari.com/#experience)',
-    'GPA & certifications': 'GPA: **3.93/4.0** (MS Robotics, ASU). Certifications: **Universal Robots e-Series** (Core and Pro), **MathWorks AI** (ML and DL), **Hugging Face RL**, and **Udemy ROS and ROS2**. Publication: *SCADA-Based Substation Control Panel and Operations*. [View manifest](https://saitejadasari.com/#manifest)',
-    'Is he available to hire?': 'Yes. Saiteja is **open to full-time roles, internships, research positions, and collaboration**. Target roles: Robotics Engineer, Controls Engineer, UAV Systems, Systems Engineer, Robotics Software Engineer, Autonomy Engineer, Test and Validation Engineer. Based in Tempe, AZ; graduating May 2026. [Get in touch](https://saitejadasari.com/#contact)',
+    'Best projects for robotics roles': 'For robotics roles, his three strongest projects are: (1) **Fault-Tolerant Crazyflie**, motor allocation reducing max roll from 145° to 7.2°, showing deep controls expertise; (2) **Multi-Robot Task Allocation**, 5 TurtleBots with from-scratch Hungarian and A* at 99% success showing ROS2 autonomy; (3) **Autonomous Drone Landing**, 8cm precision showing vision and controls integration. [View projects](https://saitejadasari.com/#deployments)',
+    'Fault-tolerant Crazyflie control': '**Fault-Tolerant Quadrotor Control** (Jan 2026 to May 2026): Closed-form 3-motor allocation derived for all 4 single-motor failure cases. Identified motor saturation as the root cause of attitude loss; a thrust clamp reduced max roll from 145° to 7.2° on Crazyflie 2.1 hardware. Validated in MuJoCo across 24 conditions. [View projects](https://saitejadasari.com/#deployments)',
+    'Multi-robot task allocation': "**Multi-Robot Task Allocation** (Dec 2025): A from-scratch ROS2 warehouse pipeline for 5 TurtleBot3 robots — hand-written A* planner, inflation costmap, Hungarian assignment, and PD trajectory control, with only Nav2's map server and AMCL off-the-shelf. A dynamic loop re-solves the Hungarian assignment as robots free up, and a path cache keyed on (start, task) makes each robot drive exactly the scored route. ~99% mission success across 5 robots and 8 tasks. [View projects](https://saitejadasari.com/#deployments)",
+    'Autonomous drone landing': '**Autonomous Drone Landing on a Moving Platform** (May 2025): Landing control logic designed in MATLAB and Simulink (25 validated trials). Onboard vision tracking and PID control on Parrot Mambo achieve closed-loop touchdown within **8 cm CEP** of a moving platform. [View projects](https://saitejadasari.com/#deployments)',
+    'Maze solving with myCobot': '**Maze Solving with myCobot Pro 600** (Dec 2024): An OpenCV pipeline (camera calibration, binary thresholding, perspective crop) builds a 34×34 occupancy grid with dilated walls. A* finds the path, and inverse kinematics (MATLAB RigidBodyTree) maps each waypoint to six joint angles streamed over TCP/IP to a physical 6-DOF myCobot Pro 600 arm. Planning-to-execution about 60 s. [View projects](https://saitejadasari.com/#deployments)',
+    'Crop weed detection': '**Crop Weed Detection** (May 2025): YOLOv8n trained on 3000 labelled samples, deployed on ROSMaster X3 via ONNX Runtime. Achieves 97% detection accuracy at 12 FPS. ROS inference and visualization nodes enable real-time robotic decision-making for precision agriculture. [View projects](https://saitejadasari.com/#deployments)',
+    'Work at Honeywell (SkySpeak AI)': "**Honeywell Externship** (Aug 2025 to Apr 2026): Architected **SkySpeak AI**, a pilot training platform for Honeywell Aerospace's Anthem ecosystem — voice analytics, CBTA competency grading, and a React instructor dashboard. Enabled 20+ stakeholder review sessions targeting ATC trainee attrition. [View experience](https://saitejadasari.com/#experience)",
+    'Controls & autonomy expertise': 'Controls is his core area: **PID** for UAV stabilization, **control allocation** with controller reconfiguration for degraded actuators, and **LQR** in simulation, with MATLAB and Simulink for digital-twin validation. On the autonomy side: A*, Hungarian assignment, costmaps, and occupancy grids. [View specs](https://saitejadasari.com/#telemetry)',
+    'UAV & drone experience': 'Hands-on UAV experience across three platforms: Crazyflie 2.1 (fault-tolerant control), Parrot Mambo (autonomous vision landing within 8 cm), and P80 heavy-payload multirotor (ArduPilot PID tuning at Marut Drones, 10% stability gain across 3 variants). Works with ArduPilot, Mission Planner, and direct PWM control. [View projects](https://saitejadasari.com/#deployments)',
+    'Education at ASU': '**MS Robotics and Autonomous Systems** at Arizona State University (Aug 2024 to May 2026, graduated), GPA **3.93/4.0**. Coursework includes Aerial Robotics, Mechatronics, Multi-Robot Systems, and Controls and Systems. He was also a TA for MATLAB Programming and Controls labs. [View specs](https://saitejadasari.com/#telemetry)',
+    'Is he available to hire?': 'Yes. Saiteja is **open to full-time roles, internships, research positions, and collaboration**. Target roles: Robotics Engineer, Controls Engineer, UAV Systems, Systems Engineer, Robotics Software Engineer, Autonomy Engineer, Test and Validation Engineer. Based in Tempe, AZ; graduated May 2026. [Get in touch](https://saitejadasari.com/#contact)',
     'How to contact him': 'Email: **totobotplus@gmail.com** | LinkedIn: [linkedin.com/in/sdasar38](https://www.linkedin.com/in/sdasar38/) | GitHub: [github.com/dstejagit09](https://github.com/dstejagit09). You can also use the contact form or download his CV from the Contact section. [Go to contact](https://saitejadasari.com/#contact)'
   };
   var FALLBACK_DEFAULT = "I can help with questions about Saiteja's projects, experience (Honeywell, ASU, Marut Drones), or technical skills (ROS2, controls, vision, UAV). What interests you?";

@@ -49,7 +49,7 @@ export function HeroSection() {
           </div>
 
           <p className="max-w-xl text-secondary text-base md:text-lg leading-relaxed text-justify hyphens-auto border-l border-primary-fixed/30 pl-5 md:pl-8 py-2">
-            M.S. Robotics candidate with 6+ projects across autonomy, controls,
+            M.S. Robotics graduate with 6+ projects across autonomy, controls,
             perception, and UAV systems. Experience deploying real-time
             robotic stacks from MATLAB and Simulink digital twins to ROS2
             hardware, including multi-robot coordination, fault-tolerant

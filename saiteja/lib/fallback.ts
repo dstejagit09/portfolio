@@ -13,40 +13,40 @@ const RESPONSES: Record<string, string> = {
     "Controls is his core area: **PID** for UAV stabilization, **control allocation** with controller reconfiguration for degraded actuators, **LQR** in simulation, and MATLAB and Simulink for digital twin validation. He also teaches PID and systems analysis to 90+ students as ASU TA. [View specs](/#telemetry)",
 
   "work at honeywell":
-    "At Honeywell Aerospace (Aug 2025 to present), he is building **SkySpeak AI**, a pilot training platform for the Anthem avionics ecosystem. He is integrating voice analytics with CBTA competency grading to measure ATC cognitive load, and built a React instructor dashboard with real-time communication analytics. [View experience](/#experience)",
+    "At Honeywell Aerospace (Aug 2025 to Apr 2026), he built **SkySpeak AI**, a pilot training platform for the Anthem avionics ecosystem. He integrated voice analytics with CBTA competency grading to measure ATC cognitive load, and built a React instructor dashboard with real-time communication analytics. [View experience](/#experience)",
 
   "ros2 projects":
-    "ROS2 is central to his work: **Multi-Robot coordination** with Nav2 for 5 TurtleBots in Gazebo, **YOLOv8 inference nodes** on ROSMaster X3 at 12 FPS, and a **ROS2 test harness** for automated Crazyflie flight scenarios with log replay. Comfortable with TF2, costmaps, launch files, and URDF/xacro. [View projects](/#deployments)",
+    "ROS2 is central to his work: **Multi-Robot coordination** for 5 TurtleBots in Gazebo with a from-scratch A* planner, Hungarian assignment, and AMCL localization (only Nav2's map server off-the-shelf), **YOLOv8 inference nodes** on ROSMaster X3 at 12 FPS, and a **ROS2 test harness** for automated Crazyflie flight scenarios with log replay. Comfortable with TF2, costmaps, launch files, and URDF/xacro. [View projects](/#deployments)",
 
   "crazyflie":
-    "**Fault-Tolerant Quadrotor Control** (Jan 2026 to present): Closed-form 3-motor allocation derived for all 4 single-motor failure cases. Identified motor saturation as the root cause of attitude loss; a thrust clamp reduced max roll from 145° to 7.2° on Crazyflie 2.1 hardware. Validated in MuJoCo across 24 conditions. [View projects](/#deployments)",
+    "**Fault-Tolerant Quadrotor Control** (Jan 2026 to May 2026): Closed-form 3-motor allocation derived for all 4 single-motor failure cases. Identified motor saturation as the root cause of attitude loss; a thrust clamp reduced max roll from 145° to 7.2° on Crazyflie 2.1 hardware. Validated in MuJoCo across 24 conditions. [View projects](/#deployments)",
 
   "multi-robot":
-    "**Multi-Robot Task Allocation** (Dec 2025): Centralized ROS2 stack in Gazebo for 5 TurtleBot3 robots. Hungarian algorithm assigns tasks optimally, A* plans collision-free paths on a costmap, Nav2 executes navigation. Validated across 10 scenarios with 99% mission success. Tech: ROS2, Python, C++, Gazebo, Nav2. [View projects](/#deployments)",
+    "**Multi-Robot Task Allocation** (Dec 2025): A from-scratch ROS2 warehouse pipeline for 5 TurtleBot3 robots — hand-written A* planner, inflation costmap, Hungarian assignment, and PD trajectory control, with only Nav2's map server and AMCL off-the-shelf. A dynamic, time-stepped loop re-solves the Hungarian assignment as robots free up, and a path cache keyed on (start, task) makes each robot drive exactly the scored route. ~99% mission success across 5 robots and 8 tasks. [View projects](/#deployments)",
 
   "crop weed":
     "**Crop Weed Detection** (May 2025): YOLOv8n trained on 3000 labelled samples, deployed on ROSMaster X3 via ONNX Runtime. Achieves 97% detection accuracy at 12 FPS. ROS inference and visualization nodes enable real-time robotic decision-making for precision agriculture. Tech: ROS, Python, OpenCV, YOLOv8. [View projects](/#deployments)",
 
   "drone landing":
-    "**Autonomous Drone Landing on a Moving Platform** (May 2025): Landing control logic designed in MATLAB and Simulink (25 validated trials). Onboard vision-based relative pose estimation and PID control on Parrot Mambo achieve closed-loop touchdown within **8 cm CEP** of a moving platform. [View projects](/#deployments)",
+    "**Autonomous Drone Landing on a Moving Platform** (May 2025): Landing control logic designed in MATLAB and Simulink (25 validated trials). Onboard vision tracking and PID control on Parrot Mambo achieve closed-loop touchdown within **8 cm CEP** of a moving platform. [View projects](/#deployments)",
 
   "maze":
-    "**Maze Solving with myCobot600** (Dec 2024): OpenCV detects 2 ArUco markers and builds an 8x8 occupancy grid. A* computes the optimal path; waypoints are executed via myCobot600 6-DOF arm. Total planning-to-execution: 60 seconds. Applicable to industrial pick-and-place. [View projects](/#deployments)",
+    "**Maze Solving with myCobot Pro 600** (Dec 2024): An OpenCV pipeline (camera calibration, binary thresholding, perspective crop) builds a 34×34 occupancy grid with dilated walls. A* finds the path, and inverse kinematics (MATLAB RigidBodyTree) maps each waypoint to six joint angles streamed over TCP/IP to a physical 6-DOF myCobot Pro 600 arm. Planning-to-execution about 60 s. [View projects](/#deployments)",
 
   "aatram":
-    "**Aatram, Co-Founder** (Feb 2026 to present): Emotion-first anti-procrastination app for students. He architected the adaptive nudge engine (JITAI-based, leveraging Apple Intelligence), built the Momentum Board with Bounce-Back Score and Monthly Chapters, and integrated focus techniques like WOOP and implementation intentions as Pomodoro alternatives. [View experience](/#experience)",
+    "**Aatram, Co-Founder** (Feb 2026 to Apr 2026): Emotion-first anti-procrastination app for students. He architected the adaptive nudge engine (JITAI-based, leveraging Apple Intelligence), built the Momentum Board with Bounce-Back Score and Monthly Chapters, and integrated focus techniques like WOOP and implementation intentions as Pomodoro alternatives. [View experience](/#experience)",
 
   "honeywell":
-    "**Honeywell Externship** (Aug 2025 to present): Architecting SkySpeak AI, a pilot training platform for Honeywell Aerospace's Anthem ecosystem. Includes voice analytics, CBTA competency grading, and a React instructor dashboard. Enabled 20+ stakeholder review sessions targeting ATC trainee attrition reduction. [View experience](/#experience)",
+    "**Honeywell Externship** (Aug 2025 to Apr 2026): Architected SkySpeak AI, a pilot training platform for Honeywell Aerospace's Anthem ecosystem. Includes voice analytics, CBTA competency grading, and a React instructor dashboard. Enabled 20+ stakeholder review sessions targeting ATC trainee attrition reduction. [View experience](/#experience)",
 
   "teaching assistant":
-    "**ASU Teaching Assistant** (Jan 2025 to present): Supports 90+ students across 5 lab sections for Intro to MATLAB Programming and Controls and Systems Lab at ASU's Fulton Schools of Engineering. Responsibilities: review sessions, office hours, and grading labs covering PID control and systems analysis. [View experience](/#experience)",
+    "**ASU Teaching Assistant** (Jan 2025 to May 2026): Supported 90+ students across 5 lab sections for Intro to MATLAB Programming and Controls and Systems Lab at ASU's Fulton Schools of Engineering. Responsibilities: review sessions, office hours, and grading labs covering PID control and systems analysis. [View experience](/#experience)",
 
   "marut":
-    "**Marut Drones, Production Engineering Intern** (Oct 2023 to Mar 2024): Integrated electronic and mechanical subsystems across multi-rotor agricultural UAV platforms. Configured ArduPilot and Mission Planner for a P80 heavy-payload drone. Results: production efficiency +15%, flight stability +10% through PID tuning across 3 UAV variants. [View experience](/#experience)",
+    "**Marut Drones, Production Engineering Intern** (Aug 2023 to May 2024): Integrated electronic and mechanical subsystems across multi-rotor agricultural UAV platforms. Configured ArduPilot and Mission Planner for a P80 heavy-payload drone. Results: production efficiency +15%, flight stability +10% through PID tuning across 3 UAV variants. [View experience](/#experience)",
 
   "ros":
-    "He uses ROS1 and ROS2 across all major projects: multi-robot Nav2 stacks, inference nodes, test harnesses, TF2, URDF/xacro, and Gazebo simulation. His strongest ROS2 work is the 5-robot TurtleBot coordination stack and the Crazyflie fault-tolerant control harness. [View specs](/#telemetry)",
+    "He uses ROS1 and ROS2 across all major projects: multi-robot coordination stacks, inference nodes, test harnesses, TF2, URDF/xacro, and Gazebo simulation. His strongest ROS2 work is the 5-robot TurtleBot coordination stack and the Crazyflie fault-tolerant control harness. [View specs](/#telemetry)",
 
   "python":
     "Python is his primary language: ROS2 nodes, computer vision pipelines (OpenCV, YOLOv8), path planning (A*, Hungarian), and data analysis. He also works in C for firmware-level control and MATLAB for control design. [View specs](/#telemetry)",
@@ -58,13 +58,13 @@ const RESPONSES: Record<string, string> = {
     "Hands-on ArduPilot experience from Marut Drones, configuring Mission Planner and tuning PID parameters for a P80 heavy-payload multirotor across 3 UAV variants and improving flight stability by 10%. Familiar with flight log analysis and parameter tuning workflows. [View specs](/#telemetry)",
 
   "opencv":
-    "OpenCV is used across multiple projects: ArUco marker detection on the maze solver, vision-based pose estimation for drone landing, YOLOv8 integration for crop weed detection, and occupancy grid generation. Deployed on both desktop Python and embedded ROS nodes. [View specs](/#telemetry)",
+    "OpenCV is used across multiple projects: camera calibration and thresholding for the maze solver, vision tracking for drone landing, YOLOv8 integration for crop weed detection, and occupancy grid generation. Deployed on both desktop Python and embedded ROS nodes. [View specs](/#telemetry)",
 
   "yolo":
     "He trained and deployed YOLOv8n for Crop Weed Detection: 3000 samples, 97% accuracy, 12 FPS on ROSMaster X3 via ONNX Runtime. The inference runs as a ROS node that publishes detection results for downstream robotic decision-making. [View projects](/#deployments)",
 
   "gazebo":
-    "Gazebo is his primary simulation environment, used for the 5-robot TurtleBot coordination stack with Nav2 and costmaps. He builds custom worlds, configures robot models with URDF/xacro, and validates autonomy stacks before hardware deployment. [View specs](/#telemetry)",
+    "Gazebo is his primary simulation environment, used for the 5-robot TurtleBot coordination stack with AMCL localization and a custom inflation costmap. He builds custom worlds, configures robot models with URDF/xacro, and validates autonomy stacks before hardware deployment. [View specs](/#telemetry)",
 
   "asu":
     "**Arizona State University** (Aug 2024 to May 2026): MS Robotics and Autonomous Systems (Systems Engineering Track), GPA **3.93/4.0**. Coursework: Aerial Robotics, Mechatronics, Multi-Robot Systems, Controls and Systems. Also serving as Teaching Assistant for MATLAB and Controls labs. [View specs](/#telemetry)",
@@ -73,7 +73,7 @@ const RESPONSES: Record<string, string> = {
     "**MS Robotics**, Arizona State University (2024 to 2026), GPA 3.93/4.0. **BE Electrical and Electronics Engineering**, Chaitanya Bharathi Institute of Technology, Hyderabad (2020 to 2024). [View specs](/#telemetry)",
 
   "gpa":
-    "Saiteja holds a **3.93/4.0 GPA** in his MS Robotics and Autonomous Systems program at Arizona State University (graduating May 2026).",
+    "Saiteja holds a **3.93/4.0 GPA** in his MS Robotics and Autonomous Systems program at Arizona State University (graduated May 2026).",
 
   "certification":
     "Certifications: **Universal Robots e-Series** (Core and Pro), **MathWorks AI** (ML and DL), **Hugging Face RL**, and **Udemy ROS and ROS2**. Publication: *SCADA-Based Substation Control Panel and Operations*. [View manifest](/#manifest)",
@@ -88,7 +88,7 @@ const RESPONSES: Record<string, string> = {
     "Email: **totobotplus@gmail.com**, or use the contact form on this site. [Go to contact](/#contact)",
 
   "hire":
-    "Saiteja is **open to full-time roles, internships, research positions, and collaboration**. Target roles: Robotics Engineer, Controls Engineer, UAV Systems, Systems Engineer, Robotics Software Engineer, Autonomy Engineer, Test and Validation Engineer. Based in Tempe, AZ; graduating May 2026. [Get in touch](/#contact)",
+    "Saiteja is **open to full-time roles, internships, research positions, and collaboration**. Target roles: Robotics Engineer, Controls Engineer, UAV Systems, Systems Engineer, Robotics Software Engineer, Autonomy Engineer, Test and Validation Engineer. Based in Tempe, AZ; graduated May 2026. [Get in touch](/#contact)",
 
   "resume":
     "Download Saiteja's resume via the **Download CV** button in the Contact section. [Go to contact](/#contact)",
@@ -97,7 +97,7 @@ const RESPONSES: Record<string, string> = {
     "Hey there! I'm Saiteja's portfolio assistant. Ask me about his **projects**, **experience**, **skills**, or **how to get in touch**.",
 
   "who":
-    "**Saiteja Venkateshwa Rao Dasari**, MS Robotics candidate at ASU (GPA 3.93, graduating May 2026), specializing in autonomous systems, control theory, and computer vision. Hands-on across ROS2 multi-robot stacks, UAV platforms, YOLOv8 perception, and MATLAB and Simulink. [Learn more](/#archive)",
+    "**Saiteja Venkateshwa Rao Dasari**, MS Robotics graduate from ASU (GPA 3.93, May 2026), specializing in autonomous systems, control theory, and computer vision. Hands-on across ROS2 multi-robot stacks, UAV platforms, YOLOv8 perception, and MATLAB and Simulink. [Learn more](/#archive)",
 };
 
 /* Keyword to topic map (order matters; specific first) */
@@ -136,7 +136,6 @@ const KEYWORD_MAP: Array<[string, string]> = [
   ["simulink",            "matlab"],
   ["matlab",              "matlab"],
   ["opencv",              "opencv"],
-  ["aruco",               "opencv"],
   ["gazebo",              "gazebo"],
   ["asu",                 "asu"],
   ["arizona state",       "asu"],

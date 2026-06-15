@@ -3,31 +3,31 @@ const EXPERIENCES = [
     index: "01",
     role: "Research Externship / Technical Lead, SkySpeak AI",
     org: "Honeywell Aerospace, Arizona State University Collaborative Research",
-    period: "Aug 2025 to Present",
+    period: "Aug 2025 to Apr 2026",
     type: "Externship",
     description:
-      "Directing a 3-engineer team in partnership with Honeywell and ASU stakeholders to deliver an ATC-pilot simulator built on LLM agents, structured guardrails, and a 300 ms LiveKit, Deepgram, and ElevenLabs voice pipeline. Engineered the Python voice analytics stack with YIN pitch detection, voice activity detection, z-score calibration, and abstention scoring under 0.60. Launched a CBTA dashboard used in 20+ stakeholder reviews and seed-grant evaluations.",
+      "Directed a 3-engineer team in partnership with Honeywell and ASU stakeholders to deliver an ATC-pilot simulator built on LLM agents, structured guardrails, and a 300 ms LiveKit, Deepgram, and ElevenLabs voice pipeline. Engineered the Python voice analytics stack with YIN pitch detection, voice activity detection, z-score calibration, and abstention scoring under 0.60. Launched a CBTA dashboard used in 20+ stakeholder reviews and seed-grant evaluations.",
     tags: ["LLM Agents", "LiveKit", "Deepgram", "ElevenLabs", "YIN", "VAD", "CBTA", "Python", "React"],
-    status: "ACTIVE",
+    status: "COMPLETED",
     link: { href: "https://honeywell-anthem-pilot-training-sol.vercel.app/", label: "VISIT LIVE PRODUCT" } as { href: string; label: string } | undefined,
   },
   {
     index: "02",
     role: "Graduate Teaching Assistant",
     org: "Arizona State University, MATLAB Programming and Instrumentation & Controls Lab",
-    period: "Jan 2025 to Present",
+    period: "Jan 2025 to May 2026",
     type: "Academic",
     description:
-      "Mentoring 90+ students across MATLAB, instrumentation, and controls labs at ASU's Fulton Schools of Engineering. Troubleshooting code and hardware setups, leading review sessions, and reinforcing PID and control-system concepts during weekly office hours.",
+      "Mentored 90+ students across MATLAB, instrumentation, and controls labs at ASU's Fulton Schools of Engineering. Troubleshot code and hardware setups, led review sessions, and reinforced PID and control-system concepts during weekly office hours.",
     tags: ["MATLAB", "Instrumentation", "Controls", "PID", "Lab Instruction"],
-    status: "ACTIVE",
+    status: "COMPLETED",
     link: undefined as { href: string; label: string } | undefined,
   },
   {
     index: "03",
     role: "Production Engineering Intern, UAV Systems Integration",
     org: "Marut Drones (IIIT-Hyderabad)",
-    period: "Oct 2023 to Mar 2024",
+    period: "Aug 2023 to May 2024",
     type: "Industry",
     description:
       "Assembled and verified UAV subsystems including ESCs, flight controllers, GPS, avionics, and propulsion hardware across multirotor platforms, raising production efficiency by 15%. Tuned ArduPilot and Mission Planner PID parameters from flight logs across 3 UAV variants, root-caused stability issues, and increased flight stability by approximately 10%.",
@@ -39,12 +39,12 @@ const EXPERIENCES = [
     index: "04",
     role: "Co-Founder",
     org: "Aatram",
-    period: "Feb 2026 to Present",
+    period: "Feb 2026 to Apr 2026",
     type: "Startup",
     description:
       "Co-founded an emotion-first anti-procrastination app for students and young professionals. Designed an adaptive nudge engine leveraging Apple Intelligence for context-aware notifications. Built a Momentum Board with streak alternatives (Bounce-Back Score, Monthly Chapters, momentum tracking), replacing punitive streak systems with psychologically grounded progress mechanics. Integrated evidence-based focus techniques: implementation intentions, WOOP, affect labeling, and temptation bundling.",
     tags: ["Product Architecture", "JITAI", "Behavioral Design", "Cloudflare Workers"],
-    status: "ACTIVE",
+    status: "COMPLETED",
     link: { href: "https://www.aatram.com/", label: "VISIT LIVE PRODUCT" } as { href: string; label: string } | undefined,
   },
 ];
@@ -64,7 +64,7 @@ export function ExperienceSection() {
           Build Log
         </h1>
         <p className="font-label text-secondary mt-4 tracking-wider uppercase">
-          Experience Record: 2023 to Present
+          Experience Record: 2023 to 2026
         </p>
       </header>
 

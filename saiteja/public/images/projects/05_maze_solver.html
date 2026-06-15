@@ -20,15 +20,6 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
 .cell.visited { background: rgba(200,80,40,0.04); border-color: rgba(200,80,40,0.1); }
 .cell.start { background: rgba(200,80,40,0.2); border: 1.5px solid rgba(200,80,40,0.5); }
 .cell.end { background: rgba(80,200,120,0.15); border: 1.5px solid rgba(80,200,120,0.4); }
-.aruco { position: absolute; width: 40px; height: 40px; border: 2px solid rgba(255,255,255,0.5); }
-.aruco-inner { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); width: 100%; height: 100%; }
-.aruco-bit { background: rgba(255,255,255,0.08); }
-.aruco-bit.on { background: rgba(255,255,255,0.7); }
-.aruco-label { position: absolute; font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 1px; white-space: nowrap; }
-.aruco-tl { top: 95px; left: 258px; }
-.aruco-tl .aruco-label { top: -14px; left: 0; }
-.aruco-br { bottom: 95px; right: 258px; }
-.aruco-br .aruco-label { bottom: -14px; right: 0; }
 .path-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 472px; height: 472px; pointer-events: none; }
 .arm-overlay { position: absolute; top: 40px; right: 60px; opacity: 0.12; pointer-events: none; }
 .label-start { position: absolute; top: 50%; left: 50%; font-size: 9px; color: #c85028; letter-spacing: 2px; text-transform: uppercase; transform: translate(-310px, -260px); }
@@ -164,19 +155,21 @@ html, body { width: 100%; height: 100%; background: #0a0a0a; font-family: 'Couri
     <text x="52" y="68" fill="rgba(255,255,255,0.15)" font-size="6" font-family="Courier New">J4</text>
   </svg>
   <div class="tech-overlay">
+    PIPELINE: CAPTURE &gt; CALIBRATE &gt; THRESHOLD<br>
+    &gt; CROP &gt; 34×34 GRID &gt; DILATE &gt; A* &gt; IK &gt; ARM<br>
     ASTAR_HEURISTIC: MANHATTAN<br>
-    GRID_RESOLUTION: 8x8<br>
-    MARKER_DICT: ARUCO_4X4_50<br>
-    DETECTION_FPS: 30<br>
-    ARM_MODEL: MYCOBOT_600<br>
+    GRID_RESOLUTION: 34×34<br>
+    CALIBRATION: CHECKERBOARD<br>
+    ARM_MODEL: MYCOBOT_PRO_600<br>
     DOF: 6
   </div>
   <div class="tech-right">
     OCCUPANCY_MAP: LOADED<br>
     PATH_STATUS: OPTIMAL<br>
-    COST: 12 STEPS<br>
-    COLLISION: CLEAR<br>
+    WALLS: DILATED<br>
+    IK_SOLVER: RIGIDBODYTREE<br>
     WAYPOINTS: COMPUTED<br>
+    COMMS: TCP/IP<br>
     ARM_STATE: EXECUTING
   </div>
 </div>

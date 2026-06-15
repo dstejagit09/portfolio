@@ -62,8 +62,8 @@ export function BioSection() {
           </p>
           <div className="space-y-6 max-w-3xl font-body text-base md:text-lg text-on-surface-variant leading-relaxed text-justify hyphens-auto">
             <p>
-              M.S. Robotics &amp; Autonomous Systems candidate at Arizona
-              State, graduating May 2026, with work spanning autonomy,
+              M.S. Robotics &amp; Autonomous Systems graduate from Arizona
+              State (May 2026), with work spanning autonomy,
               controls, perception, fault-tolerant flight, and UAV systems
               engineering. I build robotic systems that move from digital
               twin to flight hardware, and I am targeting full-time robotics,
