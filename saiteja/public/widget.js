@@ -101,6 +101,14 @@
       border: 1px solid rgba(74,222,128,0.2);\
       padding: 2px 7px; border-radius: 4px; flex-shrink: 0;\
     }\
+    .back {\
+      background: none; border: none; cursor: pointer; padding: 0;\
+      width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;\
+      display: none; align-items: center; justify-content: center;\
+      color: #6a6660; transition: color 0.15s, background 0.15s;\
+    }\
+    .back:hover { color: #e8e4d9; background: #1e1e1a; }\
+    .back.show { display: flex; }\
     \
     .msgs {\
       flex: 1; overflow-y: auto; padding: 14px 12px;\
@@ -191,6 +199,7 @@
   var CHAT_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="#0a0a0a"/></svg>';
   var SEND_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="#0a0a0a"/></svg>';
   var BOT_SVG  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="' + ACCENT + '" opacity="0.15"/><path d="M12 6v6l4 2" stroke="' + ACCENT + '" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  var BACK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   /* ── Bootstrap fonts in host document ── */
   function loadFonts() {
@@ -233,12 +242,14 @@
     var hdr = document.createElement('div');
     hdr.className = 'hdr';
     hdr.innerHTML = '\
+      <button class="back" aria-label="Back to start">' + BACK_SVG + '</button>\
       <div class="avatar">T.B</div>\
       <div class="hdr-info">\
         <p class="hdr-name">Totobot</p>\
         <p class="hdr-sub">Guide to Saiteja\'s work &amp; experience</p>\
       </div>\
       <span class="badge">ONLINE</span>';
+    var backBtn = hdr.querySelector('.back');
     panel.appendChild(hdr);
 
     /* Messages area */
@@ -312,6 +323,19 @@
       welcomeHidden = true;
       welcome.style.display = 'none';
       qaGrid.style.display = 'none';
+      backBtn.classList.add('show');
+    }
+
+    function goHome() {
+      // clear the conversation and restore the welcome + quick actions view
+      while (msgs.firstChild) msgs.removeChild(msgs.firstChild);
+      welcome.style.display = '';
+      qaGrid.style.display = 'grid';
+      msgs.appendChild(welcome);
+      msgs.appendChild(qaGrid);
+      welcomeHidden = false;
+      backBtn.classList.remove('show');
+      msgs.scrollTop = 0;
     }
 
     function scrollBottom() {
@@ -418,6 +442,7 @@
 
     /* ── Events ── */
     btn.addEventListener('click', togglePanel);
+    backBtn.addEventListener('click', goHome);
     closeBtn.addEventListener('click', togglePanel);
     sendBtn.addEventListener('click', function () { send(inp.value); });
     inp.addEventListener('keydown', function (e) {
