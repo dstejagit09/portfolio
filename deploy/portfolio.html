@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Stacks v2 // Saiteja Dasari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-base: #1a0708;
+  --bg-elevated: #2e0e0e;
+  --text-primary: #f7ece8;
+  --text-secondary: #c2a59f;
+  --text-muted: #8a6a65;
+  --border: rgba(253, 250, 216, 0.09);
+  --border-strong: rgba(253, 250, 216, 0.18);
+  --accent: #fdfad8;
+  --accent-soft: rgba(253, 250, 216, 0.14);
+  --accent-hover: #ffffff;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-heading: 'Space Grotesk', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', Menlo, monospace;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html, body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 15% 20%, rgba(253, 250, 216, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 800px 600px at 85% 80%, rgba(253, 250, 216, 0.025) 0%, transparent 60%),
+    var(--bg-base);
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 40px 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.top-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.warehouse-btn {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--accent);
+  background: rgba(253, 250, 216, 0.08);
+  border: 0.5px solid rgba(253, 250, 216, 0.35);
+  border-radius: 10px;
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  backdrop-filter: blur(20px) saturate(1.3);
+  transition: all 0.2s var(--ease-out);
+}
+
+.warehouse-btn:hover {
+  background: rgba(253, 250, 216, 0.16);
+  border-color: rgba(253, 250, 216, 0.6);
+  color: var(--accent-hover);
+}
+
+.warehouse-btn .wh-arrow { font-size: 14px; line-height: 1; }
+
+@media (max-width: 900px) {
+  .warehouse-btn { top: 14px; left: 14px; padding: 8px 12px; font-size: 10px; }
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, #8B7D5A 100%);
+  color: #0B0B0F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.brand-name {
+  font-family: var(--font-heading);
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.brand-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  margin-top: 1px;
+}
+
+.header-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* NAV */
+.section-nav {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  background: rgba(253, 250, 216, 0.06);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
+  border: 0.5px solid rgba(253, 250, 216, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  margin-bottom: 40px;
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
+}
+
+.nav-btn {
+  flex: 1 1 0;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  white-space: nowrap;
+  gap: 8px;
+}
+
+.nav-btn::before {
+  content: attr(data-num);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.nav-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-btn.active {
+  color: #23090a;
+  background: var(--accent);
+}
+
+.nav-btn.active::before {
+  color: rgba(35, 9, 10, 0.6);
+}
+
+/* STACK LAYOUT */
+.section-view {
+  display: none;
+  flex: 1;
+}
+
+.section-view.active {
+  display: block;
+  animation: sectionIn 0.5s var(--ease-out);
+}
+
+@keyframes sectionIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stack-layout {
+  display: grid;
+  grid-template-columns: 380px 560px;
+  justify-content: center;
+  gap: 64px;
+  align-items: start;
+  min-height: 620px;
+}
+
+.stack-layout.role-solo {
+  grid-template-columns: minmax(0, 560px);
+}
+
+/* COVER */
+.cover {
+  position: sticky;
+  top: 40px;
+  padding: 32px 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 620px;
+  justify-content: space-between;
+}
+
+.cover-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.cover-title {
+  font-family: var(--font-display);
+  font-size: 92px;
+  line-height: 0.95;
+  color: var(--text-primary);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.cover-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.cover-description {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  max-width: 340px;
+  margin-bottom: 40px;
+}
+
+.cover-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-top: 24px;
+  border-top: 0.5px solid var(--border);
+}
+
+.counter-current {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.counter-total {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.cover-progress {
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.cover-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s var(--ease-out);
+}
+
+/* DECK */
+.deck-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.deck {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 3 / 4.4;
+  perspective: 1400px;
+}
+
+.card {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.6s var(--ease-spring), opacity 0.6s var(--ease-out);
+  transform-style: preserve-3d;
+  will-change: transform;
+  background: var(--bg-elevated);
+  border: 0.5px solid var(--border-strong);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.card[data-position="1"] {
+  transform: translateY(20px) translateX(30px) scale(0.94) rotateZ(3deg);
+  z-index: 3;
+  opacity: 0.65;
+}
+
+.card[data-position="2"] {
+  transform: translateY(40px) translateX(60px) scale(0.88) rotateZ(6deg);
+  z-index: 2;
+  opacity: 0.35;
+}
+
+.card[data-position="3"] {
+  transform: translateY(60px) translateX(90px) scale(0.82) rotateZ(9deg);
+  z-index: 1;
+  opacity: 0.15;
+}
+
+.card[data-position="hidden"] {
+  transform: translateY(80px) translateX(120px) scale(0.75);
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card[data-position="0"] {
+  transform: translateY(0) translateX(0) scale(1) rotateZ(0);
+  z-index: 4;
+  opacity: 1;
+}
+
+/* CARD VISUAL (top 50%) */
+.card-visual {
+  position: relative;
+  height: 50%;
+  overflow: hidden;
+  background: #000;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(55px);
+  opacity: 0.85;
+  will-change: transform;
+  z-index: 0;
+}
+
+.blob-1 { top: -15%; left: -10%; width: 75%; height: 75%; animation: floatA 12s ease-in-out infinite; }
+.blob-2 { top: 25%; left: 40%; width: 65%; height: 65%; animation: floatB 15s ease-in-out infinite; }
+.blob-3 { top: 45%; left: -5%; width: 60%; height: 60%; animation: floatC 18s ease-in-out infinite; }
+
+@keyframes floatA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, 15px) scale(1.1); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-25px, 20px) scale(0.9); }
+}
+
+@keyframes floatC {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(15px, -20px) scale(1.15); }
+}
+
+.visual-grain {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 0);
+  background-size: 3px 3px;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+.visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 30%, transparent 60%, rgba(20, 20, 26, 0.6) 100%);
+  z-index: 1;
+}
+
+/* Role model card: portrait photo fills the top visual half */
+.visual-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.role-visual .visual-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, transparent 30%, transparent 44%, rgba(15, 6, 6, 0.88) 100%); z-index: 2; }
+.role-visual .visual-top, .role-visual .visual-title { z-index: 3; }
+.photo-empty { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; color: rgba(255, 255, 255, 0.4); }
+.role-body { display: flex; flex-direction: column; justify-content: flex-start; }
+.role-note { color: var(--text-secondary); line-height: 1.6; }
+.role-note:empty::before { content: 'A line about them and their character goes here.'; color: var(--text-muted); opacity: 0.5; }
+
+.visual-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.visual-badge {
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: white;
+  letter-spacing: 0.15em;
+  font-weight: 500;
+}
+
+.visual-icon {
+  width: 30px;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Project name on visual */
+.visual-title {
+  position: relative;
+  z-index: 2;
+  margin-top: 8px;
+}
+
+.project-name {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  color: white;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.project-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Video thumbnail */
+.visual-thumb {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 16 / 9;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-out), border-color 0.2s;
+}
+
+.visual-thumb:hover {
+  transform: scale(1.03);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.thumb-play {
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+  padding-left: 3px;
+}
+
+.thumb-label {
+  position: absolute;
+  bottom: 5px;
+  left: 7px;
+  right: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Metric block (bottom of visual) */
+.visual-metric {
+  position: relative;
+  z-index: 2;
+}
+
+.metric-value {
+  font-family: var(--font-heading);
+  font-size: 31px;
+  font-weight: 500;
+  color: white;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.15em;
+  font-weight: 500;
+  margin-top: 5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* CARD BODY (bottom 50%) */
+.card-body {
+  padding: 20px 22px 20px;
+  background: var(--bg-elevated);
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  font-weight: 500;
+}
+
+.card-description {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  max-height: 44px;
+  overflow: hidden;
+}
+
+.card-tag {
+  padding: 2px 7px;
+  background: rgba(253, 250, 216, 0.05);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  border: 0.5px solid var(--border);
+}
+
+.card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.card-btn {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 10px;
+  background: rgba(253, 250, 216, 0.06);
+  color: var(--text-primary);
+  border: 0.5px solid var(--border);
+  border-radius: 7px;
+  font-family: var(--font-heading);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.15s var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--border-strong);
+}
+
+.card-btn.primary {
+  background: var(--accent);
+  color: #23090a;
+  border-color: var(--accent);
+}
+
+.card-btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+/* Skill and contact card variants */
+.card.skill-card .card-visual { height: 42%; }
+.card.skill-card .card-body { height: 58%; }
+
+/* No-thumbnail card variant: adjust spacing so visual feels intentional */
+.card.no-thumb .visual-title {
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 8px 0;
+}
+
+.card.no-thumb .project-name {
+  font-size: 27px;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.card.no-thumb .project-sub {
+  font-size: 10px;
+}
+
+.card.no-thumb .visual-title::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  margin-top: 14px;
+}
+
+.skill-category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.skill-pill {
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  border-radius: 5px;
+  border: 0.5px solid var(--border);
+}
+
+.skill-pill.featured {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: rgba(184, 168, 122, 0.3);
+}
+
+/* DECK CONTROLS */
+.deck-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  max-width: 520px;
+}
+
+.control-btn {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-family: var(--font-mono);
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-strong);
+}
+
+.dots {
+  flex: 1;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--border-strong);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+.dot.active {
+  width: 24px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.autoplay-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.15s var(--ease-out);
+}
+
+.autoplay-toggle:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.autoplay-toggle.playing {
+  color: var(--accent);
+  border-color: rgba(184, 168, 122, 0.3);
+}
+
+.autoplay-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.autoplay-toggle.playing .autoplay-dot {
+  animation: pulse 2s infinite;
+}
+
+/* BOTTOM NOTE */
+.bottom-note {
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 0.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.note-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+.note-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.key {
+  display: inline-block;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid var(--border-strong);
+  border-bottom-width: 1.5px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-primary);
+}
+
+@media (max-width: 1060px) {
+  .page { padding: 24px 20px 60px; }
+  .stack-layout { grid-template-columns: 1fr; gap: 32px; }
+  .cover { position: static; min-height: auto; padding: 0; }
+  .cover-title { font-size: 56px; }
+  .deck { max-width: 100%; margin: 0 auto; }
+  .section-nav { width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .section-nav::-webkit-scrollbar { display: none; }
+  .nav-btn { flex: 0 0 auto; }
+}
+
+@media (max-width: 500px) {
+  .cover-title { font-size: 44px; }
+  .top-header { align-items: center; gap: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.15s !important;
+  }
+  .blob { animation: none !important; }
+}
+
+/* ===== project video modal ===== */
+.video-modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; }
+.video-modal.open { display: flex; }
+.vm-backdrop { position: absolute; inset: 0; background: rgba(10, 4, 4, 0.74); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.vm-panel { position: relative; width: min(920px, 100%); max-height: 88vh; overflow-y: auto; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 20px; padding: 26px 26px 24px; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6); animation: vmpop 0.26s var(--ease-spring); }
+@keyframes vmpop { from { transform: scale(0.94) translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.vm-close { position: absolute; top: 15px; right: 15px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-strong); background: rgba(253, 250, 216, 0.06); color: var(--text-primary); font-size: 14px; cursor: pointer; display: grid; place-items: center; transition: background 0.15s, border-color 0.15s; }
+.vm-close:hover { background: rgba(253, 250, 216, 0.14); border-color: var(--accent); }
+.vm-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; color: var(--text-muted); }
+.vm-title { font-family: var(--font-heading); font-weight: 700; font-size: 23px; margin-top: 6px; color: var(--text-primary); padding-right: 44px; }
+.vm-stage { position: relative; margin-top: 18px; aspect-ratio: 16 / 9; width: 100%; border-radius: 14px; overflow: hidden; background: #120506; border: 1px solid var(--border); }
+.vm-stage iframe, .vm-stage video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.vm-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 24px; }
+.vm-empty .vm-ico { font-size: 30px; color: var(--accent); opacity: 0.5; }
+.vm-empty .vm-note { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.05em; line-height: 1.7; color: var(--text-muted); max-width: 380px; }
+.vm-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.vm-chip { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; padding: 9px 14px; border-radius: 9px; border: 1px solid var(--border-strong); background: rgba(253, 250, 216, 0.05); color: var(--text-secondary); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.vm-chip:hover { border-color: var(--accent); color: var(--text-primary); }
+.vm-chip.active { background: var(--accent); color: #23090a; border-color: var(--accent); font-weight: 600; }
+@media (max-width: 560px) { .vm-panel { padding: 20px 16px 18px; border-radius: 16px; } .vm-title { font-size: 19px; } }
+</style>
+</head>
+<body>
+
+<div class="ambient-bg"></div>
+
+<a class="warehouse-btn" href="index.html" aria-label="Reset and return to the warehouse simulation">
+  <span class="wh-arrow">←</span> Warehouse
+</a>
+
+<div class="page">
+  <header class="top-header">
+    <div class="brand">
+      <div class="brand-text">
+        <div class="brand-name">Saiteja Dasari</div>
+        <div class="brand-sub">ROBOTICS ENGINEER · MS ASU · MAY 2026</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav">
+    <button class="nav-btn active" data-section="about" data-num="01">About</button>
+    <button class="nav-btn" data-section="projects" data-num="02">Deployments</button>
+    <button class="nav-btn" data-section="experience" data-num="03">Build Log</button>
+    <button class="nav-btn" data-section="skills" data-num="04">Specs</button>
+    <button class="nav-btn" data-section="contact" data-num="05">Contact</button>
+    <button class="nav-btn" data-section="socials" data-num="06">Socials</button>
+    <button class="nav-btn" data-section="roleModels" data-num="07">Role Models</button>
+  </nav>
+
+  <div id="sections"></div>
+
+  <footer class="bottom-note">
+    <div class="note-shortcut">
+      <span><span class="key">←</span> <span class="key">→</span> navigate</span>
+      <span><span class="key">SPACE</span> pause</span>
+      <span><span class="key">1-6</span> section</span>
+    </div>
+  </footer>
+</div>
+
+<div class="video-modal" id="videoModal" aria-hidden="true">
+  <div class="vm-backdrop" data-close></div>
+  <div class="vm-panel" role="dialog" aria-modal="true" aria-label="Project videos">
+    <button class="vm-close" type="button" data-close aria-label="Close">✕</button>
+    <div class="vm-eyebrow">PROJECT VIDEO</div>
+    <div class="vm-title" id="vmTitle">Project</div>
+    <div class="vm-stage" id="vmStage"></div>
+    <div class="vm-list" id="vmList"></div>
+  </div>
+</div>
+
+<script>
+const data = {
+  about: {
+    coverNum: '01 / ABOUT',
+    coverTitle: 'The <em>engineer</em>',
+    coverDesc: 'Robotics engineer focused on control, autonomy, and the loops that keep hardware upright. Currently finishing an MS at Arizona State University, graduating May 2026.',
+    cards: [
+      {
+        category: '01 · PROFILE',
+        projectName: 'Saiteja Dasari',
+        projectSub: 'ROBOTICS · CONTROLS · AUTONOMY',
+        date: 'TEMPE, ARIZONA',
+        description: 'I build the control loops that keep machines upright when a motor quits. My work spans UAV flight control, multi-robot coordination, manipulation, and perception, always taken from simulation through to real hardware. I care about systems that are measured, validated, and honest about their failure modes.',
+        metric: 'MS · 2026',
+        metricLabel: 'ROBOTICS & AUTONOMOUS SYSTEMS · ASU',
+        tags: ['Controls', 'Autonomy', 'UAV', 'ROS2', 'MATLAB', 'Python'],
+        icon: '◆',
+        hasThumb: false,
+        colors: ['#3a1212', '#7a3b2e', '#d8b06a'],
+        links: [
+          { label: 'Resume ↓', href: 'Saiteja-Dasari-Resume.pdf', primary: true },
+          { label: 'Email', href: 'mailto:totobotplus@gmail.com' }
+        ]
+      },
+      {
+        category: '02 · APPROACH',
+        projectName: 'What I build',
+        projectSub: 'SIM-TO-REAL · CLOSED-LOOP',
+        date: 'FOCUS AREAS',
+        description: 'Fault-tolerant flight control, multi-robot task allocation, vision-guided manipulation, and autonomous landing. Each project starts as a rigid-body or digital-twin simulation, gets a controller designed and tuned against it, then moves onto real hardware, Crazyflie, TurtleBot, Parrot Mambo, myCobot, ROSMaster.',
+        metric: '6 domains',
+        metricLabel: 'CONTROLS · AUTONOMY · PERCEPTION',
+        tags: ['Flight control', 'Estimation', 'Planning', 'Manipulation', 'Perception'],
+        icon: '⟠',
+        hasThumb: false,
+        colors: ['#2e0e0e', '#8a4a34', '#c9a06a'],
+        links: [
+          { label: 'GitHub ↗', href: 'https://github.com/dstejagit09', primary: true }
+        ]
+      },
+      {
+        category: '03 · EDUCATION',
+        projectName: 'MS Robotics & Autonomous Systems',
+        projectSub: 'ARIZONA STATE UNIVERSITY',
+        date: 'GRAD MAY 2026',
+        description: 'Graduate coursework in control systems, robotic manipulation, perception, and autonomous systems, with research and project work across UAVs, ground robots, and manipulators. Prior background in electrical and electronics engineering.',
+        metric: 'MAY 2026',
+        metricLabel: 'MS · ROBOTICS & AUTONOMOUS SYSTEMS',
+        tags: ['Control Systems', 'Manipulation', 'Perception', 'Autonomy'],
+        icon: '◇',
+        hasThumb: false,
+        colors: ['#3a1212', '#6b3b32', '#b98a5a']
+      },
+      {
+        category: '04 · EDUCATION',
+        projectName: 'B.E. Electrical & Electronics Engineering',
+        projectSub: 'CHAITANYA BHARATHI INSTITUTE OF TECHNOLOGY',
+        date: 'CBIT · HYDERABAD',
+        description: 'Bachelor of Engineering in Electrical & Electronics at CBIT, Hyderabad (2020 to 2024). Grounding in power systems, control, and instrumentation that still underpins my controls and robotics work. Published undergraduate research on SCADA-based substation control and operations.',
+        metric: '2024',
+        metricLabel: 'B.E. · ELECTRICAL & ELECTRONICS ENGINEERING',
+        tags: ['Power Systems', 'Control', 'Instrumentation', 'SCADA'],
+        icon: '◈',
+        hasThumb: false,
+        colors: ['#3a1212', '#7a4436', '#caa06a'],
+        links: [
+          { label: 'SCADA Publication ↗', href: 'https://drive.google.com/file/d/1Qwj3ca2g2XpTMZeiqUhrv-E_H1pE_LTh/view', primary: true }
+        ]
+      }
+    ]
+  },
+
+  projects: {
+    coverNum: '02 / DEPLOYMENTS',
+    coverTitle: 'Project <em>archive</em>',
+    coverDesc: 'Six robotics builds shipped between 2024 and 2026. Autonomy, controls, perception, and UAV systems. Each one measured, validated, and open-source where possible.',
+    cards: [
+      {
+        category: '01 · CONTROLS',
+        projectName: 'Fault-Tolerant Quadrotor Control',
+        projectSub: 'CRAZYFLIE 2.1 · SIM-TO-REAL',
+        date: 'JAN 2026 · MAY 2026',
+        description: 'Closed-form 3-motor allocation derived and validated for all 4 single-motor failure cases. Identified motor saturation as the root cause of attitude loss; a thrust clamp reduced max roll from 145° to 7.2° on hardware. MuJoCo rigid-body sim built for gyroscopic coupling, with sim-to-real validation across PID, INDI, and gyroscopic-compensation controllers.',
+        metric: '145° → 7.2°',
+        metricLabel: 'MAX ROLL REDUCTION',
+        tags: ['MuJoCo', 'CrazySim SITL', 'Simulink', 'Python', 'PID', 'INDI', 'FDI', 'Control Allocation'],
+        thumbLabel: 'CF_FLIGHT_01',
+        thumbDuration: '0:42',
+        icon: '↗',
+        colors: ['#4A5D3A', '#7A8A5A', '#B5B98C'],
+        videos: [],
+        links: [
+          { label: '▶ Video', video: true, primary: true },
+          { label: 'Repo ↗', href: 'https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project' }
+        ]
+      },
+      {
+        category: '02 · AUTONOMY',
+        projectName: 'Multi-Robot Task Allocation',
+        projectSub: 'ROS2 · 5 TURTLEBOTS',
+        date: 'DEC 2025',
+        description: 'A from-scratch ROS2 warehouse stack for 5 TurtleBot3 robots: hand-written A* planner, inflation costmap, Hungarian assignment, and PD trajectory control, with only Nav2 map server and AMCL off-the-shelf. Dynamic time-stepped loop re-solves Hungarian as robots free up. Path cache keyed on (start, task) makes each robot drive exactly the scored route.',
+        metric: '99% / 5 bots',
+        metricLabel: 'MISSION SUCCESS · 8 TASKS',
+        tags: ['ROS2', 'A*', 'Hungarian', 'Nav2', 'AMCL', 'Gazebo', 'Python', 'Costmaps'],
+        thumbLabel: 'MULTIROBOT_SIM',
+        thumbDuration: '1:15',
+        icon: '↗',
+        colors: ['#3B4E6B', '#5E7099', '#8FA5C7'],
+        videos: [],
+        links: [
+          { label: '▶ Video', video: true, primary: true },
+          { label: 'Repo ↗', href: 'https://github.com/dstejagit09/Multi-Robot-Task-Allocation-main' }
+        ]
+      },
+      {
+        category: '03 · PERCEPTION',
+        projectName: 'Crop & Weed Detection',
+        projectSub: 'YOLOv8 · ROSMASTER X3',
+        date: 'MAY 2025',
+        description: 'YOLOv8 model trained on 3000 samples, deployed on ROSMaster X3 at 97% accuracy and 12 FPS. Integrated ROS inference and visualization nodes for real-time robotic decision-making in precision agriculture. End-to-end pipeline from dataset labeling to onboard deployment.',
+        metric: '97% @ 12 FPS',
+        metricLabel: 'ACCURACY · ROSMASTER X3',
+        tags: ['YOLOv8', 'PyTorch', 'ROS', 'OpenCV', 'ROSMaster X3'],
+        thumbLabel: 'FIELD_DETECT_01',
+        thumbDuration: '0:38',
+        icon: '↗',
+        colors: ['#5D7248', '#8AA168', '#C4CE94'],
+        videos: [],
+        links: [
+          { label: '▶ Video', video: true, primary: true }
+        ]
+      },
+      {
+        category: '04 · GNC',
+        projectName: 'Autonomous Drone Landing',
+        projectSub: 'PARROT MAMBO · MATLAB',
+        date: 'MAY 2025',
+        description: 'Guidance and control logic built in MATLAB and Simulink as a digital twin and validated across 25+ trials. An onboard downward-camera vision-tracking pipeline estimates the landing platform position relative to the Parrot Mambo, and a closed-loop PID controller lands the drone within 8 cm of a moving platform.',
+        metric: '8 cm CEP',
+        metricLabel: 'LANDING ACCURACY · 25 TRIALS',
+        tags: ['MATLAB', 'Simulink', 'Digital Twin', 'OpenCV', 'PID', 'Parrot Mambo', 'Vision'],
+        thumbLabel: 'LANDING_TRACK',
+        thumbDuration: '0:56',
+        icon: '↗',
+        colors: ['#3D3B60', '#6B5D9A', '#9C8FC9'],
+        videos: [],
+        links: [
+          { label: '▶ Video', video: true, primary: true },
+          { label: 'Repo ↗', href: 'https://github.com/dstejagit09/autonomous_drone_landing' }
+        ]
+      },
+      {
+        category: '05 · MANIPULATION',
+        projectName: 'Maze Solving with myCobot Pro 600',
+        projectSub: '6-DOF ARM · TCP/IP',
+        date: 'DEC 2024',
+        description: 'OpenCV vision pipeline (calibration, thresholding, perspective crop) converts a maze image into a 34×34 occupancy grid with walls dilated for safety margin. From-scratch A* planner (4-connected, Manhattan) finds the path. Inverse kinematics solved with MATLAB RigidBodyTree maps each waypoint to six joint angles, streamed over TCP/IP to a 6-DOF myCobot Pro 600.',
+        metric: '34×34 · 60s',
+        metricLabel: 'GRID · PLAN-TO-EXECUTION',
+        tags: ['OpenCV', 'A*', 'IK', 'MATLAB', 'RigidBodyTree', 'TCP/IP', 'myCobot Pro 600'],
+        thumbLabel: 'MAZE_SOLVE_01',
+        thumbDuration: '1:04',
+        icon: '↗',
+        colors: ['#7A4F3A', '#B0785A', '#D8A87F'],
+        videos: [],
+        links: [
+          { label: '▶ Video', video: true, primary: true },
+          { label: 'Repo ↗', href: 'https://github.com/dstejagit09/Maze-Solving-using-MyCobot600' }
+        ]
+      },
+      {
+        category: '06 · AEROSPACE',
+        projectName: 'SkySpeak AI',
+        projectSub: 'HONEYWELL ANTHEM · ATC',
+        date: 'AUG 2025 · APR 2026',
+        description: 'AI-powered ATC-pilot simulator for Honeywell Aerospace Anthem ecosystem. Real-time voice pipeline at 300 ms latency (LiveKit, Deepgram, ElevenLabs) paired with Python voice analytics: YIN pitch detection, VAD, z-score calibration, and abstention scoring under 0.60. CBTA dashboard surfaces cognitive load and communication competency to instructors across 20+ stakeholder reviews.',
+        metric: '300 ms',
+        metricLabel: 'VOICE PIPELINE LATENCY',
+        tags: ['LLM Agents', 'LiveKit', 'Deepgram', 'ElevenLabs', 'YIN', 'VAD', 'CBTA', 'Python', 'React'],
+        thumbLabel: 'SKYSPEAK_DEMO',
+        thumbDuration: '1:32',
+        icon: '↗',
+        colors: ['#265762', '#4A8A96', '#7EBAC3'],
+        videos: [],
+        links: [
+          { label: '▶ Video', video: true, primary: true },
+          { label: 'Live Demo ↗', href: 'https://honeywell-anthem-pilot-training-sol.vercel.app/' },
+          { label: 'Repo ↗', href: 'https://github.com/dstejagit09/HoneywellAnthem_PilotTraining_Dash' }
+        ]
+      }
+    ]
+  },
+
+  experience: {
+    coverNum: '03 / BUILD LOG',
+    coverTitle: 'Working <em>history</em>',
+    coverDesc: 'Aerospace, industry, teaching, and a co-founded iOS app. Reverse chronological. Every role listed here is complete.',
+    cards: [
+      {
+        category: 'EXTERNSHIP · TECHNICAL LEAD',
+        projectName: 'Research Externship, SkySpeak AI',
+        projectSub: 'HONEYWELL AEROSPACE × ASU',
+        date: 'AUG 2025 · APR 2026',
+        description: 'Directed a 3-engineer team in partnership with Honeywell and ASU stakeholders to deliver an ATC-pilot simulator built on LLM agents, structured guardrails, and a 300 ms LiveKit, Deepgram, and ElevenLabs voice pipeline. Engineered the Python voice analytics stack with YIN pitch detection, voice activity detection, z-score calibration, and abstention scoring under 0.60. Launched a CBTA dashboard used in 20+ stakeholder reviews and seed-grant evaluations.',
+        metric: '3 engineers',
+        metricLabel: 'TEAM · 20+ STAKEHOLDER REVIEWS',
+        tags: ['LLM Agents', 'LiveKit', 'Deepgram', 'ElevenLabs', 'YIN', 'VAD', 'CBTA', 'Python', 'React', 'Leadership'],
+        thumbLabel: 'HONEYWELL_LEAD',
+        thumbDuration: '1:24',
+        icon: '↗',
+        colors: ['#26363F', '#3F5566', '#5F7A8C'],
+        videos: [],
+        links: [
+          { label: '▶ Video', video: true, primary: true },
+          { label: 'Live Demo ↗', href: 'https://honeywell-anthem-pilot-training-sol.vercel.app/' },
+          { label: 'Repo ↗', href: 'https://github.com/dstejagit09/HoneywellAnthem_PilotTraining_Dash' }
+        ]
+      },
+      {
+        category: 'ACADEMIC · TA',
+        projectName: 'Graduate Teaching Assistant',
+        projectSub: 'ARIZONA STATE UNIVERSITY',
+        date: 'JAN 2025 · MAY 2026',
+        description: 'Mentored 90+ students across MATLAB, instrumentation, and controls labs at ASU Fulton Schools of Engineering. Troubleshot code and hardware setups, led review sessions, and reinforced PID and control-system concepts during weekly office hours. Two courses: MATLAB Programming and Instrumentation & Controls Lab.',
+        metric: '90+ students',
+        metricLabel: 'MENTORED · 2 COURSES',
+        tags: ['MATLAB', 'Instrumentation', 'Controls', 'PID', 'Lab Instruction', 'Mentorship'],
+        hasThumb: false,
+        icon: '↗',
+        colors: ['#5A2323', '#8A3A3A', '#B87050'],
+        links: [
+          { label: 'ASU Fulton ↗', href: 'https://engineering.asu.edu/', primary: true }
+        ]
+      },
+      {
+        category: 'INDUSTRY · INTERNSHIP',
+        projectName: 'Production Engineering Intern',
+        projectSub: 'MARUT DRONES × IIIT-HYDERABAD',
+        date: 'AUG 2023 · MAY 2024',
+        description: 'Assembled and verified UAV subsystems including ESCs, flight controllers, GPS, avionics, and propulsion hardware across multirotor platforms, raising production efficiency by 15%. Tuned ArduPilot and Mission Planner PID parameters from flight logs across 3 UAV variants, root-caused stability issues, and increased flight stability by approximately 10%.',
+        metric: '3 variants · +10%',
+        metricLabel: 'UAV FLIGHT STABILITY GAIN',
+        tags: ['ArduPilot', 'Mission Planner', 'PID', 'UAV Assembly', 'Flight Logs', 'Avionics', 'ESC'],
+        hasThumb: false,
+        icon: '↗',
+        colors: ['#7A5A2A', '#B5824A', '#D8AB74'],
+        links: [
+          { label: 'Marut Drones ↗', href: 'https://www.marutdrones.com/', primary: true }
+        ]
+      },
+      {
+        category: 'STARTUP · CO-FOUNDER',
+        projectName: 'Co-Founder, Aatram',
+        projectSub: 'iOS · BEHAVIORAL DESIGN',
+        date: 'FEB 2026 · APR 2026',
+        description: 'Co-founded an emotion-first anti-procrastination app for students and young professionals. Designed an adaptive nudge engine leveraging Apple Intelligence for context-aware notifications. Built a Momentum Board with streak alternatives (Bounce-Back Score, Monthly Chapters, momentum tracking), replacing punitive streak systems with psychologically grounded progress mechanics. Integrated evidence-based focus techniques: implementation intentions, WOOP, affect labeling, and temptation bundling.',
+        metric: 'iOS App',
+        metricLabel: 'JITAI · BEHAVIORAL DESIGN',
+        tags: ['Product Architecture', 'JITAI', 'Behavioral Design', 'Cloudflare Workers', 'Apple Intelligence', 'iOS'],
+        hasThumb: false,
+        icon: '↗',
+        colors: ['#7A3A5A', '#B0587A', '#DA8CA6'],
+        links: [
+          { label: 'Visit aatram.com ↗', href: 'https://www.aatram.com/', primary: true }
+        ]
+      }
+    ]
+  },
+
+  skills: {
+    coverNum: '04 / SPECS',
+    coverTitle: 'Technical <em>spec</em>',
+    coverDesc: 'Day-to-day stack for robotics software, simulation, controls, and analysis. Six categories, everything here has shipped.',
+    cards: [
+      {
+        category: '01 · CODE',
+        projectName: 'Programming & Tools',
+        projectSub: 'PYTHON · C/C++ · MATLAB',
+        date: 'CORE STACK',
+        description: 'Day-to-day stack for robotics software, simulation, and analysis. Python and C/C++ across embedded, ROS2 nodes, and tooling. MATLAB and Simulink for control design and digital twins.',
+        metric: '7',
+        metricLabel: 'CORE LANGUAGES & TOOLS',
+        skills: ['Python', 'C/C++', 'MATLAB/Simulink', 'Bash', 'Linux', 'Git', 'SolidWorks'],
+        featured: ['Python', 'C/C++', 'MATLAB/Simulink'],
+        hasThumb: false,
+        icon: '{}',
+        colors: ['#3D4F5C', '#6D8290', '#A0B4C2']
+      },
+      {
+        category: '02 · ROBOTICS',
+        projectName: 'Robotics & Simulation',
+        projectSub: 'ROS2 · GAZEBO · MUJOCO',
+        date: 'MIDDLEWARE + SIM',
+        description: 'Centralized ROS2 autonomy and Gazebo multi-robot environments. MuJoCo and CrazySim SITL for higher-fidelity quadrotor dynamics, with ArduPilot and Mission Planner on production UAVs.',
+        metric: '10 tools',
+        metricLabel: 'ROBOTICS + SIMULATION',
+        skills: ['ROS1/ROS2', 'Gazebo', 'MuJoCo', 'CrazySim SITL', 'RViz', 'tf2', 'URDF/xacro', 'ArduPilot', 'Mission Planner', 'cflib'],
+        featured: ['ROS1/ROS2', 'Gazebo', 'MuJoCo'],
+        hasThumb: false,
+        icon: '⚙',
+        colors: ['#5F5A2A', '#8F864A', '#C0B57A']
+      },
+      {
+        category: '03 · CONTROLS',
+        projectName: 'Controls, GNC & Test',
+        projectSub: 'FDI · CONTROL ALLOCATION · SITL',
+        date: 'GNC + VALIDATION',
+        description: 'Fault detection and isolation, control allocation, and controller reconfiguration on Crazyflie 2.1. SITL workflows, log replay, and flight-log analysis on hardware.',
+        metric: '145° → 7.2°',
+        metricLabel: 'ROLL REDUCTION VALIDATED',
+        skills: ['PID', 'Closed-Loop Control', 'State Estimation', 'Sensor Fusion', 'FDI', 'Control Allocation', 'Controller Reconfiguration', 'SITL', 'Log Replay', 'Flight-Log Analysis'],
+        featured: ['FDI', 'Control Allocation', 'SITL'],
+        hasThumb: false,
+        icon: '◈',
+        colors: ['#4A5D3A', '#7A9058', '#B0C084']
+      },
+      {
+        category: '04 · PERCEPTION',
+        projectName: 'Autonomy & Perception',
+        projectSub: 'HUNGARIAN · A* · YOLOV8',
+        date: 'PLANNING + VISION',
+        description: 'Hungarian task assignment and A* planning over costmaps for multi-robot fleets. YOLOv8 and OpenCV pipelines for weed detection. Camera-calibrated vision and inverse kinematics for the maze-solver arm task.',
+        metric: '97% @ 12 FPS',
+        metricLabel: 'REAL-TIME DETECTION',
+        skills: ['A*', 'Hungarian Algorithm', 'Path Planning', 'Costmaps', 'Occupancy Grids', 'Collision Avoidance', 'OpenCV', 'YOLOv8', 'Inverse Kinematics'],
+        featured: ['A*', 'Hungarian Algorithm', 'YOLOv8'],
+        hasThumb: false,
+        icon: '⬡',
+        colors: ['#3A4A6B', '#5C749A', '#8FA5C7']
+      },
+      {
+        category: '05 · FLIGHT',
+        projectName: 'Flight Platforms',
+        projectSub: 'CRAZYFLIE · PARROT · P80',
+        date: 'HANDS-ON HARDWARE',
+        description: 'Hands-on with Crazyflie 2.1 (fault-tolerant control), Parrot Mambo (vision-based landing), and P80 heavy-payload multirotor (ArduPilot PID tuning across 3 variants).',
+        metric: '3 platforms',
+        metricLabel: 'FLOWN · TUNED · DEPLOYED',
+        skills: ['Crazyflie 2.1', 'Parrot Mambo', 'P80 Multirotor', 'ArduPilot', 'Mission Planner'],
+        featured: ['Crazyflie 2.1', 'P80 Multirotor'],
+        hasThumb: false,
+        icon: '✈',
+        colors: ['#6A3F26', '#9A6748', '#C89578']
+      },
+      {
+        category: '06 · SIM2REAL',
+        projectName: 'Sim-to-Hardware',
+        projectSub: 'DIGITAL TWIN · SITL',
+        date: 'BRIDGE STACK',
+        description: 'Digital twin in Simulink for autonomous landing. MuJoCo rigid-body sim for gyroscopic coupling on Crazyflie, with CrazySim SITL bridging to firmware-in-the-loop testing.',
+        metric: '24 conditions',
+        metricLabel: 'MUJOCO SIM VALIDATED',
+        skills: ['Digital Twin', 'MuJoCo', 'CrazySim SITL', 'Simulink', 'Gazebo'],
+        featured: ['MuJoCo', 'CrazySim SITL'],
+        hasThumb: false,
+        icon: '⇄',
+        colors: ['#4A4A6B', '#7070A0', '#A0A0CE']
+      }
+    ]
+  },
+
+  contact: {
+    coverNum: '05 / CONTACT',
+    coverTitle: 'Initialize <em>contact</em>',
+    coverDesc: 'Open for full-time robotics, controls, autonomy, UAV, test and validation roles. Fastest reply on email.',
+    cards: [
+      {
+        category: '01 · EMAIL · FASTEST',
+        projectName: 'totobotplus@gmail.com',
+        projectSub: 'DIRECT SIGNAL · <24h REPLY',
+        date: 'EMAIL',
+        description: 'Best channel for role inquiries, referrals, project questions, and anything long-form. I read and reply within 24 hours on weekdays. Attachments and PDFs welcome.',
+        metric: '<24 h',
+        metricLabel: 'AVERAGE RESPONSE TIME',
+        tags: ['Email', 'Direct', 'Priority', 'Long-form'],
+        hasThumb: false,
+        icon: '@',
+        colors: ['#5F3A5A', '#8A5A85', '#B584AF'],
+        links: [
+          { label: 'Send email', href: 'mailto:totobotplus@gmail.com', primary: true }
+        ]
+      },
+      {
+        category: '02 · SCHEDULE · CALL',
+        projectName: 'Book a 30-min call',
+        projectSub: 'CALENDLY · MST · US',
+        date: 'CALENDLY',
+        description: 'For interviews, technical deep-dives, or recruiter chats. Pick any 30-min slot on Calendly. I hold Arizona time (MST, no DST). Video link auto-sent on booking.',
+        metric: '30 min',
+        metricLabel: 'BOOKABLE ON CALENDLY',
+        tags: ['Calendly', 'Video Call', 'MST', 'Interviews'],
+        hasThumb: false,
+        icon: '☏',
+        colors: ['#2A5F5A', '#4A8A85', '#7DB5AE'],
+        links: [
+          { label: 'Book on Calendly ↗', href: 'https://calendly.com/dsaiteja0910/30min', primary: true }
+        ]
+      },
+      {
+        category: '03 · RESUME · CV',
+        projectName: 'Download CV',
+        projectSub: 'PDF · LATEST · RESUME.PDF',
+        date: 'DOCUMENT',
+        description: 'Most recent one-page CV in PDF. Latest projects, publications, certifications, and full experience log. Kept in sync with LinkedIn and the site.',
+        metric: 'v4.0.2',
+        metricLabel: 'RESUME · MAY 2026 UPDATE',
+        tags: ['PDF', 'One-Page', 'CV', 'Latest'],
+        hasThumb: false,
+        icon: '↓',
+        colors: ['#5F5A2A', '#8A854A', '#B5B074'],
+        links: [
+          { label: 'Download CV ↗', href: 'https://www.saitejadasari.com/resume.pdf', primary: true }
+        ]
+      },
+      {
+        category: '04 · LOCATION · STATUS',
+        projectName: 'Tempe, Arizona',
+        projectSub: 'OPEN TO RELOCATE · U.S.',
+        date: 'LOCATION',
+        description: 'Currently in Tempe, AZ on F-1 OPT. Open to relocate anywhere in the United States for the right robotics role. Available immediately. Actively applying for full-time robotics, controls, autonomy, UAV, and test and validation roles.',
+        metric: 'Anywhere',
+        metricLabel: 'OPEN TO RELOCATE · U.S.',
+        tags: ['Tempe AZ', 'F-1 OPT', 'US-Wide', 'Immediate'],
+        hasThumb: false,
+        icon: '◉',
+        colors: ['#6B4A2A', '#9A6E4A', '#C89678'],
+        links: [
+          { label: 'Full contact page ↗', href: 'https://www.saitejadasari.com/#contact', primary: true }
+        ]
+      }
+    ]
+  },
+
+  socials: {
+    coverNum: '06 / SOCIALS',
+    coverTitle: 'Around the <em>web</em>',
+    coverDesc: 'Code lives on GitHub, work history on LinkedIn, and a direct line by email. The fastest ways to follow the build and reach me.',
+    cards: [
+      {
+        category: '01 · CODE',
+        projectName: 'github.com/dstejagit09',
+        projectSub: 'ALL PROJECT REPOS · PUBLIC',
+        date: 'GITHUB',
+        description: 'Every project shown in the deployments tab has a live repo here (Crazyflie fault-tolerance, Multi-Robot Task Allocation, Autonomous Drone Landing, Maze Solving, SkySpeak AI). Plus experiments, forks, and configuration files. Star or watch for updates.',
+        metric: '5+ repos',
+        metricLabel: 'PUBLIC PROJECT REPOSITORIES',
+        tags: ['GitHub', 'Public', 'Repos', 'Open Source'],
+        hasThumb: false,
+        icon: '{ }',
+        colors: ['#2A2A2A', '#4A5D3A', '#7A9060'],
+        links: [
+          { label: 'Open GitHub ↗', href: 'https://github.com/dstejagit09', primary: true }
+        ]
+      },
+      {
+        category: '02 · PROFESSIONAL',
+        projectName: 'linkedin.com/in/sdasar38',
+        projectSub: 'HISTORY · RECS · POSTS',
+        date: 'LINKEDIN',
+        description: 'Full work history, recommendations from Honeywell teammates and ASU faculty, and mutual connections. Occasional writeups on robotics, controls, and UAV. Best channel for warm intros and referrals.',
+        metric: 'in',
+        metricLabel: 'PROFESSIONAL NETWORK',
+        tags: ['LinkedIn', 'Recs', 'History', 'Intros'],
+        hasThumb: false,
+        icon: 'in',
+        colors: ['#2A4A6B', '#4A70A0', '#75A0C7'],
+        links: [
+          { label: 'Open LinkedIn ↗', href: 'https://www.linkedin.com/in/sdasar38/', primary: true }
+        ]
+      },
+      {
+        category: '03 · PORTFOLIO',
+        projectName: 'saitejadasari.com',
+        projectSub: 'PRIMARY PORTFOLIO · V4.0.2',
+        date: 'PORTFOLIO',
+        description: 'Primary portfolio site. Archive, bio, technical specs, build log, deployments, manifest, and contact. Version 4.0.2 stable. This card stack is a prototype for the deployments and build log sections.',
+        metric: 'v4.0.2',
+        metricLabel: 'STABLE · MAY 2026',
+        tags: ['Portfolio', 'Primary', 'Live', 'Archive'],
+        hasThumb: false,
+        icon: '◎',
+        colors: ['#5A4A2A', '#8A754A', '#B5A17A'],
+        links: [
+          { label: 'Open site ↗', href: 'https://www.saitejadasari.com', primary: true }
+        ]
+      }
+    ]
+  },
+  roleModels: {
+    coverNum: '07 / ROLE MODELS',
+    coverTitle: 'Standing on <em>shoulders</em>',
+    coverDesc: 'The engineers, scientists, and builders whose work sets the bar I measure mine against.',
+    cards: [
+      {
+        category: '07 · ROLE MODEL',
+        projectName: 'Role Model 01',
+        projectSub: '',
+        description: '',
+        image: '',
+        icon: '★',
+        hasThumb: false,
+        colors: ['#3a1212', '#7a4436', '#caa06a']
+      },
+      {
+        category: '07 · ROLE MODEL',
+        projectName: 'Role Model 02',
+        projectSub: '',
+        description: '',
+        image: '',
+        icon: '★',
+        hasThumb: false,
+        colors: ['#26363F', '#3F5566', '#5F7A8C']
+      },
+      {
+        category: '07 · ROLE MODEL',
+        projectName: 'Role Model 03',
+        projectSub: '',
+        description: '',
+        image: '',
+        icon: '★',
+        hasThumb: false,
+        colors: ['#4A5D3A', '#7A9058', '#B0C084']
+      },
+      {
+        category: '07 · ROLE MODEL',
+        projectName: 'Role Model 04',
+        projectSub: '',
+        description: '',
+        image: '',
+        icon: '★',
+        hasThumb: false,
+        colors: ['#3D3B60', '#6B5D9A', '#9C8FC9']
+      }
+    ]
+  }
+};
+
+const sectionsRoot = document.getElementById('sections');
+
+function renderCard(card, isSkills = false, isRole = false) {
+  const [c1, c2, c3] = card.colors;
+  const showThumb = card.hasThumb !== false;
+
+  if (isRole) {
+    const photo = card.image
+      ? `<img class="visual-photo" src="${card.image}" alt="${card.projectName || 'Role model'}" loading="lazy">`
+      : '<div class="photo-empty">PORTRAIT</div>';
+    return `
+    <div class="card role-card no-thumb" data-position="hidden">
+      <div class="card-visual role-visual">
+        <div class="blob blob-1" style="background: ${c1};"></div>
+        <div class="blob blob-2" style="background: ${c2};"></div>
+        <div class="blob blob-3" style="background: ${c3};"></div>
+        ${photo}
+        <div class="visual-grain"></div>
+        <div class="visual-overlay"></div>
+        <div class="visual-top">
+          <div class="visual-badge">${card.category}</div>
+          <div class="visual-icon">${card.icon}</div>
+        </div>
+        <div class="visual-title">
+          <div class="project-name">${card.projectName}</div>
+          <div class="project-sub">${card.projectSub}</div>
+        </div>
+      </div>
+      <div class="card-body role-body">
+        <p class="card-description role-note">${card.description || ''}</p>
+      </div>
+    </div>
+    `;
+  }
+
+  const thumbHTML = showThumb ? `
+    <div class="visual-thumb">
+      <div class="thumb-play">▶</div>
+      <div class="thumb-label">
+        <span>${card.thumbLabel}</span>
+        <span>${card.thumbDuration}</span>
+      </div>
+    </div>
+  ` : '';
+
+  let bodyContent = '';
+  if (isSkills) {
+    bodyContent = `
+      <div class="card-date">${card.date}</div>
+      <p class="card-description">${card.description}</p>
+      <div class="skill-category-list">
+        ${card.skills.map(s => `<span class="skill-pill ${card.featured.includes(s) ? 'featured' : ''}">${s}</span>`).join('')}
+      </div>
+    `;
+  } else {
+    bodyContent = `
+      <div class="card-date">${card.date}</div>
+      <p class="card-description">${card.description}</p>
+      <div class="card-tags">
+        ${card.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}
+      </div>
+      ${card.links ? `<div class="card-actions">
+        ${card.links.map(l => l.video
+          ? `<button type="button" class="card-btn ${l.primary ? 'primary' : ''} video-btn" data-videos="${encodeURIComponent(JSON.stringify(card.videos || []))}" data-project="${encodeURIComponent(card.projectName || 'Project')}">${l.label}</button>`
+          : `<a class="card-btn ${l.primary ? 'primary' : ''}" href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`).join('')}
+      </div>` : ''}
+    `;
+  }
+
+  return `
+    <div class="card ${isSkills ? 'skill-card' : ''} ${!showThumb ? 'no-thumb' : ''}" data-position="hidden">
+      <div class="card-visual">
+        <div class="blob blob-1" style="background: ${c1};"></div>
+        <div class="blob blob-2" style="background: ${c2};"></div>
+        <div class="blob blob-3" style="background: ${c3};"></div>
+        <div class="visual-grain"></div>
+        <div class="visual-overlay"></div>
+
+        <div class="visual-top">
+          <div class="visual-badge">${card.category}</div>
+          <div class="visual-icon">${card.icon}</div>
+        </div>
+
+        <div class="visual-title">
+          <div class="project-name">${card.projectName}</div>
+          <div class="project-sub">${card.projectSub}</div>
+        </div>
+
+        ${thumbHTML}
+
+        <div class="visual-metric">
+          <div class="metric-value">${card.metric}</div>
+          <div class="metric-label">${card.metricLabel}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        ${bodyContent}
+      </div>
+    </div>
+  `;
+}
+
+function renderSection(key, sectionData) {
+  const isSkills = key === 'skills';
+  const isRole = key === 'roleModels';
+  const cover = isRole ? '' : `
+        <div class="cover">
+          <div>
+            <div class="cover-num">${sectionData.coverNum}</div>
+            <h1 class="cover-title">${sectionData.coverTitle}</h1>
+            <p class="cover-description">${sectionData.coverDesc}</p>
+          </div>
+          <div>
+            <div class="cover-counter">
+              <span class="counter-current">01</span>
+              <span class="counter-total">/ ${String(sectionData.cards.length).padStart(2, '0')}</span>
+            </div>
+            <div class="cover-progress">
+              <div class="cover-progress-fill" style="width: ${100/sectionData.cards.length}%;"></div>
+            </div>
+          </div>
+        </div>`;
+  return `
+    <section class="section-view" data-section="${key}">
+      <div class="stack-layout${isRole ? ' role-solo' : ''}">
+        ${cover}
+        <div class="deck-container">
+          <div class="deck">
+            ${sectionData.cards.map(c => renderCard(c, isSkills, isRole)).join('')}
+          </div>
+          <div class="deck-controls">
+            <button class="control-btn prev-btn" aria-label="Previous">←</button>
+            <div class="dots">
+              ${sectionData.cards.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join('')}
+            </div>
+            <button class="autoplay-toggle playing" aria-label="Toggle autoplay">
+              <span class="autoplay-dot"></span>
+              <span class="autoplay-label">AUTO</span>
+            </button>
+            <button class="control-btn next-btn" aria-label="Next">→</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+sectionsRoot.innerHTML = Object.entries(data).map(([key, val]) => renderSection(key, val)).join('');
+
+const state = {
+  currentSection: 'about',
+  cardIndices: {},
+  autoplay: {},
+  timers: {}
+};
+Object.keys(data).forEach(k => { state.cardIndices[k] = 0; state.autoplay[k] = true; });
+
+function updateDeck(sectionKey) {
+  const view = document.querySelector(`.section-view[data-section="${sectionKey}"]`);
+  if (!view) return;
+  const cards = view.querySelectorAll('.card');
+  const currentIdx = state.cardIndices[sectionKey];
+  const total = cards.length;
+
+  cards.forEach((card, i) => {
+    let pos = (i - currentIdx + total) % total;
+    card.dataset.position = pos === 0 ? '0' : pos <= 3 ? String(pos) : 'hidden';
+  });
+
+  const counter = view.querySelector('.counter-current');
+  if (counter) counter.textContent = String(currentIdx + 1).padStart(2, '0');
+
+  view.querySelectorAll('.dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentIdx);
+  });
+
+  const progressFill = view.querySelector('.cover-progress-fill');
+  if (progressFill) progressFill.style.width = `${((currentIdx + 1) / total) * 100}%`;
+}
+
+function next(sectionKey) {
+  const total = data[sectionKey].cards.length;
+  state.cardIndices[sectionKey] = (state.cardIndices[sectionKey] + 1) % total;
+  updateDeck(sectionKey);
+}
+
+function prev(sectionKey) {
+  const total = data[sectionKey].cards.length;
+  state.cardIndices[sectionKey] = (state.cardIndices[sectionKey] - 1 + total) % total;
+  updateDeck(sectionKey);
+}
+
+function goTo(sectionKey, index) {
+  state.cardIndices[sectionKey] = index;
+  updateDeck(sectionKey);
+}
+
+function startAutoplay(sectionKey) {
+  clearInterval(state.timers[sectionKey]);
+  if (!state.autoplay[sectionKey]) return;
+  state.timers[sectionKey] = setInterval(() => next(sectionKey), 4500);
+}
+
+function stopAutoplay(sectionKey) {
+  clearInterval(state.timers[sectionKey]);
+}
+
+function toggleAutoplay(sectionKey) {
+  state.autoplay[sectionKey] = !state.autoplay[sectionKey];
+  const view = document.querySelector(`.section-view[data-section="${sectionKey}"]`);
+  const toggle = view.querySelector('.autoplay-toggle');
+  toggle.classList.toggle('playing', state.autoplay[sectionKey]);
+  toggle.querySelector('.autoplay-label').textContent = state.autoplay[sectionKey] ? 'AUTO' : 'PAUSED';
+  if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+  else stopAutoplay(sectionKey);
+}
+
+function switchSection(sectionKey) {
+  Object.keys(state.timers).forEach(k => clearInterval(state.timers[k]));
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.section === sectionKey);
+  });
+  document.querySelectorAll('.section-view').forEach(view => {
+    view.classList.toggle('active', view.dataset.section === sectionKey);
+  });
+  state.currentSection = sectionKey;
+  updateDeck(sectionKey);
+  if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchSection(btn.dataset.section));
+});
+
+document.querySelectorAll('.section-view').forEach(view => {
+  const sectionKey = view.dataset.section;
+
+  view.querySelector('.next-btn').addEventListener('click', () => {
+    next(sectionKey);
+    if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+  });
+
+  view.querySelector('.prev-btn').addEventListener('click', () => {
+    prev(sectionKey);
+    if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+  });
+
+  view.querySelector('.autoplay-toggle').addEventListener('click', () => toggleAutoplay(sectionKey));
+
+  view.querySelectorAll('.dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      goTo(sectionKey, parseInt(dot.dataset.index));
+      if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+    });
+  });
+
+  view.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.card-btn') || e.target.closest('.visual-thumb')) return;
+      if (card.dataset.position !== '0') {
+        next(sectionKey);
+        if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+      }
+    });
+  });
+
+  const deck = view.querySelector('.deck');
+  deck.addEventListener('mouseenter', () => stopAutoplay(sectionKey));
+  deck.addEventListener('mouseleave', () => {
+    if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+  });
+});
+
+document.addEventListener('keydown', (e) => {
+  const vmEl = document.getElementById('videoModal');
+  if (vmEl && vmEl.classList.contains('open')) return;
+  const key = e.key;
+  const section = state.currentSection;
+  if (key === 'ArrowRight') { next(section); if (state.autoplay[section]) startAutoplay(section); }
+  else if (key === 'ArrowLeft') { prev(section); if (state.autoplay[section]) startAutoplay(section); }
+  else if (key === ' ') { e.preventDefault(); toggleAutoplay(section); }
+  else if (['1', '2', '3', '4', '5', '6', '7'].includes(key)) {
+    const sections = Object.keys(data);
+    if (sections[parseInt(key) - 1]) switchSection(sections[parseInt(key) - 1]);
+  }
+});
+
+document.querySelector('.section-view[data-section="about"]').classList.add('active');
+updateDeck('about');
+startAutoplay('about');
+
+document.querySelectorAll('.deck').forEach(deck => {
+  let startX = null;
+  const sectionKey = deck.closest('.section-view').dataset.section;
+  deck.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; stopAutoplay(sectionKey); });
+  deck.addEventListener('touchend', (e) => {
+    if (startX === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    if (Math.abs(diff) > 40) { if (diff > 0) next(sectionKey); else prev(sectionKey); }
+    startX = null;
+    if (state.autoplay[sectionKey]) startAutoplay(sectionKey);
+  });
+});
+
+/* ===== project video modal ===== */
+(function(){
+  var modal = document.getElementById('videoModal');
+  if(!modal) return;
+  var stage = document.getElementById('vmStage');
+  var list = document.getElementById('vmList');
+  var titleEl = document.getElementById('vmTitle');
+  var current = [];
+
+  function toEmbed(u){
+    try {
+      if(u.indexOf('youtu') !== -1){
+        var id = '';
+        if(u.indexOf('youtu.be/') !== -1) id = u.split('youtu.be/')[1];
+        else if(u.indexOf('v=') !== -1) id = u.split('v=')[1];
+        else if(u.indexOf('embed/') !== -1) id = u.split('embed/')[1];
+        else if(u.indexOf('shorts/') !== -1) id = u.split('shorts/')[1];
+        if(id){ id = id.split('?')[0].split('&')[0].split('#')[0].split('/')[0]; return 'https://www.youtube.com/embed/' + id; }
+      }
+      if(u.indexOf('vimeo.com/') !== -1){
+        var vid = u.split('vimeo.com/')[1];
+        if(vid){ vid = vid.split('?')[0].split('&')[0].split('#')[0].split('/')[0]; return 'https://player.vimeo.com/video/' + vid; }
+      }
+    } catch(_){}
+    return u;
+  }
+  function isFile(u){ u = String(u).toLowerCase().split('?')[0].split('#')[0]; return u.endsWith('.mp4') || u.endsWith('.webm') || u.endsWith('.ogg') || u.endsWith('.mov'); }
+  function emptyHtml(){
+    return '<div class="vm-empty"><div class="vm-ico">▶</div><div class="vm-note">No video connected yet. Videos for this project will be added from saitejadasari.com.</div></div>';
+  }
+  function playIdx(idx){
+    var v = current[idx];
+    Array.prototype.forEach.call(list.children, function(c,i){ c.classList.toggle('active', i===idx); });
+    if(!v || !v.url){ stage.innerHTML = emptyHtml(); return; }
+    if(isFile(v.url)) stage.innerHTML = '<video controls autoplay playsinline src="' + v.url + '"></video>';
+    else stage.innerHTML = '<iframe src="' + toEmbed(v.url) + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+  }
+  function openVM(project, videos){
+    current = Array.isArray(videos) ? videos : [];
+    titleEl.textContent = project || 'Project';
+    list.innerHTML = '';
+    if(current.length){
+      current.forEach(function(v,i){
+        var chip = document.createElement('button');
+        chip.type = 'button'; chip.className = 'vm-chip';
+        chip.textContent = (v && v.title) ? v.title : ('Video ' + (i+1));
+        chip.addEventListener('click', function(){ playIdx(i); });
+        list.appendChild(chip);
+      });
+      playIdx(0);
+    } else {
+      stage.innerHTML = emptyHtml();
+    }
+    modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVM(){
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+    stage.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+  modal.addEventListener('click', function(e){ if(e.target.closest('[data-close]')) closeVM(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal.classList.contains('open')) closeVM(); });
+  document.addEventListener('click', function(e){
+    var vb = e.target.closest('.video-btn');
+    if(!vb) return;
+    e.preventDefault();
+    var cardEl = vb.closest('.card');
+    if(cardEl && cardEl.getAttribute('data-position') !== '0') return;
+    var vids = [];
+    try { vids = JSON.parse(decodeURIComponent(vb.getAttribute('data-videos') || '')); } catch(_){}
+    var proj = 'Project';
+    try { proj = decodeURIComponent(vb.getAttribute('data-project') || 'Project'); } catch(_){}
+    openVM(proj, vids);
+  });
+})();
+</script>
+
+</body>
+</html>
