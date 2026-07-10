@@ -470,9 +470,12 @@ html, body {
 .role-visual .visual-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, transparent 30%, transparent 44%, rgba(15, 6, 6, 0.88) 100%); z-index: 2; }
 .role-visual .visual-top, .role-visual .visual-title { z-index: 3; }
 .photo-empty { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; color: rgba(255, 255, 255, 0.4); }
-.role-body { display: flex; flex-direction: column; justify-content: flex-start; }
+.card.role-card .card-visual { height: 66%; }   /* larger portrait so each image fills the card uniformly */
+.role-body { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .role-note { color: var(--text-secondary); line-height: 1.6; }
 .role-note:empty::before { content: 'A line about them and their character goes here.'; color: var(--text-muted); opacity: 0.5; }
+.role-words { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.role-word { font-family: var(--font-heading); font-weight: 600; font-size: clamp(16px, 4.4vw, 21px); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); line-height: 1.1; }
 
 .visual-top {
   display: flex;
@@ -1087,7 +1090,11 @@ const data = {
         thumbDuration: '0:42',
         icon: '↗',
         colors: ['#4A5D3A', '#7A8A5A', '#B5B98C'],
-        videos: [],
+        videos: [
+          { title: 'Sim-to-Real Demo', url: 'uploads/videos/crazyflie.mp4' },
+          { title: 'Hardware Flight', url: 'uploads/videos/crazyfliehs.mp4' },
+          { title: 'Hardware — Clip', url: 'uploads/videos/crazyflieh.mp4' }
+        ],
         links: [
           { label: '▶ Video', video: true, primary: true },
           { label: 'Repo ↗', href: 'https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project' }
@@ -1106,7 +1113,9 @@ const data = {
         thumbDuration: '1:15',
         icon: '↗',
         colors: ['#3B4E6B', '#5E7099', '#8FA5C7'],
-        videos: [],
+        videos: [
+          { title: 'Warehouse Simulation', url: 'uploads/videos/multirobottask.mp4' }
+        ],
         links: [
           { label: '▶ Video', video: true, primary: true },
           { label: 'Repo ↗', href: 'https://github.com/dstejagit09/Multi-Robot-Task-Allocation-main' }
@@ -1125,7 +1134,10 @@ const data = {
         thumbDuration: '0:38',
         icon: '↗',
         colors: ['#5D7248', '#8AA168', '#C4CE94'],
-        videos: [],
+        videos: [
+          { title: 'Field Detection', url: 'uploads/videos/cropweeddetection.mp4' },
+          { title: 'Detection — Run 2', url: 'uploads/videos/cropweeddetection1.mp4' }
+        ],
         links: [
           { label: '▶ Video', video: true, primary: true }
         ]
@@ -1143,7 +1155,9 @@ const data = {
         thumbDuration: '0:56',
         icon: '↗',
         colors: ['#3D3B60', '#6B5D9A', '#9C8FC9'],
-        videos: [],
+        videos: [
+          { title: 'Landing Demo', url: 'uploads/videos/autonomousdronelanding.mp4' }
+        ],
         links: [
           { label: '▶ Video', video: true, primary: true },
           { label: 'Repo ↗', href: 'https://github.com/dstejagit09/autonomous_drone_landing' }
@@ -1162,7 +1176,9 @@ const data = {
         thumbDuration: '1:04',
         icon: '↗',
         colors: ['#7A4F3A', '#B0785A', '#D8A87F'],
-        videos: [],
+        videos: [
+          { title: 'Maze Solve', url: 'uploads/videos/mazesolving.mp4' }
+        ],
         links: [
           { label: '▶ Video', video: true, primary: true },
           { label: 'Repo ↗', href: 'https://github.com/dstejagit09/Maze-Solving-using-MyCobot600' }
@@ -1181,7 +1197,13 @@ const data = {
         thumbDuration: '1:32',
         icon: '↗',
         colors: ['#265762', '#4A8A96', '#7EBAC3'],
-        videos: [],
+        videos: [
+          { title: 'Overview', url: 'uploads/videos/skyspeakai.mp4' },
+          { title: 'Adaptive AI', url: 'uploads/videos/adaptiveai.mp4' },
+          { title: 'Pilot Predict', url: 'uploads/videos/pilotpredict.mp4' },
+          { title: 'Scenario Builder', url: 'uploads/videos/scenariobuilder.mp4' },
+          { title: 'Layout Customisation', url: 'uploads/videos/layoutcustomisation.mp4' }
+        ],
         links: [
           { label: '▶ Video', video: true, primary: true },
           { label: 'Live Demo ↗', href: 'https://honeywell-anthem-pilot-training-sol.vercel.app/' },
@@ -1209,7 +1231,13 @@ const data = {
         thumbDuration: '1:24',
         icon: '↗',
         colors: ['#26363F', '#3F5566', '#5F7A8C'],
-        videos: [],
+        videos: [
+          { title: 'Overview', url: 'uploads/videos/skyspeakai.mp4' },
+          { title: 'Adaptive AI', url: 'uploads/videos/adaptiveai.mp4' },
+          { title: 'Pilot Predict', url: 'uploads/videos/pilotpredict.mp4' },
+          { title: 'Scenario Builder', url: 'uploads/videos/scenariobuilder.mp4' },
+          { title: 'Layout Customisation', url: 'uploads/videos/layoutcustomisation.mp4' }
+        ],
         links: [
           { label: '▶ Video', video: true, primary: true },
           { label: 'Live Demo ↗', href: 'https://honeywell-anthem-pilot-training-sol.vercel.app/' },
@@ -1493,43 +1521,43 @@ const data = {
     cards: [
       {
         category: '07 · ROLE MODEL',
-        projectName: 'Role Model 01',
-        projectSub: '',
-        description: '',
-        image: '',
+        projectName: 'Max Verstappen',
+        projectSub: 'FORMULA 1 · RED BULL RACING',
+        image: 'uploads/rolemodels/max.jpg',
+        words: ['Implacable', 'Preternatural'],
         icon: '★',
         hasThumb: false,
-        colors: ['#3a1212', '#7a4436', '#caa06a']
+        colors: ['#1a2744', '#31507f', '#5a7fb0']
       },
       {
         category: '07 · ROLE MODEL',
-        projectName: 'Role Model 02',
-        projectSub: '',
-        description: '',
-        image: '',
+        projectName: 'Rohit Sharma',
+        projectSub: 'CRICKET · INDIA',
+        image: 'uploads/rolemodels/rohit.jpg',
+        words: ['Imperturbable', 'Forbearing'],
         icon: '★',
         hasThumb: false,
-        colors: ['#26363F', '#3F5566', '#5F7A8C']
+        colors: ['#1b3a6b', '#2f63a6', '#5b8fd0']
       },
       {
         category: '07 · ROLE MODEL',
-        projectName: 'Role Model 03',
-        projectSub: '',
-        description: '',
-        image: '',
+        projectName: 'Erling Haaland',
+        projectSub: 'FOOTBALL · MANCHESTER CITY',
+        image: 'uploads/rolemodels/haaland.jpg',
+        words: ['Inexorable', 'Parsimonious'],
         icon: '★',
         hasThumb: false,
-        colors: ['#4A5D3A', '#7A9058', '#B0C084']
+        colors: ['#3a5e86', '#6f97c0', '#a9c7e6']
       },
       {
         category: '07 · ROLE MODEL',
-        projectName: 'Role Model 04',
-        projectSub: '',
-        description: '',
-        image: '',
+        projectName: 'Brett Adcock',
+        projectSub: 'ROBOTICS · FIGURE',
+        image: 'uploads/rolemodels/brett.jpg',
+        words: ['Autodidactic', 'Protean'],
         icon: '★',
         hasThumb: false,
-        colors: ['#3D3B60', '#6B5D9A', '#9C8FC9']
+        colors: ['#2e2a52', '#514a86', '#8079b8']
       }
     ]
   }
@@ -1564,14 +1592,16 @@ function renderCard(card, isSkills = false, isRole = false) {
         </div>
       </div>
       <div class="card-body role-body">
-        <p class="card-description role-note">${card.description || ''}</p>
+        ${(card.words && card.words.length)
+          ? `<div class="role-words">${card.words.map(w => `<span class="role-word">&ldquo;${w}&rdquo;</span>`).join('')}</div>`
+          : `<p class="card-description role-note">${card.description || ''}</p>`}
       </div>
     </div>
     `;
   }
 
   const thumbHTML = showThumb ? `
-    <div class="visual-thumb">
+    <div class="visual-thumb video-btn" role="button" tabindex="0" aria-label="Play ${card.projectName || 'project'} video" data-videos="${encodeURIComponent(JSON.stringify(card.videos || []))}" data-project="${encodeURIComponent(card.projectName || 'Project')}">
       <div class="thumb-play">▶</div>
       <div class="thumb-label">
         <span>${card.thumbLabel}</span>
@@ -1880,17 +1910,21 @@ document.querySelectorAll('.deck').forEach(deck => {
   function openVM(project, videos){
     current = Array.isArray(videos) ? videos : [];
     titleEl.textContent = project || 'Project';
+    var eyebrow = modal.querySelector('.vm-eyebrow');
+    if(eyebrow) eyebrow.textContent = current.length > 1 ? (current.length + ' CLIPS · SELECT TO PLAY') : 'PROJECT VIDEO';
     list.innerHTML = '';
     if(current.length){
       current.forEach(function(v,i){
         var chip = document.createElement('button');
         chip.type = 'button'; chip.className = 'vm-chip';
-        chip.textContent = (v && v.title) ? v.title : ('Video ' + (i+1));
+        chip.textContent = '▶ ' + ((v && v.title) ? v.title : ('Clip ' + (i+1)));
         chip.addEventListener('click', function(){ playIdx(i); });
         list.appendChild(chip);
       });
+      list.style.display = current.length > 1 ? 'flex' : 'none'; // only show the chooser when there's a choice
       playIdx(0);
     } else {
+      list.style.display = 'none';
       stage.innerHTML = emptyHtml();
     }
     modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
