@@ -4,6 +4,9 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
 <title>Robotics Warehouse Simulation · Portfolio</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
 <template id="__bundler_thumbnail">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 <rect width="100" height="100" fill="#c9cdd3"/>
@@ -578,9 +581,11 @@ function __boot(){
   const THREE = window.THREE;
   const canvas = document.getElementById('scene');
   let renderer;
-  try{ renderer = new THREE.WebGLRenderer({ canvas, antialias:true, preserveDrawingBuffer:true }); }
+  const IS_MOBILE = (window.matchMedia && matchMedia('(pointer:coarse)').matches) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || Math.min(innerWidth,innerHeight) < 820;
+  try{ renderer = new THREE.WebGLRenderer({ canvas, antialias:!IS_MOBILE, preserveDrawingBuffer:!IS_MOBILE, powerPreference:'high-performance' }); }
   catch(e){ document.getElementById('err').style.display='grid'; return; }
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, IS_MOBILE ? 1.4 : 2));
+  canvas.addEventListener('webglcontextlost', function(ev){ ev.preventDefault(); }, false);
   if(THREE.ColorManagement) THREE.ColorManagement.enabled=true;
   renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=0.58;
   if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace; else if('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
@@ -641,7 +646,7 @@ function __boot(){
   const shadowify=(g)=>{ g.traverse(o=>{ if(o.isMesh){ o.castShadow=true; o.receiveShadow=true; } }); return g; };
   const lerp=(a,b,t)=>a+(b-a)*t, sstep=(e0,e1,x)=>{ const t=Math.max(0,Math.min(1,(x-e0)/(e1-e0))); return t*t*(3-2*t); };
   function ik2(D,H,L1,L2){ let r=Math.sqrt(D*D+H*H); const mx=L1+L2-0.002, mn=Math.abs(L1-L2)+0.002; r=Math.max(mn,Math.min(mx,r)); let cE=(r*r-L1*L1-L2*L2)/(2*L1*L2); cE=Math.max(-1,Math.min(1,cE)); const beta=Math.acos(cE); const phi=Math.atan2(D,H); const a=phi-Math.atan2(L2*Math.sin(beta),L1+L2*Math.cos(beta)); return {shP:a, elP:beta}; }
-  renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=IS_MOBILE?THREE.BasicShadowMap:THREE.PCFSoftShadowMap;
   let envMap=null;
   (function(){ const pm=new THREE.PMREMGenerator(renderer);
     const ec=document.createElement('canvas'); ec.width=512; ec.height=256; const ex=ec.getContext('2d');
@@ -655,7 +660,7 @@ function __boot(){
   const hemi=new THREE.HemisphereLight(0xeef3f8, 0x9aa0a8, 0.22); scene.add(hemi);
   const amb=new THREE.AmbientLight(0xffffff, 0.03); scene.add(amb);
   const key = new THREE.DirectionalLight(0xfff6ea, 1.05); key.position.set(14,26,10);
-  key.castShadow=true; key.shadow.mapSize.set(2048,2048);
+  key.castShadow=true; key.shadow.mapSize.set(IS_MOBILE?1024:2048, IS_MOBILE?1024:2048);
   key.shadow.camera.near=1; key.shadow.camera.far=90; key.shadow.camera.left=-34; key.shadow.camera.right=34; key.shadow.camera.top=34; key.shadow.camera.bottom=-34;
   key.shadow.bias=-0.0004; key.shadow.normalBias=0.02; key.shadow.camera.updateProjectionMatrix(); scene.add(key);
   const fill = new THREE.DirectionalLight(0xdfeaff, 0.26); fill.position.set(-16,18,-12); scene.add(fill);
@@ -1234,27 +1239,27 @@ function __boot(){
       projects:[
         {name:'Maze Solving with myCobot Pro 600', sub:'6-DOF arm · TCP/IP',
          desc:'OpenCV turns a maze image into a 34×34 occupancy grid, an A* planner finds the path, and MATLAB inverse kinematics streams six joint angles over TCP/IP to a 6-DOF myCobot Pro 600.',
-         links:[{label:'Details',href:'https://www.saitejadasari.com/projects/05-maze-solver',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Maze-Solving-using-MyCobot600'}]}
+         links:[{label:'Details',href:'portfolio.html?p=maze',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Maze-Solving-using-MyCobot600'}]}
       ]},
     {key:'Aerial', sub:'Drone flight cell', accent:0x9a7bff, icon:'atom', pos:bayPos.C, zone:{x0:4,z0:4,x1:20,z1:20},
       body:'Autonomous quadrotors, fault-tolerant flight control, vision, and sim-to-real validation.', chips:['Flight control','Vision','SITL','Fault tolerance'],
       projects:[
         {name:'Fault-Tolerant Quadrotor Control', sub:'Crazyflie 2.1 · Sim-to-Real',
          desc:'Closed-form 3-motor allocation for all four single-motor failure cases; a thrust clamp cut max roll from 145° to 7.2° on hardware, validated in MuJoCo and sim-to-real across PID, INDI, and gyroscopic-compensation controllers.',
-         links:[{label:'Details',href:'https://www.saitejadasari.com/projects/01-fault-tolerant-crazyflie',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project'}]},
+         links:[{label:'Details',href:'portfolio.html?p=fault-tolerant',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project'}]},
         {name:'Autonomous Drone Landing', sub:'Parrot Mambo · MATLAB',
          desc:'MATLAB/Simulink digital twin with an onboard downward-camera tracking pipeline and closed-loop PID; lands the Parrot Mambo within 8 cm of a moving platform, validated across 25+ trials.',
-         links:[{label:'Details',href:'https://www.saitejadasari.com/projects/04-autonomous-drone-landing',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/autonomous_drone_landing'}]}
+         links:[{label:'Details',href:'portfolio.html?p=drone-landing',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/autonomous_drone_landing'}]}
       ]},
     {key:'Ground Vehicles', sub:'UGV test track', accent:0x46c66d, icon:'bars', pos:bayPos.D, zone:{x0:-20,z0:4,x1:-4,z1:20},
       body:'Ground robots, multi-robot planning, navigation, and onboard perception.', chips:['ROS2','Planning','Nav','Perception'],
       projects:[
         {name:'Multi-Robot Task Allocation', sub:'ROS2 · 5 TurtleBots',
          desc:'From-scratch ROS2 warehouse stack for 5 TurtleBot3s: A* planner, inflation costmap, Hungarian assignment, and PD control, re-solving assignments dynamically as robots free up.',
-         links:[{label:'Details',href:'https://www.saitejadasari.com/projects/02-multi-robot-task-allocation',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Multi-Robot-Task-Allocation-main'}]},
+         links:[{label:'Details',href:'portfolio.html?p=multi-robot',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Multi-Robot-Task-Allocation-main'}]},
         {name:'Crop & Weed Detection', sub:'YOLOv8 · ROSMaster X3',
          desc:'YOLOv8 trained on 3,000 samples and deployed on a ROSMaster X3 at 97% accuracy and 12 FPS, with ROS inference and visualization nodes for real-time precision-agriculture decisions.',
-         links:[{label:'Details',href:'https://www.saitejadasari.com/projects/03-crop-weed-detection',primary:true}]}
+         links:[{label:'Details',href:'portfolio.html?p=crop-weed',primary:true}]}
       ]},
     {key:'Contact', dual:['PORTFOLIO','RESUME','CONTACT'], sub:'Portfolio, resume & contact', accent:0x37d6d0, icon:'wave', pos:new THREE.Vector3(0,0,-16),
       body:'Open to full-time robotics, controls, autonomy, and UAV roles, fastest reply by email. One-page CV ready to download.', chips:['email','LinkedIn','GitHub','PDF · 1 page'],
