@@ -1,6 +1,17 @@
 {
-  "cleanUrls": false,
+  "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/projects/:slug", "destination": "/index.html" },
+    { "source": "/build-log/:slug", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/projects", "destination": "/index.html" },
+    { "source": "/build-log", "destination": "/index.html" },
+    { "source": "/skills", "destination": "/index.html" },
+    { "source": "/contact", "destination": "/index.html" },
+    { "source": "/socials", "destination": "/index.html" },
+    { "source": "/role-models", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/uploads/(.*)",

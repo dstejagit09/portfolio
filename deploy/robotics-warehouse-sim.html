@@ -1241,32 +1241,32 @@ function __boot(){
       projects:[
         {name:'Maze Solving with myCobot Pro 600', sub:'6-DOF arm · TCP/IP',
          desc:'OpenCV turns a maze image into a 34×34 occupancy grid, an A* planner finds the path, and MATLAB inverse kinematics streams six joint angles over TCP/IP to a 6-DOF myCobot Pro 600.',
-         links:[{label:'Details',href:'index.html?p=maze',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Maze-Solving-using-MyCobot600'}]}
+         links:[{label:'Details',href:'/projects/maze',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Maze-Solving-using-MyCobot600'}]}
       ]},
     {key:'Aerial', sub:'Drone flight cell', accent:0x9a7bff, icon:'atom', pos:bayPos.C, zone:{x0:4,z0:4,x1:20,z1:20},
       body:'Autonomous quadrotors, fault-tolerant flight control, vision, and sim-to-real validation.', chips:['Flight control','Vision','SITL','Fault tolerance'],
       projects:[
         {name:'Fault-Tolerant Quadrotor Control', sub:'Crazyflie 2.1 · Sim-to-Real',
          desc:'Closed-form 3-motor allocation for all four single-motor failure cases; a thrust clamp cut max roll from 145° to 7.2° on hardware, validated in MuJoCo and sim-to-real across PID, INDI, and gyroscopic-compensation controllers.',
-         links:[{label:'Details',href:'index.html?p=fault-tolerant',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project'}]},
+         links:[{label:'Details',href:'/projects/fault-tolerant',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/CrazyFlie_Fault_Tolerant_Project'}]},
         {name:'Autonomous Drone Landing', sub:'Parrot Mambo · MATLAB',
          desc:'MATLAB/Simulink digital twin with an onboard downward-camera tracking pipeline and closed-loop PID; lands the Parrot Mambo within 8 cm of a moving platform, validated across 25+ trials.',
-         links:[{label:'Details',href:'index.html?p=drone-landing',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/autonomous_drone_landing'}]}
+         links:[{label:'Details',href:'/projects/drone-landing',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/autonomous_drone_landing'}]}
       ]},
     {key:'Ground Vehicles', sub:'UGV test track', accent:0x46c66d, icon:'bars', pos:bayPos.D, zone:{x0:-20,z0:4,x1:-4,z1:20},
       body:'Ground robots, multi-robot planning, navigation, and onboard perception.', chips:['ROS2','Planning','Nav','Perception'],
       projects:[
         {name:'Multi-Robot Task Allocation', sub:'ROS2 · 5 TurtleBots',
          desc:'From-scratch ROS2 warehouse stack for 5 TurtleBot3s: A* planner, inflation costmap, Hungarian assignment, and PD control, re-solving assignments dynamically as robots free up.',
-         links:[{label:'Details',href:'index.html?p=multi-robot',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Multi-Robot-Task-Allocation-main'}]},
+         links:[{label:'Details',href:'/projects/multi-robot',primary:true},{label:'Repo ↗',href:'https://github.com/dstejagit09/Multi-Robot-Task-Allocation-main'}]},
         {name:'Crop & Weed Detection', sub:'YOLOv8 · ROSMaster X3',
          desc:'YOLOv8 trained on 3,000 samples and deployed on a ROSMaster X3 at 97% accuracy and 12 FPS, with ROS inference and visualization nodes for real-time precision-agriculture decisions.',
-         links:[{label:'Details',href:'index.html?p=crop-weed',primary:true}]}
+         links:[{label:'Details',href:'/projects/crop-weed',primary:true}]}
       ]},
     {key:'Contact', dual:['PORTFOLIO','RESUME','CONTACT'], sub:'Portfolio, resume & contact', accent:0x37d6d0, icon:'wave', pos:new THREE.Vector3(0,0,-16),
       body:'Open to full-time robotics, controls, autonomy, and UAV roles, fastest reply by email. One-page CV ready to download.', chips:['email','LinkedIn','GitHub','PDF · 1 page'],
       projects:[
-        {name:'Portfolio', sub:'Interactive card-stack site', desc:'Projects, build log, technical specs, and contact, presented as an interactive card deck.', links:[{label:'Open portfolio ↗',href:'index.html',primary:true}]},
+        {name:'Portfolio', sub:'Interactive card-stack site', desc:'Projects, build log, technical specs, and contact, presented as an interactive card deck.', links:[{label:'Open portfolio ↗',href:'/',primary:true}]},
         {name:'totobotplus@gmail.com', sub:'Email · reply within 24h',
          desc:'Fastest channel for role inquiries, referrals, and anything long-form.',
          links:[{label:'Send email',href:'mailto:totobotplus@gmail.com',primary:true}]},
@@ -1422,7 +1422,7 @@ function __boot(){
   const intro=document.getElementById('whintro');
   function enterWarehouse(){ if(intro) intro.classList.add('hide'); try{ document.getElementById('scene').focus(); }catch(e){} }
   document.addEventListener('warehouse:enter', enterWarehouse);
-  document.addEventListener('warehouse:skip', ()=>{ location.href='index.html'; });
+  document.addEventListener('warehouse:skip', ()=>{ location.href='/'; });
   document.addEventListener('warehouse:jump', e=>{ const n=e.detail&&e.detail.bay; enterWarehouse(); if(n>=1&&n<=4) teleportTo(SECTIONS[n-1]); });
   document.addEventListener('warehouse:lights', e=>{ const on=!!(e.detail&&e.detail.on); setSpotMode(on); const lb=document.getElementById('simtog'); if(lb) lb.classList.toggle('on',on); });
   const panel=document.getElementById('panel');
@@ -1448,7 +1448,7 @@ function __boot(){
   panel.addEventListener('click',e=>{ if(e.target===panel) closeStation(); });
   const lightBtn=document.getElementById('simtog');
   lightBtn.onclick=()=>{ setSpotMode(!spotMode); lightBtn.classList.toggle('on',spotMode); };
-  const skipTog=document.getElementById('skiptog'); if(skipTog) skipTog.onclick=()=>{ location.href='index.html'; };
+  const skipTog=document.getElementById('skiptog'); if(skipTog) skipTog.onclick=()=>{ location.href='/'; };
   const TOUCH=document.body.classList.contains('touch');
   const openBtn=document.getElementById('openbtn'); let lastOpenName='';
   if(openBtn) openBtn.addEventListener('click',(e)=>{ e.preventDefault(); if(active) openStation(active); });
@@ -1516,7 +1516,7 @@ function __boot(){
       const ang=(-90+idx*(360/N))*Math.PI/180, cx=C+Math.cos(ang)*R, cy=C+Math.sin(ang)*R;
       it.style.left=(cx-85)+'px'; it.style.top=(cy-29)+'px';
       const num=(!qi.portfolio&&qi.si<4)?(qi.si+1):''; it.innerHTML='<i style="background:#fdfad8"></i><span style="flex:1">'+(qi.label||sec.key)+'</span>'+(num?'<span class="qk">'+num+'</span>':'');
-      it.onclick=qi.portfolio?(()=>{ location.href='index.html'; }):(()=>teleportTo(sec)); qwrap.appendChild(it); });
+      it.onclick=qi.portfolio?(()=>{ location.href='/'; }):(()=>teleportTo(sec)); qwrap.appendChild(it); });
     const hub=document.createElement('div'); hub.className='qhub'; hub.innerHTML='JUMP<br>TO'; qwrap.appendChild(hub);
     qmenu.appendChild(qwrap); })();
 

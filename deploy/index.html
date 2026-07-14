@@ -1005,7 +1005,7 @@ html, body {
 
 <div class="ambient-bg"></div>
 
-<a class="warehouse-btn" href="robotics-warehouse-sim.html" aria-label="Enter the 3D robotics warehouse walkthrough">
+<a class="warehouse-btn" href="robotics-warehouse-sim" aria-label="Enter the 3D robotics warehouse walkthrough">
   3D Warehouse <span class="wh-arrow">→</span>
 </a>
 
@@ -1020,10 +1020,9 @@ html, body {
 
     <div class="wh-invite">
       <div class="wh-invite-text">
-        <div class="wh-invite-eyebrow">INTERACTIVE WALKTHROUGH · OPTIONAL</div>
         <div class="wh-invite-title">Prefer to explore in 3D? Step inside the <em>robotics warehouse</em> and drive between the project bays.</div>
       </div>
-      <a class="wh-invite-btn" href="robotics-warehouse-sim.html">Enter the warehouse <span class="wh-arrow2">→</span></a>
+      <a class="wh-invite-btn" href="robotics-warehouse-sim">Enter the warehouse <span class="wh-arrow2">→</span></a>
     </div>
   </header>
 
@@ -1911,19 +1910,33 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Deep-link from the warehouse bays: ?p=slug opens that project card directly
-const DEEP_LINK = { 'fault-tolerant': 0, 'multi-robot': 1, 'crop-weed': 2, 'drone-landing': 3, 'maze': 4 };
+// Shareable deep-links. Clean paths (via vercel.json rewrites) open a section or a
+// specific project / build-log card; legacy ?p=<slug> is still honoured.
+//   /projects/<slug>     -> that project card      /projects   -> Deployments
+//   /build-log/<slug>    -> that build-log card     /build-log  -> Build Log
+//   /skills /contact /socials /role-models /about -> that section
+const PROJECT_SLUGS  = { 'fault-tolerant': 0, 'multi-robot': 1, 'crop-weed': 2, 'drone-landing': 3, 'maze': 4, 'skyspeak': 5 };
+const BUILDLOG_SLUGS = { 'honeywell': 0, 'teaching-assistant': 1, 'marut-drones': 2, 'aatram': 3 };
+const PATH_SECTION   = { 'about': 'about', 'projects': 'projects', 'build-log': 'experience', 'skills': 'skills', 'contact': 'contact', 'socials': 'socials', 'role-models': 'roleModels' };
 (function () {
-  const p = new URLSearchParams(location.search).get('p');
-  if (p && DEEP_LINK[p] !== undefined) {
-    state.autoplay['projects'] = false;
-    switchSection('projects');
-    goTo('projects', DEEP_LINK[p]);
-  } else {
+  function openDefault() {
     document.querySelector('.section-view[data-section="about"]').classList.add('active');
     updateDeck('about');
     startAutoplay('about');
   }
+  function openDeep(section, idx) {
+    if (idx != null) state.autoplay[section] = false;
+    switchSection(section);
+    if (idx != null) goTo(section, idx);
+  }
+  const parts = location.pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
+  const seg0 = (parts[0] || '').toLowerCase(), seg1 = (parts[1] || '').toLowerCase();
+  const q = new URLSearchParams(location.search).get('p');
+  if (seg0 === 'projects' && PROJECT_SLUGS[seg1] !== undefined) openDeep('projects', PROJECT_SLUGS[seg1]);
+  else if (seg0 === 'build-log' && BUILDLOG_SLUGS[seg1] !== undefined) openDeep('experience', BUILDLOG_SLUGS[seg1]);
+  else if (seg0 && seg0 !== 'about' && PATH_SECTION[seg0]) openDeep(PATH_SECTION[seg0], null);
+  else if (q && PROJECT_SLUGS[q] !== undefined) openDeep('projects', PROJECT_SLUGS[q]);
+  else openDefault();
 })();
 
 document.querySelectorAll('.deck').forEach(deck => {
