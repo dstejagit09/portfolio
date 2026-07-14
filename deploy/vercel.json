@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/((?!uploads/).*)", "destination": "/index.html" }
+    { "source": "/((?!uploads/).*)", "destination": "/" }
   ],
   "headers": [
     {
