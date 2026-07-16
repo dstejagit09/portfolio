@@ -774,6 +774,15 @@ html, body {
 .card.skill-card .card-visual { height: 42%; }
 .card.skill-card .card-body { height: 58%; }
 
+/* Phones: give the card a little more height and let the video thumbnail
+   breathe — wider, taller (less squished), with space above and below. */
+@media (max-width: 640px) {
+  .deck { aspect-ratio: 3 / 4.62; }
+  .card-visual { height: 52%; }
+  .card-body { height: 48%; }
+  .visual-thumb { max-width: 232px; margin: 9px auto; }
+}
+
 /* No-thumbnail card variant: adjust spacing so visual feels intentional */
 .card.no-thumb .visual-title {
   margin-top: auto;
@@ -1156,8 +1165,8 @@ const data = {
         icon: '↗',
         colors: ['#4A5D3A', '#7A8A5A', '#B5B98C'],
         videos: [
-          { title: 'Hardware Flight', url: 'uploads/videos/crazyfliehs.mp4' },
-          { title: 'Hardware — Clip', url: 'uploads/videos/crazyflieh.mp4' }
+          { title: 'Sim Demo', url: 'uploads/videos/crazyflie.mp4' },
+          { title: 'Hardware Flight', url: 'uploads/videos/crazyfliehs.mp4' }
         ],
         links: [
           { label: '▶ Video', video: true, primary: true },
