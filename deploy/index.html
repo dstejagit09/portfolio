@@ -777,23 +777,24 @@ html, body {
 /* Phones: give the card a little more height and let the video thumbnail
    breathe — wider, taller (less squished), with space above and below. */
 @media (max-width: 640px) {
-  .deck { aspect-ratio: 3 / 4.85; }
-  .card-visual { height: 52%; }
-  .card-body { height: 48%; }
+  /* Taller card on phones so the video thumbnail can be a proper rectangle. */
+  .deck { aspect-ratio: 3 / 6.0; }
+  .card-visual { height: 55%; }
+  .card-body { height: 45%; }
   /* Slightly smaller title so long project names stay within two lines
-     (no truncation), which keeps every thumbnail the same size. */
-  .project-name { font-size: 22px; }
-  /* Reserve a fixed two-line title height so one-line titles (e.g. SkySpeak)
-     don't leave extra room — every card then gets identical spacing. */
-  .visual-title { min-height: 74px; }
-  /* Every video thumbnail identical size + centered, like the SkySpeak card,
-     regardless of title length. Fixed box instead of a flex-squished one. */
+     (no truncation), keeping every thumbnail identical. */
+  .project-name { font-size: 21px; }
+  /* Reserve a fixed two-line title height so one-line titles don't leave
+     extra room — every card gets identical spacing. */
+  .visual-title { min-height: 64px; }
+  /* Proper wide 16:9 video thumbnail (not a thin strip), identical on every
+     card, with even space above and below (the visual is space-between). */
   .visual-thumb {
     flex: 0 0 auto;
-    width: 100%;
-    max-width: 232px;
-    height: 76px;
-    aspect-ratio: auto;
+    width: 92%;
+    max-width: 320px;
+    height: auto;
+    aspect-ratio: 16 / 9;
     margin: 0 auto;
   }
 }
