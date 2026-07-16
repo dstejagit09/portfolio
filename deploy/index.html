@@ -2005,6 +2005,12 @@ document.querySelectorAll('.deck').forEach(deck => {
     return u;
   }
   function isFile(u){ u = String(u).toLowerCase().split('?')[0].split('#')[0]; return u.endsWith('.mp4') || u.endsWith('.webm') || u.endsWith('.ogg') || u.endsWith('.mov'); }
+  /* vercel.json serves /uploads/* as `immutable, max-age=31536000`, so a browser
+     that has cached a clip NEVER revalidates it — re-encoding a file in place is
+     invisible to every returning visitor for a year. The URL itself has to change.
+     BUMP THIS on any re-encode of anything under uploads/videos/. */
+  var ASSET_V = '20260716';
+  function versioned(u){ return u + (u.indexOf('?') === -1 ? '?v=' : '&v=') + ASSET_V; }
   function emptyHtml(){
     return '<div class="vm-empty"><div class="vm-ico">▶</div><div class="vm-note">No video connected yet. Videos for this project will be added from saitejadasari.com.</div></div>';
   }
@@ -2015,7 +2021,7 @@ document.querySelectorAll('.deck').forEach(deck => {
     stage.classList.remove('vm-stage--fit');
     stage.style.removeProperty('--vm-arn');
     if(isFile(v.url)){
-      stage.innerHTML = '<video controls autoplay playsinline src="' + v.url + '"></video>';
+      stage.innerHTML = '<video controls autoplay playsinline src="' + versioned(v.url) + '"></video>';
       var vid = stage.querySelector('video');
       vid.addEventListener('loadedmetadata', function(){
         if(!vid.videoWidth || !vid.videoHeight) return;
