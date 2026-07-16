@@ -777,10 +777,25 @@ html, body {
 /* Phones: give the card a little more height and let the video thumbnail
    breathe — wider, taller (less squished), with space above and below. */
 @media (max-width: 640px) {
-  .deck { aspect-ratio: 3 / 4.62; }
+  .deck { aspect-ratio: 3 / 4.85; }
   .card-visual { height: 52%; }
   .card-body { height: 48%; }
-  .visual-thumb { max-width: 232px; margin: 9px auto; }
+  /* Slightly smaller title so long project names stay within two lines
+     (no truncation), which keeps every thumbnail the same size. */
+  .project-name { font-size: 22px; }
+  /* Reserve a fixed two-line title height so one-line titles (e.g. SkySpeak)
+     don't leave extra room — every card then gets identical spacing. */
+  .visual-title { min-height: 74px; }
+  /* Every video thumbnail identical size + centered, like the SkySpeak card,
+     regardless of title length. Fixed box instead of a flex-squished one. */
+  .visual-thumb {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 232px;
+    height: 76px;
+    aspect-ratio: auto;
+    margin: 0 auto;
+  }
 }
 
 /* No-thumbnail card variant: adjust spacing so visual feels intentional */
@@ -1166,7 +1181,7 @@ const data = {
         colors: ['#4A5D3A', '#7A8A5A', '#B5B98C'],
         videos: [
           { title: 'Sim Demo', url: 'uploads/videos/crazyflie.mp4' },
-          { title: 'Hardware Flight', url: 'uploads/videos/crazyfliehs.mp4' }
+          { title: 'Hardware Flight', url: 'uploads/videos/crazyflieh.mp4' }
         ],
         links: [
           { label: '▶ Video', video: true, primary: true },
