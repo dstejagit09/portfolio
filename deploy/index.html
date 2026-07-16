@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Every asset below is referenced relatively. On a deep link such as
+     /projects/fault-tolerant those would resolve to /projects/uploads/...,
+     which the Vercel rewrite turns into index.html (so videos load HTML and
+     die with DEMUXER_ERROR_COULD_NOT_OPEN). Anchoring to the root fixes all
+     of them at once. Safe here: no fragment-only links, no pushState router. -->
+<base href="/">
 <title>Saiteja Dasari · Robotics Engineer</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
