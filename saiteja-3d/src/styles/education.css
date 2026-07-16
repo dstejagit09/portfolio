@@ -1,0 +1,84 @@
+/* Education overlay scrolls internally so the cert/pub extras fit under the
+   stack without changing the shared overlay layout. */
+.edu-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 4px 4px 8px;
+}
+
+.edu-extras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  width: min(1100px, 92vw);
+}
+
+.edu-group {
+  padding: 20px 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.edu-group-title {
+  margin: 0 0 14px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.edu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edu-cert {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.edu-cert-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0b1020;
+}
+.edu-cert-meta {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.edu-pub {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.edu-pub-link {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0b1020;
+  text-decoration: none;
+}
+.edu-pub-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.edu-pub-meta {
+  font-size: 13px;
+  color: #64748b;
+}
+
+@media (max-width: 760px) {
+  .edu-extras {
+    grid-template-columns: 1fr;
+  }
+}

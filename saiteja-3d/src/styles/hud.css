@@ -1,0 +1,217 @@
+/* HUD overlays sit above the canvas. The wrapper ignores pointer events so
+   clicks fall through to the 3D world; individual controls opt back in. */
+.hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: #0b1020;
+}
+
+.hud button,
+.hud a {
+  pointer-events: auto;
+}
+
+/* ---- Hamburger menu (top-left) ---- */
+.hud-menu {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+.hud-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0 11px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+}
+
+.hud-hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #0b1020;
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hud-hamburger[aria-expanded='true'] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hud-hamburger[aria-expanded='true'] span:nth-child(2) {
+  opacity: 0;
+}
+.hud-hamburger[aria-expanded='true'] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.hud-menu-panel {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  padding: 8px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+}
+
+.hud-menu-panel a,
+.hud-menu-panel .hud-menu-link {
+  padding: 10px 12px;
+  border-radius: 9px;
+  color: #0b1020;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+.hud-menu-panel a:hover,
+.hud-menu-panel .hud-menu-link:hover {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.hud-menu-divider {
+  height: 1px;
+  margin: 6px 8px;
+  background: rgba(15, 23, 42, 0.1);
+}
+
+/* ---- Resume button (top-right) ---- */
+.hud-resume {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 11px 20px;
+  border-radius: 12px;
+  background: #0b1020;
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.2);
+}
+.hud-resume:hover {
+  background: #1e293b;
+}
+
+/* ---- Proximity hint (bottom-center) ---- */
+.hud-hint {
+  position: fixed;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: rgba(11, 16, 32, 0.9);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.25);
+  animation: hud-hint-in 0.18s ease;
+}
+
+.hud-hint kbd {
+  display: inline-block;
+  min-width: 22px;
+  padding: 2px 6px;
+  margin: 0 2px;
+  border-radius: 6px;
+  background: #fff;
+  color: #0b1020;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@keyframes hud-hint-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ---- Signpost proximity hint (rendered via drei <Html> in the 3D scene) ---- */
+.pond-hint {
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(11, 16, 32, 0.92);
+  color: #fff;
+  font: 600 13px system-ui, 'Segoe UI', Roboto, sans-serif;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.3);
+  user-select: none;
+  pointer-events: none;
+}
+.pond-hint kbd {
+  display: inline-block;
+  min-width: 18px;
+  padding: 1px 5px;
+  margin: 0 2px;
+  border-radius: 5px;
+  background: #fff;
+  color: #0b1020;
+  font: 700 12px ui-monospace, Consolas, monospace;
+  text-align: center;
+}
+
+/* ---- Loading screen ---- */
+.hud-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  pointer-events: auto;
+}
+
+.hud-loading-inner {
+  width: min(320px, 70vw);
+  text-align: center;
+}
+
+.hud-loading-label {
+  margin-bottom: 14px;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: #64748b;
+}
+
+.hud-loading-bar {
+  height: 6px;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.hud-loading-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #0b1020;
+  transition: width 0.2s ease;
+}
