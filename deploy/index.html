@@ -1021,6 +1021,14 @@ html, body {
 .video-modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; }
 .video-modal.open { display: flex; }
 .vm-backdrop { position: absolute; inset: 0; background: rgba(10, 4, 4, 0.74); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+/* While a clip is open, stop paying for background effects nobody can see.
+   Each card renders 3 blur(55px) blobs on infinite float animations (90 across
+   the deck), and .vm-backdrop re-blurs the whole viewport every frame on top of
+   them. That compositing load starves video playback on integrated GPUs — a 7s
+   clip can take 40s+. The backdrop goes opaque instead of blurred, so the same
+   thing is hidden for a fraction of the cost. */
+body.vm-open .blob { animation-play-state: paused; }
+body.vm-open .vm-backdrop { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(10, 4, 4, 0.94); }
 .vm-panel { position: relative; width: min(920px, 100%); max-height: 88vh; overflow-y: auto; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 20px; padding: 26px 26px 24px; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6); animation: vmpop 0.26s var(--ease-spring); }
 @keyframes vmpop { from { transform: scale(0.94) translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
 .vm-close { position: absolute; top: 15px; right: 15px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-strong); background: rgba(253, 250, 216, 0.06); color: var(--text-primary); font-size: 14px; cursor: pointer; display: grid; place-items: center; transition: background 0.15s, border-color 0.15s; }
@@ -2053,11 +2061,15 @@ document.querySelectorAll('.deck').forEach(deck => {
     }
     modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('vm-open');
+    stopAutoplay(state.currentSection); // the deck kept rotating behind the overlay, forcing a full re-blur every 4.5s
   }
   function closeVM(){
     modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
     stage.innerHTML = '';
     document.body.style.overflow = '';
+    document.body.classList.remove('vm-open');
+    if(state.autoplay[state.currentSection]) startAutoplay(state.currentSection);
   }
   modal.addEventListener('click', function(e){ if(e.target.closest('[data-close]')) closeVM(); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal.classList.contains('open')) closeVM(); });
