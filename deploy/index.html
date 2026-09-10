@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after {
   margin: 0;
@@ -34,10 +34,10 @@
   --accent: #fdfad8;
   --accent-soft: rgba(253, 250, 216, 0.14);
   --accent-hover: #ffffff;
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-heading: 'Space Grotesk', -apple-system, sans-serif;
-  --font-body: 'Inter', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', Menlo, monospace;
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -1048,6 +1048,15 @@ body.vm-open .vm-backdrop { backdrop-filter: none; -webkit-backdrop-filter: none
 .vm-chip { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; padding: 9px 14px; border-radius: 9px; border: 1px solid var(--border-strong); background: rgba(253, 250, 216, 0.05); color: var(--text-secondary); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; }
 .vm-chip:hover { border-color: var(--accent); color: var(--text-primary); }
 .vm-chip.active { background: var(--accent); color: #23090a; border-color: var(--accent); font-weight: 600; }
+.vm-group { margin-top: 16px; }
+.vm-group-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 9px; }
+.vm-group-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.vm-thumb { padding: 0; width: 84px; height: 56px; border-radius: 9px; overflow: hidden; border: 1px solid var(--border-strong); background: rgba(253, 250, 216, 0.05); cursor: pointer; flex: 0 0 auto; transition: border-color 0.15s, box-shadow 0.15s; }
+.vm-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vm-thumb:hover { border-color: var(--accent); }
+.vm-thumb.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.vm-stage img.vm-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #120506; }
+.vm-caption { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--text-secondary); margin-top: 11px; min-height: 15px; }
 @media (max-width: 560px) { .vm-panel { padding: 20px 16px 18px; border-radius: 16px; } .vm-title { font-size: 19px; } }
 </style>
 </head>
@@ -1104,6 +1113,7 @@ body.vm-open .vm-backdrop { backdrop-filter: none; -webkit-backdrop-filter: none
     <div class="vm-eyebrow">PROJECT VIDEO</div>
     <div class="vm-title" id="vmTitle">Project</div>
     <div class="vm-stage" id="vmStage"></div>
+    <div class="vm-caption" id="vmCaption"></div>
     <div class="vm-list" id="vmList"></div>
   </div>
 </div>
@@ -1129,7 +1139,7 @@ const data = {
         colors: ['#3a1212', '#7a3b2e', '#d8b06a'],
         links: [
           { label: 'Resume ↓', href: 'Saiteja-Dasari-Resume.pdf', primary: true },
-          { label: 'Email', href: 'mailto:totobotplus@gmail.com' }
+          { label: 'Email', href: 'mailto:dasarisaiteja09@gmail.com' }
         ]
       },
       {
@@ -1183,7 +1193,7 @@ const data = {
   projects: {
     coverNum: '02 / DEPLOYMENTS',
     coverTitle: 'Project <em>archive</em>',
-    coverDesc: 'Six robotics builds shipped between 2024 and 2026. Autonomy, controls, perception, and UAV systems. Each one measured, validated, and open-source where possible.',
+    coverDesc: 'Seven robotics builds shipped between 2024 and 2026. Autonomy, controls, perception, soft robotics, and UAV systems. Each one measured, validated, and open-source where possible.',
     cards: [
       {
         category: '01 · CONTROLS',
@@ -1316,6 +1326,32 @@ const data = {
           { label: 'Live Demo ↗', href: 'https://honeywell-anthem-pilot-training-sol.vercel.app/' },
           { label: 'Repo ↗', href: 'https://github.com/dstejagit09/HoneywellAnthem_PilotTraining_Dash' }
         ]
+      },
+      {
+        category: '07 · SOFT ROBOTICS',
+        projectName: 'In-Pipe Locomotion Robot',
+        projectSub: 'ROBOSOFT 2025 · ASU',
+        date: 'JAN 2025 · MAY 2025',
+        description: 'A tethered tank for the RoboSoft 2025 In-Pipe Locomotion Challenge. Cast Dragon Skin silicone treads grip a 5 cm pipe maze of turns, rubble, sand, and slopes. Cleared the full course in 7.5 min.',
+        metric: '7.5 min',
+        metricLabel: 'FULL COURSE · 10 MIN LIMIT',
+        tags: ['Soft Robotics', '3D Printing', 'Dragon Skin Silicone', 'Mechanical Design', 'Differential Drive', 'CAD', 'Competition'],
+        thumbLabel: 'INPIPE_RUN',
+        thumbDuration: '0:10',
+        icon: '↗',
+        colors: ['#3E6E5A', '#5E9A82', '#8FC0A8'],
+        videos: [
+          { title: 'Track Run', url: 'uploads/videos/inpipe.mp4' },
+          { title: 'Pipe Bend', url: 'uploads/videos/inpipe2.mp4' }
+        ],
+        photos: [
+          { url: 'uploads/inpipe/01.jpg', title: 'Robot in Pipe' },
+          { url: 'uploads/inpipe/02.jpg', title: 'Robot Detail' }
+        ],
+        links: [
+          { label: '▶ Photos and Videos', video: true, primary: true },
+          { label: 'Repo ↗', href: 'https://github.com/dstejagit09/Soft-Robotics-In-Pipe-Locomotion' }
+        ]
       }
     ]
   },
@@ -1323,7 +1359,7 @@ const data = {
   experience: {
     coverNum: '03 / BUILD LOG',
     coverTitle: 'Working <em>history</em>',
-    coverDesc: 'Aerospace, industry, teaching, and a co-founded iOS app. Reverse chronological. Every role listed here is complete.',
+    coverDesc: 'Aerospace, industry, teaching, motorsport, and a co-founded iOS app. Reverse chronological. Every role listed here is complete.',
     cards: [
       {
         category: 'EXTERNSHIP · TECHNICAL LEAD',
@@ -1362,10 +1398,7 @@ const data = {
         tags: ['MATLAB', 'Instrumentation', 'Controls', 'PID', 'Lab Instruction', 'Mentorship'],
         hasThumb: false,
         icon: '↗',
-        colors: ['#5A2323', '#8A3A3A', '#B87050'],
-        links: [
-          { label: 'ASU Fulton ↗', href: 'https://engineering.asu.edu/', primary: true }
-        ]
+        colors: ['#5A2323', '#8A3A3A', '#B87050']
       },
       {
         category: 'INDUSTRY · INTERNSHIP',
@@ -1376,11 +1409,25 @@ const data = {
         metric: '3 variants · +10%',
         metricLabel: 'UAV FLIGHT STABILITY GAIN',
         tags: ['ArduPilot', 'Mission Planner', 'PID', 'UAV Assembly', 'Flight Logs', 'Avionics', 'ESC'],
-        hasThumb: false,
+        thumbLabel: 'MARUT_P80',
+        thumbDuration: '0:05',
         icon: '↗',
         colors: ['#7A5A2A', '#B5824A', '#D8AB74'],
+        videos: [
+          { title: 'Quadrotor Bench Test', url: 'uploads/videos/marutdrones.mp4' },
+          { title: 'Rover Test', url: 'uploads/videos/marutdrones2.mp4' },
+          { title: 'Bicopter Bench Test', url: 'uploads/videos/marutdrones3.mp4' }
+        ],
+        photos: [
+          { url: 'uploads/marut/01.jpg', title: 'P80 Drone' },
+          { url: 'uploads/marut/02.jpg', title: 'RPTO Drone' },
+          { url: 'uploads/marut/03.jpg', title: 'Hexacopter with Spraying Mechanism' },
+          { url: 'uploads/marut/04.jpg', title: 'FPV Drone' },
+          { url: 'uploads/marut/05.jpg', title: 'Testing' }
+        ],
         links: [
-          { label: 'Marut Drones ↗', href: 'https://www.marutdrones.com/', primary: true }
+          { label: '▶ Photos and Videos', video: true, primary: true },
+          { label: 'Marut Drones ↗', href: 'https://www.marutdrones.com/' }
         ]
       },
       {
@@ -1397,6 +1444,27 @@ const data = {
         colors: ['#7A3A5A', '#B0587A', '#DA8CA6'],
         links: [
           { label: 'Visit aatram.com ↗', href: 'https://www.aatram.com/', primary: true }
+        ]
+      },
+      {
+        category: 'MOTORSPORT · POWERTRAIN',
+        projectName: 'Praheti Racing, Formula SAE',
+        projectSub: 'SAE-CBIT · HYDERABAD',
+        date: 'OCT 2022 · SEP 2023',
+        description: 'First real hands-on vehicle build. Engineered the powertrain system for the student formula car, working with a KTM RC 390 engine and the differential setup, and took ownership of electrical connectivity and grounding across the vehicle to improve reliability.',
+        metric: 'KTM RC 390',
+        metricLabel: 'POWERTRAIN · DRIVETRAIN',
+        tags: ['Formula SAE', 'Powertrain', 'Drivetrain', 'Vehicle Wiring', 'Grounding', 'Mechanical Assembly'],
+        thumbLabel: 'PRAHETI_SAE',
+        thumbDuration: '',
+        icon: '↗',
+        colors: ['#3A3A42', '#5E5E6E', '#8A8A9A'],
+        photos: [
+          { url: 'uploads/praheti/01.jpg', title: 'Team & Car' },
+          { url: 'uploads/praheti/02.jpg', title: 'Powertrain' }
+        ],
+        links: [
+          { label: '▶ Photos', video: true, primary: true }
         ]
       }
     ]
@@ -1501,7 +1569,7 @@ const data = {
     cards: [
       {
         category: '01 · EMAIL · FASTEST',
-        projectName: 'totobotplus@gmail.com',
+        projectName: 'dasarisaiteja09@gmail.com',
         projectSub: 'DIRECT SIGNAL · <24h REPLY',
         date: 'EMAIL',
         description: 'Best channel for role inquiries, referrals, project questions, and anything long-form. I read and reply within 24 hours on weekdays. Attachments and PDFs welcome.',
@@ -1512,7 +1580,7 @@ const data = {
         icon: '@',
         colors: ['#5F3A5A', '#8A5A85', '#B584AF'],
         links: [
-          { label: 'Send email', href: 'mailto:totobotplus@gmail.com', primary: true }
+          { label: 'Send email', href: 'mailto:dasarisaiteja09@gmail.com', primary: true }
         ]
       },
       {
@@ -1692,7 +1760,7 @@ function renderCard(card, isSkills = false, isRole = false) {
   }
 
   const thumbHTML = showThumb ? `
-    <div class="visual-thumb video-btn" role="button" tabindex="0" aria-label="Play ${card.projectName || 'project'} video" data-videos="${encodeURIComponent(JSON.stringify(card.videos || []))}" data-project="${encodeURIComponent(card.projectName || 'Project')}">
+    <div class="visual-thumb video-btn" role="button" tabindex="0" aria-label="Open ${card.projectName || 'project'} media" data-videos="${encodeURIComponent(JSON.stringify(card.videos || []))}" data-photos="${encodeURIComponent(JSON.stringify(card.photos || []))}" data-project="${encodeURIComponent(card.projectName || 'Project')}">
       <div class="thumb-play">▶</div>
       <div class="thumb-label">
         <span>${card.thumbLabel}</span>
@@ -1719,7 +1787,7 @@ function renderCard(card, isSkills = false, isRole = false) {
       </div>
       ${card.links ? `<div class="card-actions">
         ${card.links.map(l => l.video
-          ? `<button type="button" class="card-btn ${l.primary ? 'primary' : ''} video-btn" data-videos="${encodeURIComponent(JSON.stringify(card.videos || []))}" data-project="${encodeURIComponent(card.projectName || 'Project')}">${l.label}</button>`
+          ? `<button type="button" class="card-btn ${l.primary ? 'primary' : ''} video-btn" data-videos="${encodeURIComponent(JSON.stringify(card.videos || []))}" data-photos="${encodeURIComponent(JSON.stringify(card.photos || []))}" data-project="${encodeURIComponent(card.projectName || 'Project')}">${l.label}</button>`
           : `<a class="card-btn ${l.primary ? 'primary' : ''}" href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`).join('')}
       </div>` : ''}
     `;
@@ -1993,7 +2061,9 @@ document.querySelectorAll('.deck').forEach(deck => {
   var stage = document.getElementById('vmStage');
   var list = document.getElementById('vmList');
   var titleEl = document.getElementById('vmTitle');
+  var caption = document.getElementById('vmCaption');
   var current = [];
+  var chipEls = [];
 
   function toEmbed(u){
     try {
@@ -2023,13 +2093,24 @@ document.querySelectorAll('.deck').forEach(deck => {
     return '<div class="vm-empty"><div class="vm-ico">▶</div><div class="vm-note">No video connected yet. Videos for this project will be added from saitejadasari.com.</div></div>';
   }
   function playIdx(idx){
-    var v = current[idx];
-    Array.prototype.forEach.call(list.children, function(c,i){ c.classList.toggle('active', i===idx); });
-    if(!v || !v.url){ stage.innerHTML = emptyHtml(); return; }
+    var m = current[idx];
+    chipEls.forEach(function(c,i){ if(c) c.classList.toggle('active', i===idx); });
+    if(caption) caption.textContent = (m && m.title) ? m.title : '';
+    if(!m || !m.url){ stage.innerHTML = emptyHtml(); return; }
     stage.classList.remove('vm-stage--fit');
     stage.style.removeProperty('--vm-arn');
-    if(isFile(v.url)){
-      stage.innerHTML = '<video controls autoplay playsinline src="' + versioned(v.url) + '"></video>';
+    if(m.type === 'photo'){
+      stage.innerHTML = '<img class="vm-img" src="' + versioned(m.url) + '" alt="' + (m.title || 'Photo') + '">';
+      var im = stage.querySelector('img');
+      im.addEventListener('load', function(){
+        if(!im.naturalWidth || !im.naturalHeight) return;
+        stage.style.setProperty('--vm-arn', (im.naturalWidth / im.naturalHeight).toFixed(4));
+        stage.classList.add('vm-stage--fit');
+      });
+      return;
+    }
+    if(isFile(m.url)){
+      stage.innerHTML = '<video controls autoplay muted playsinline src="' + versioned(m.url) + '"></video>';
       var vid = stage.querySelector('video');
       vid.addEventListener('loadedmetadata', function(){
         if(!vid.videoWidth || !vid.videoHeight) return;
@@ -2037,28 +2118,55 @@ document.querySelectorAll('.deck').forEach(deck => {
         stage.classList.add('vm-stage--fit');
       });
     }
-    else stage.innerHTML = '<iframe src="' + toEmbed(v.url) + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    else stage.innerHTML = '<iframe src="' + toEmbed(m.url) + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
   }
-  function openVM(project, videos){
-    current = Array.isArray(videos) ? videos : [];
+  function mediaUrl(x){ return (typeof x === 'string') ? x : (x && x.url) || ''; }
+  function openVM(project, videos, photos){
+    videos = Array.isArray(videos) ? videos : [];
+    photos = Array.isArray(photos) ? photos : [];
+    current = []; chipEls = [];
+    videos.forEach(function(v){ current.push({ type:'video', url: mediaUrl(v), title: (v && v.title) || 'Clip' }); });
+    photos.forEach(function(p,i){ current.push({ type:'photo', url: mediaUrl(p), title: (p && p.title) || ('Photo ' + (i+1)) }); });
     titleEl.textContent = project || 'Project';
+    var nv = videos.length, np = photos.length;
     var eyebrow = modal.querySelector('.vm-eyebrow');
-    if(eyebrow) eyebrow.textContent = current.length > 1 ? (current.length + ' CLIPS · SELECT TO PLAY') : 'PROJECT VIDEO';
-    list.innerHTML = '';
-    if(current.length){
-      current.forEach(function(v,i){
-        var chip = document.createElement('button');
-        chip.type = 'button'; chip.className = 'vm-chip';
-        chip.textContent = '▶ ' + ((v && v.title) ? v.title : ('Clip ' + (i+1)));
-        chip.addEventListener('click', function(){ playIdx(i); });
-        list.appendChild(chip);
-      });
-      list.style.display = current.length > 1 ? 'flex' : 'none'; // only show the chooser when there's a choice
-      playIdx(0);
-    } else {
-      list.style.display = 'none';
-      stage.innerHTML = emptyHtml();
+    if(eyebrow){
+      if(nv && np) eyebrow.textContent = nv + ' VIDEO' + (nv>1?'S':'') + ' · ' + np + ' PHOTO' + (np>1?'S':'') + ' · SELECT TO VIEW';
+      else if(nv) eyebrow.textContent = nv > 1 ? (nv + ' CLIPS · SELECT TO PLAY') : 'PROJECT VIDEO';
+      else if(np) eyebrow.textContent = np > 1 ? (np + ' PHOTOS · SELECT TO VIEW') : 'PROJECT PHOTO';
+      else eyebrow.textContent = 'PROJECT MEDIA';
     }
+    list.innerHTML = '';
+    function group(label){
+      var g = document.createElement('div'); g.className = 'vm-group';
+      var lb = document.createElement('div'); lb.className = 'vm-group-label'; lb.textContent = label; g.appendChild(lb);
+      var row = document.createElement('div'); row.className = 'vm-group-row'; g.appendChild(row);
+      list.appendChild(g); return row;
+    }
+    var idx = 0;
+    if(nv){
+      var vrow = group('VIDEOS');
+      videos.forEach(function(v){
+        var my = idx++;
+        var chip = document.createElement('button'); chip.type = 'button'; chip.className = 'vm-chip';
+        chip.textContent = '▶ ' + ((v && v.title) || ('Clip ' + (my+1)));
+        chip.addEventListener('click', function(){ playIdx(my); });
+        vrow.appendChild(chip); chipEls[my] = chip;
+      });
+    }
+    if(np){
+      var prow = group('PHOTOS');
+      photos.forEach(function(p,i){
+        var my = idx++;
+        var t = document.createElement('button'); t.type = 'button'; t.className = 'vm-thumb'; t.setAttribute('aria-label', 'Photo ' + (i+1));
+        var im = document.createElement('img'); im.src = versioned(mediaUrl(p)); im.alt = 'Photo ' + (i+1); im.loading = 'lazy';
+        t.appendChild(im);
+        t.addEventListener('click', function(){ playIdx(my); });
+        prow.appendChild(t); chipEls[my] = t;
+      });
+    }
+    list.style.display = current.length > 1 ? 'block' : 'none';
+    if(current.length) playIdx(0); else stage.innerHTML = emptyHtml();
     modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
     document.body.classList.add('vm-open');
@@ -2081,9 +2189,11 @@ document.querySelectorAll('.deck').forEach(deck => {
     if(cardEl && cardEl.getAttribute('data-position') !== '0') return;
     var vids = [];
     try { vids = JSON.parse(decodeURIComponent(vb.getAttribute('data-videos') || '')); } catch(_){}
+    var phs = [];
+    try { phs = JSON.parse(decodeURIComponent(vb.getAttribute('data-photos') || '')); } catch(_){}
     var proj = 'Project';
     try { proj = decodeURIComponent(vb.getAttribute('data-project') || 'Project'); } catch(_){}
-    openVM(proj, vids);
+    openVM(proj, vids, phs);
   });
 })();
 </script>

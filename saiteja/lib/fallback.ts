@@ -82,10 +82,10 @@ const RESPONSES: Record<string, string> = {
     "Published: **SCADA-Based Substation Control Panel and Operations**. View the paper in the Manifest section. [View manifest](/#manifest)",
 
   "contact":
-    "Reach Saiteja at **totobotplus@gmail.com** or use the contact form on this site. LinkedIn: [linkedin.com/in/sdasar38](https://www.linkedin.com/in/sdasar38/) | GitHub: [github.com/dstejagit09](https://github.com/dstejagit09). [Go to contact](/#contact)",
+    "Reach Saiteja at **dasarisaiteja09@gmail.com** or use the contact form on this site. LinkedIn: [linkedin.com/in/sdasar38](https://www.linkedin.com/in/sdasar38/) | GitHub: [github.com/dstejagit09](https://github.com/dstejagit09). [Go to contact](/#contact)",
 
   "email":
-    "Email: **totobotplus@gmail.com**, or use the contact form on this site. [Go to contact](/#contact)",
+    "Email: **dasarisaiteja09@gmail.com**, or use the contact form on this site. [Go to contact](/#contact)",
 
   "hire":
     "Saiteja is **open to full-time roles, internships, research positions, and collaboration**. Target roles: Robotics Engineer, Controls Engineer, UAV Systems, Systems Engineer, Robotics Software Engineer, Autonomy Engineer, Test and Validation Engineer. Based in Tempe, AZ; graduated May 2026. [Get in touch](/#contact)",

@@ -29,7 +29,7 @@ export default function Home() {
           VERSION 4.0.2-STABLE | [ SYSTEM: READY ]
         </div>
         <a
-          href="mailto:totobotplus@gmail.com"
+          href="mailto:dasarisaiteja09@gmail.com"
           className="text-secondary hover:text-primary-fixed font-label text-xs uppercase tracking-widest transition-colors duration-150"
         >
           Currently: Open for Opportunities

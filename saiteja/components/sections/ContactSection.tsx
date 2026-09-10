@@ -12,7 +12,7 @@ export function ContactSection() {
     const body = encodeURIComponent(
       `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
     );
-    window.open(`mailto:totobotplus@gmail.com?subject=${subject}&body=${body}`);
+    window.open(`mailto:dasarisaiteja09@gmail.com?subject=${subject}&body=${body}`);
     setSent(true);
   };
 
@@ -146,10 +146,10 @@ export function ContactSection() {
                 Direct Signal
               </span>
               <a
-                href="mailto:totobotplus@gmail.com"
+                href="mailto:dasarisaiteja09@gmail.com"
                 className="font-label text-xl text-primary-fixed hover:opacity-70 transition-opacity"
               >
-                totobotplus@gmail.com
+                dasarisaiteja09@gmail.com
               </a>
             </div>
 

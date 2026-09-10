@@ -8,7 +8,7 @@ export const SITE_CONFIG = {
   fullName: "Saiteja Venkateshwa Rao Dasari",
   title: "MS @ Arizona State University",
   tagline: "ROBOTICS ENGINEER",
-  email: "totobotplus@gmail.com",
+  email: "dasarisaiteja09@gmail.com",
   phone: "(480) 749-7265",
   location: "Tempe, Arizona",
   linkedin: "https://linkedin.com/in/saiteja-venkateshwa-rao-dasari",
