@@ -1429,7 +1429,7 @@ function __boot(){
   const intro=document.getElementById('whintro');
   function enterWarehouse(){ if(intro) intro.classList.add('hide'); try{ document.getElementById('scene').focus(); }catch(e){} }
   document.addEventListener('warehouse:enter', enterWarehouse);
-  document.addEventListener('warehouse:skip', ()=>{ location.href='/'; });
+  document.addEventListener('warehouse:skip', ()=>{ location.href='/robotics'; });
   document.addEventListener('warehouse:jump', e=>{ const n=e.detail&&e.detail.bay; enterWarehouse(); if(n>=1&&n<=4) teleportTo(SECTIONS[n-1]); });
   document.addEventListener('warehouse:lights', e=>{ const on=!!(e.detail&&e.detail.on); setSpotMode(on); const lb=document.getElementById('simtog'); if(lb) lb.classList.toggle('on',on); });
   const panel=document.getElementById('panel');
@@ -1455,7 +1455,7 @@ function __boot(){
   panel.addEventListener('click',e=>{ if(e.target===panel) closeStation(); });
   const lightBtn=document.getElementById('simtog');
   lightBtn.onclick=()=>{ setSpotMode(!spotMode); lightBtn.classList.toggle('on',spotMode); };
-  const skipTog=document.getElementById('skiptog'); if(skipTog) skipTog.onclick=()=>{ location.href='/'; };
+  const skipTog=document.getElementById('skiptog'); if(skipTog) skipTog.onclick=()=>{ location.href='/robotics'; };
   const TOUCH=document.body.classList.contains('touch');
   const openBtn=document.getElementById('openbtn'); let lastOpenName='';
   if(openBtn) openBtn.addEventListener('click',(e)=>{ e.preventDefault(); if(active) openStation(active); });
@@ -1523,7 +1523,7 @@ function __boot(){
       const ang=(-90+idx*(360/N))*Math.PI/180, cx=C+Math.cos(ang)*R, cy=C+Math.sin(ang)*R;
       it.style.left=(cx-85)+'px'; it.style.top=(cy-29)+'px';
       const num=(!qi.portfolio&&qi.si<4)?(qi.si+1):''; it.innerHTML='<i style="background:#fdfad8"></i><span style="flex:1">'+(qi.label||sec.key)+'</span>'+(num?'<span class="qk">'+num+'</span>':'');
-      it.onclick=qi.portfolio?(()=>{ location.href='/'; }):(()=>teleportTo(sec)); qwrap.appendChild(it); });
+      it.onclick=qi.portfolio?(()=>{ location.href='/robotics'; }):(()=>teleportTo(sec)); qwrap.appendChild(it); });
     const hub=document.createElement('div'); hub.className='qhub'; hub.innerHTML='JUMP<br>TO'; qwrap.appendChild(hub);
     qmenu.appendChild(qwrap); })();
 
