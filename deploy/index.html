@@ -390,6 +390,9 @@ html,#si{scrollbar-color:rgba(253,250,216,.28) #120607}
 </div>
 
 <script>
+/* Project popups are switched off until the simulation pictures and full write-ups are ready.
+   Set to true to make the project rows clickable again (arrow, hint and popup all come back). */
+const PROJECT_POPUPS=false;
 const PROJECTS=[
   {t:"HBM3 Channel and PDN Co-Simulation on a 2.5D Silicon Interposer",s:"Ansys HFSS 3D Layout · SIwave",
    d:["Modeled a 4-pair HBM3 differential channel on a 2.5D silicon interposer in HFSS 3D Layout and extracted its 16-port S-parameters, achieving −2.4 dB insertion loss and NEXT/FEXT under −39 dB at 3.2 GHz Nyquist for 6.4 Gbps NRZ signaling.",
@@ -422,10 +425,10 @@ const SI=[
      <div class="cw">Relevant coursework</div><div class="tags"><span>Signals and Systems</span><span>Electromagnetic Fields</span><span>Analog Electronics</span><span>Digital Electronics</span><span>Power Electronics</span><span>Control Systems</span></div></div>
     <div class="ed"><div class="edh"><div><div class="t">MS, Robotics and Autonomous Systems</div><div class="s">Arizona State University · Tempe, AZ · GPA 3.93/4.0</div></div><span class="meta">Aug 2024 – May 2026</span></div></div>
    </div></div>`},
- {eb:"03 / Projects",t:"The<em>work</em>",p:"Three self-driven SI projects. Open one to see the simulation and details.",
+ {eb:"03 / Projects",t:"The<em>work</em>",p:PROJECT_POPUPS?"Three self-driven SI projects. Open one to see the simulation and details.":"Three self-driven SI projects in Ansys HFSS, SIwave and field solvers.",
   card:head("03 · Projects","Projects","SI · PI · Channel analysis","03","Self-driven projects · Ansys")+`<div class="cbody">
-   <div class="rows">${PROJECTS.map((p,i)=>`<button class="row" data-proj="${i}"><span class="num">0${i+1}</span><span><div class="t">${p.t}</div><div class="s">${p.s}</div></span><span class="arr">→</span></button>`).join("")}</div>
-   <span class="hint2">Click a project to open it</span></div>`},
+   <div class="rows">${PROJECTS.map((p,i)=>PROJECT_POPUPS?`<button class="row" data-proj="${i}"><span class="num">0${i+1}</span><span><div class="t">${p.t}</div><div class="s">${p.s}</div></span><span class="arr">→</span></button>`:`<div class="row"><span class="num">0${i+1}</span><span><div class="t">${p.t}</div><div class="s">${p.s}</div></span></div>`).join("")}</div>
+   ${PROJECT_POPUPS?`<span class="hint2">Click a project to open it</span>`:""}</div>`},
  {eb:"04 / Experience",t:"The<em>path</em>",p:"Hands-on hardware and lab instrumentation.",
   card:head("04 · Experience","Experience","Lab · Hardware","02","Roles")+`<div class="cbody">
    <div class="rows">
@@ -544,7 +547,7 @@ $("mclose").onclick=closeModal;
 $("scrim").addEventListener("click",e=>{if(e.target===$("scrim"))closeModal()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();if(e.key==="ArrowRight")step(1);if(e.key==="ArrowLeft")step(-1)});
 document.addEventListener("click",e=>{
-  const pr=e.target.closest("[data-proj]");if(pr){openModal(+pr.dataset.proj);return}
+  const pr=e.target.closest("[data-proj]");if(pr&&PROJECT_POPUPS){openModal(+pr.dataset.proj);return}
   const b=e.target.closest("[data-go]");if(!b)return;const g=b.dataset.go;
   go(g);
 });
